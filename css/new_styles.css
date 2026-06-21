@@ -1,0 +1,297 @@
+*{
+	box-sizing:border-box;
+	margin:0;
+	padding:0;
+}
+.head{
+	position:relative;
+	top:1px;
+  display:block;
+  width:100%;
+  height:90px;
+  background:blue;
+ }
+ .head a {
+	position:relative; left:2px; top:15px;
+	display:block;
+	width : 30px;
+    height:35px;
+ }
+ .head p {
+    position:absolute; top:20px; left:30%;
+	display:inline-block;
+	color:rgb(0,255,0);
+	text-align:center;
+	}
+  .login-icon{
+    position: absolute; top: 20px; right: 3%;
+}
+
+.login-icon img{
+    position: absolute; right: 40%;
+height: 20px; width: 20px;
+border-radius: 50%;
+}
+.login-icon p{
+  position: relative; top:5px;
+  font-size: 12px;  
+  text-align: center;
+  color:rgb(0,255,0); 
+}
+.login-icon #logout{
+    color: red;
+}
+ .copyright p{
+   text-align: center;
+  }
+   .copyright a {
+      color: green;
+  }
+.form_cont {
+  position: relative; top:80px;
+   display:block;
+   border:2px solid white;
+   width:300px;
+   border-radius: 10px;
+   }
+   .form_cont p{
+       text-align: center;
+       color:green;
+   }
+   .form_cont input{
+     width:250px;  
+      padding: 5px;
+   }
+   .form_cont label{
+       color:red;
+      text-align:justify;
+   }
+   .form_cont a{
+       text-decoration: none;
+       display: block;
+       background: green;
+       border-radius:20px;
+       color:white;
+       width:150px; height:30px;
+       padding: 5px;
+   }
+    .form_cont #submitA {
+      width:100px; height: 30px;
+       display: block;
+       background: green;
+       border-radius:20px;
+       color:white;
+       font-size: 20px;
+	   cursor:pointer;
+	   position: relative; left:70px;
+	   top:10px;
+	   margin-bottom: 15px;
+   }
+   .form_cont #cancelA {
+      width:100px; height: 30px;
+       display: block;
+       background: red;
+       border-radius:20px;
+       color:white;
+       font-size: 20px;
+	   cursor:pointer;
+	   position: relative; right:80px;
+	   bottom: 35px;
+	   margin-bottom: 15px;
+   }
+   .form_cont #submit {
+      width:120px; height: 30px;
+       display: block;
+       background: green;
+       border-radius:20px;
+       color:white;
+       font-size: 20px;
+	   cursor:pointer;
+	   margin-bottom: 15px;
+   }
+   .form_cont  select{
+      width:250px; height:35px;
+  }
+ .form_cont textarea{
+      width:250px; height:300px;
+      padding: 10px;
+  }
+  .notify{
+        position: relative; top:20px;
+        display: block;
+        text-align: justify;
+        background:grey;
+        width:300px;
+        padding:5px ;
+        margin-bottom: 10px;
+    }
+    .warning{
+      position: relative; top:40px;
+      color:green;
+      padding: 10px;
+      text-align: justify;
+      background: white;
+      margin:20px;
+  }
+    .warning i{
+   font-weight: bold;
+   color:rgb(200,150,250);
+        
+    }
+  .errors{
+      display:block;
+     position:relative; top:25px;
+     text-align: center;
+     color:red;
+  }
+  .success{
+     display:block;
+     position:relative; top:25px;
+     text-align: center;
+     color:green;
+
+  }
+  .new_success{
+ top:10px;
+ text-align: justify; 
+ padding:10px;
+ font-size:12px;
+ border: 1px solid #fff;
+ border-radius:10px;
+ background:#007BFF;
+ color:white;
+ display:block;
+ left:10%;
+ width:80%;
+
+}
+   .showpsw {
+    position: absolute;
+        left:15px;
+   }
+   /* delete button css */
+    #del{
+    margin: 5px;
+    position: absolute;
+      padding: 5px;
+      font-size: 14px;
+      color:white;
+      background: red;
+      text-decoration: none;
+      
+  }
+    /* Edit button css */
+    #edit{
+      margin: 5px;
+      position: absolute;
+      padding: 5px;
+      font-size: 14px;
+      color:white;
+      background: green;
+      text-decoration: none;
+      
+  }
+  /* download button css */
+    #download{
+      margin: 5px;
+      position: absolute;
+      padding: 5px;
+      font-size: 14px;
+      color:white;
+      background: orange;
+      text-decoration: none;
+      
+  }
+ /* paragraph css */
+ #par{
+      position: relative;
+      padding: 10px;
+  }
+   .crt {
+      position: relative; top:50px;
+   display:block;
+   }
+   .crt p {
+       text-align: justify;
+       padding: 10px;
+   }
+   .forget {
+	   display:block;
+	   background:white;
+	   position:relative; top:18px;
+	   width:294px;height:59px;
+   }
+  .forget #cancel {
+   text-decoration:none;
+   background:rgb(230,0,0);
+   color:white;
+   width:70px;height:35px;
+   padding:5px;
+   }
+  .forget #forgetpassword {
+	  padding-left:40px;
+  }
+  .welcome {
+	position:relative; top:50px;
+	display:block;
+	width:100%;
+	
+}
+.welcome h3{
+	text-align:center;
+	color:green;
+	}
+.welcome img{
+     position: relative; top:50px;
+     height: 300px; width:80%;
+ }
+ .welcome p{
+     color:red;
+     margin-left:10px;
+ }
+ .errors{
+      display:block;
+     position:relative; top:25px;
+     text-align: center;
+     color:red;
+  }
+  .success{
+     display:block;
+     position:relative; top:25px;
+     text-align: center;
+     color:green;
+
+  }
+
+.new_success{
+ position: relative;
+ top:20px;
+ text-align: justify; 
+ padding:10px;
+ font-size:12px;
+ border: 1px solid #fff;
+ border-radius:10px;
+ background:#007BFF;
+ color:white;
+ display:block;
+ left:0;
+ width:90%;
+ margin:20px auto;
+
+}
+.new_errors{
+ position: relative;
+ top:20px;
+ text-align: justify; 
+ padding:10px;
+ font-size:12px;
+ border: 1px solid #fff;
+ border-radius:10px;
+ background:red;
+ color:white;
+ display:block;
+ left: 0;
+ width:90%;
+ margin:auto;
+
+}

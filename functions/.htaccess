@@ -1,0 +1,3 @@
+# /includes/.htaccess
+# Deny all direct browser access
+Deny from all

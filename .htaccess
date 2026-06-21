@@ -1,0 +1,38 @@
+# --- BEGIN PERFORMANCE OPTIMIZATION ---
+# 1. Enable Caching for static assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+</IfModule>
+
+# 2. Set Cache-Control Headers
+<IfModule mod_headers.c>
+    <FilesMatch "\.(jpg|jpeg|png|webp|gif|ico)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+</IfModule>
+# --- END PERFORMANCE OPTIMIZATION ---
+
+RewriteEngine On
+
+# Custom 403 error page
+ErrorDocument 403 /403.shtml
+
+# Block all direct requests for .php files
+RewriteCond %{THE_REQUEST} \s/+.*\.php[\s?] [NC]
+RewriteRule ^ - [F,L]
+
+# Allow existing files
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Allow existing directories
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Route everything else to index.php
+RewriteRule ^ index.php [L,QSA]
