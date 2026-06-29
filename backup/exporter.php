@@ -198,9 +198,8 @@ private function saveJson(array $backup): string
 
     if ($json === false) {
 
-        throw new Exception(
-            "Failed to encode backup to JSON."
-        );
+       throw new Exception(
+    "Failed to encode backup to JSON. Error: " . json_last_error_msg());
 
     }
 
@@ -236,7 +235,7 @@ private function compress(string $jsonFile): string
         throw new Exception("Unable to open backup file.");
     }
 
-    $destination = gzopen($gzipFile, 'wb9');
+ $destination = gzopen($gzipFile, 'wb9');
 
     if (!$destination) {
         fclose($source);
@@ -285,7 +284,7 @@ private function cleanupBackups(string $keepFile): void
  */
 public function exportDb(): string
 {
-    
+       
     // Build the backup array
     $backup = $this->buildBackup();
     // Save it as JSON

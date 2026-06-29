@@ -1,7 +1,7 @@
 <?php
 
 $root = $_SERVER["DOCUMENT_ROOT"];
-require $root."/page_init.php";
+ require $root."/page_init.php";
 require_once $root."/backup/config.php";
 
 /**
@@ -359,15 +359,86 @@ display:block;
         border-radius: 50%;
         width: 30px;
         height: 30px;
-       animation: spin 0.5s linear infinite;
+      animation: spin 0.5s linear infinite;
         margin: 20px auto;
+    }
+    
+     #prep2{
+     display: none;
+     text-align:center;
+     color:rgb(50,200,50);
+     font-size:10px;
+     position:absolute;
+     right:0;
+     top:1px;
+     font-weight:bold;
+ }
+    #spinner2 {
+        display: none;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+      animation: spin 0.5s linear infinite;
+      position:absolute;
+      top: -30px;
+      right:15%;
     }
 
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
+    
+ .backup_images{
+  
+  position:relative;
+  display:block;
+  width:100%;
+  
+ }
 
+ .backup_images a{
+  text-align:center;
+  text-decoration:none;
+  background:rgba(200,150,100,0.7);
+  color:#fff;
+  cursor:pointer;
+  border-radius:3px;
+  padding:5px;
+  display:block;
+  width:40%;
+  float:right;
+  font-size:12px;
+  position:relative;
+  top:-30px;
+  right:0;
+ }
+ 
+ .backup_images a:hover{
+  
+  background:rgba(150,200,150,0.8);
+   text-decoration:underline;
+ }
+ 
+ @media screen and (min-width:800px){
+     
+ .backup_images a{
+   right:15%;
+  }
+  
+ #spinner2{
+  right:35%;
+ }
+ 
+ #prep2{
+  right:25%;
+ 
+   }
+ 
+ }
+ 
 </style>';
 
 echo '<section class="section">';
@@ -453,6 +524,13 @@ Invalid Backup Signature.
 </p></div>'; 
      
  }
+ 
+ echo '<div class="backup_images">
+ <a href="backup_images" id="backup-images-btn">Backup Images</a> 
+ <div id="spinner2"></div>
+<span id="prep2">Preparing backup, please wait...</span>
+ </div>';
+ 
 }
 
 elseif(isset($_GET["backup_access"])){
@@ -497,6 +575,31 @@ Addfooter($site);
 
 <script>
  
+ const backup = document.getElementById("backup-images-btn");
+ backup.addEventListener("click",(e)=>{
+ 
+// e.preventDefault();
+  const spinner2 = document.getElementById("spinner2");
+  const prep2 = document.getElementById("prep2");
+  
+ spinner2.style.display ="flex";
+ prep2.style.display = "block";
+ 
+ setTimeout(()=>{
+  
+ spinner2.style.display ="none";
+ prep2.style.display = "none";
+     
+ },10000);
+ 
+ });
+ 
+    
+</script>
+
+
+<script>
+ 
  const form = document.getElementById("regForm");
  form.addEventListener("submit",(e)=>{
   
@@ -512,7 +615,7 @@ Addfooter($site);
  spinner.style.display ="none";
  prep.style.display = "none";
      
- },10000);
+ },20000);
  
  });
  

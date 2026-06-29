@@ -3,20 +3,21 @@
 class Logger
 {
     private string $logFile;
-    private msqli $conn;
+    private mysqli $conn;
     
-    public function __construct(mysqli $conn, string $logDirectory = null)
+    public function __construct(mysqli $conn, string $logDirectory)
     {
      
      $this->conn = $conn;   
         
-       if ($logDirectory === null) {
+       if (!$logDirectory) {
         $logDirectory = __DIR__ . '/logs/';
+       
         }
 
         // Create the logs directory if it doesn't exist
         if (!is_dir($logDirectory)) {
-            mkdir($logDirectory, 0755, true);
+           mkdir($logDirectory, 0755, true);
         }
 
         $this->logFile = rtrim($logDirectory, '/\\') . '/backup_' . date('Y-m') . '.log';
@@ -35,7 +36,7 @@ class Logger
     public function error(string $message): void
     {
         $this->write('ERROR', $message);
-        $this->notifyAdmin($message);
+       $this->notifyAdmin($message);
         
     }
 
@@ -63,7 +64,7 @@ Time: " . date('Y-m-d H:i:s') . "<br>
 Message: {$message}";
 
    
-    $stmt = $this->conn->prepare("
+    $sql = "
         INSERT INTO mail_queue
         (
             recipient_name,
@@ -73,22 +74,30 @@ Message: {$message}";
             attachment,
             created_at
         )
-        VALUES (?, ?, ?, ?, ?, NOW())
-    ");
-
-    $attachment = null;
-    $stmt->bind_param(
-        "sssss",
-        ADMIN_NAME,
-        ADMIN_EMAIL,
+        VALUES (?, ?, ?, ?, ?, ?)
+        ";
+   
+   $time = date("d/m/Y h:i A");
+   $attachment = null;
+   $adminName = ADMIN_NAME;
+   $adminEmail = ADMIN_EMAIL;
+   
+   $stmt = $this->conn->prepare($sql);
+   $stmt->bind_param(
+        "ssssss",
+        $adminName,
+        $adminEmail,
         $subject,
         $messageBody,
-        $attachment
-    );
+        $attachment,
+        $time
+);
 
-    $stmt->execute();
 
-    $stmt->close();
+$stmt->execute();
+
+$stmt->close();
+
 } 
   
   

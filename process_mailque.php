@@ -185,6 +185,8 @@ foreach ($mailque as $queue) {
  }
      
 }
+
+
  //end of loop 
  
  if($er || $errors ){
@@ -192,12 +194,8 @@ foreach ($mailque as $queue) {
   file_put_contents(
     __DIR__ . "/cron_debug.log",
     date("Y-m-d H:i:s") . "Error sending mails. Error_num: $er, Errors: $errors\n",
-    FILE_APPEND
-);
-
-  exit(); 
- 
- }
- 
+    FILE_APPEND);
+}
 
 
+exit(); 

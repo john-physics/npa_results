@@ -40,14 +40,15 @@ define('BACKUP_PREFIX', 'database_backup_');
 |--------------------------------------------------------------------------
 */
 
-define('JSON_FLAGS',
-    JSON_PRETTY_PRINT |
-    JSON_UNESCAPED_UNICODE |
-    JSON_UNESCAPED_SLASHES
+define(
+    'JSON_FLAGS',
+    JSON_PRETTY_PRINT
+    | JSON_UNESCAPED_UNICODE
+    | JSON_UNESCAPED_SLASHES
+    | JSON_INVALID_UTF8_SUBSTITUTE
 );
 
-
-//$dirname = "/home/newphase/domains";
+$dirname = "/home/newphase/domains";
 $dirname = "/storage/emulated/0";
 $configfile = $dirname . '/config/npa.config.ini';
 
@@ -59,13 +60,13 @@ $host = $config["data"]["hostname"];
 $user = $config["data"]["username"];
 $dbpsw = $config["data"]["dbpsw"];
 $dbname = $config["data"]["dbname"];
-$dbname = "npa_backup";
 
    if($dbname){
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT); // Enable error exceptions 
 try{
   
  $conn = mysqli_connect($host,$user,$dbpsw,$dbname);
+ mysqli_set_charset($conn, "utf8");
  
 }
 catch(mysqli_sql_exception $error){

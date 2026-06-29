@@ -1215,7 +1215,7 @@ if($filename && $filename !== "extension_error"){
 
  if($pemail){
      
- $subject = "Access Details for Your Ward’s Result Portal";
+ $subject = "Access Details for Your Ward's Result Portal";
 $body = "Dear $pname,<br><br>
 We are pleased to inform you that your ward, <strong>$std_name</strong>, has been successfully registered on the school's result portal.<br><br>
 You can now access your ward's academic results using the details below:<br><br>
@@ -1265,12 +1265,12 @@ if($Id){
     
  $student_det = collect_user_data($conn,"students","std_id",$Id,"i");
 
- 
  $old_surname = $student_det["surname"];
  $old_othernames =$student_det["othernames"];
+ $old_stdname = $old_surname." ".$old_othernames;
  $old_pname =$student_det["parent_name"];
- $old_pemail =$student_det["parent_email"];
- $old_pnum = $student_det["parent_number"];
+ $old_pemail=$student_det["parent_email"];
+ $old_pnum =$student_det["parent_number"];
  $old_gender = $student_det["gender"];
  $old_profile = $student_det["profile"];
  $old_state = $student_det["std_state"];
@@ -1279,6 +1279,7 @@ if($Id){
  $old_resident = $student_det["resident"];
  $old_year =$student_det["year_admitted"];
  $old_class=$student_det["current_class"];
+ $pin =$student_det["std_pin"];
  
  
   $_SESSION["success_msg"] ="";
@@ -1342,8 +1343,37 @@ if($pemail && $pemail != $old_pemail){
   if(update_user_data($conn,"students","parent_email","std_id",$pemail,$Id,"si")){
   $_SESSION["success_msg"].="<br>• Parent's email updated successfully ✓";
       
-   $upd++;   
-  }
+   $upd++;
+ 
+ //resend email to newly editted email  
+ $pname = null_check($pname,$old_pname);
+ $stdname = $surname." ".$othernames;
+ $std_name = null_check($stdname,$old_stdname);
+ 
+ $subject = "Access Details for Your Ward's Result Portal";
+$body = "Dear $pname,<br><br>
+We are pleased to inform you that your ward, <strong>$std_name</strong>, has been successfully registered on the school's result portal.<br><br>
+You can now access your ward's academic results using the details below:<br><br>
+<strong>Result Checking PIN:</strong> $pin<br>
+<strong>Portal Link:</strong> <a href='$rurl'>$rurl</a><br><br>
+
+Please keep this information secure and do not share it with unauthorized persons.<br><br>
+If you experience any difficulty accessing your ward’s result, kindly contact the ICT Director of the school for assistance.<br><br>
+We appreciate your continued support and wish <strong>$std_name</strong> excellent academic success.<br><br>
+<i>Best regards,<br>
+$site</i>";
+ 
+   $msg =[
+      "name" => $pname,
+      "email" => $pemail,
+      "subject" => $subject,
+      "body" => $body,
+      "attach" => null,
+      ];
+      
+ $insert = inser_into_queue($msg);
+
+ }
   else{
       
  $_SESSION["error_msg"].="<br>• Failed to update parent's email: Database error"; 

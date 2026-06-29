@@ -1,0 +1,189 @@
+[29-Jun-2026 18:37:51 Africa/Lagos] PHP Deprecated:  Logger::__construct(): Implicitly marking parameter $logDirectory as nullable is deprecated, the explicit nullable type must be used instead in /storage/emulated/0/webdev/backup/logger.php on line 8
+[29-Jun-2026 18:37:51 Africa/Lagos] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 10 in /storage/emulated/0/webdev/backup/logger.php:66
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(66): mysqli->prepare('\n        INSERT...')
+#1 /storage/emulated/0/webdev/backup/logger.php(38): Logger->notifyAdmin('Testing logging...')
+#2 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#3 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#4 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#5 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 66
+[29-Jun-2026 18:41:21 Africa/Lagos] PHP Fatal error:  Uncaught ArgumentCountError: Too few arguments to function Logger::__construct(), 1 passed in /storage/emulated/0/webdev/backup/backup.php on line 30 and exactly 2 expected in /storage/emulated/0/webdev/backup/logger.php:8
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/backup.php(30): Logger->__construct(Object(mysqli))
+#1 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#2 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#3 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 8
+[29-Jun-2026 18:42:16 Africa/Lagos] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 10 in /storage/emulated/0/webdev/backup/logger.php:67
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(67): mysqli->prepare('\n        INSERT...')
+#1 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#2 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#3 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#4 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#5 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 67
+[29-Jun-2026 18:47:33 Africa/Lagos] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 10 in /storage/emulated/0/webdev/backup/logger.php:80
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(80): mysqli->prepare('\n        INSERT...')
+#1 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#2 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#3 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#4 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#5 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 80
+[29-Jun-2026 18:47:38 Africa/Lagos] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 10 in /storage/emulated/0/webdev/backup/logger.php:80
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(80): mysqli->prepare('\n        INSERT...')
+#1 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#2 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#3 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#4 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#5 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 80
+[29-Jun-2026 18:49:16 Africa/Lagos] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 10 in /storage/emulated/0/webdev/backup/logger.php:81
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(81): mysqli_stmt->prepare('\n        INSERT...')
+#1 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#2 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#3 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#4 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#5 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 81
+[29-Jun-2026 18:49:19 Africa/Lagos] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 10 in /storage/emulated/0/webdev/backup/logger.php:81
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(81): mysqli_stmt->prepare('\n        INSERT...')
+#1 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#2 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#3 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#4 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#5 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 81
+[29-Jun-2026 18:50:45 Africa/Lagos] PHP Fatal error:  Uncaught ArgumentCountError: mysqli_stmt::prepare() expects exactly 1 argument, 2 given in /storage/emulated/0/webdev/backup/logger.php:81
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(81): mysqli_stmt->prepare('\n        INSERT...', Object(mysqli_stmt))
+#1 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#2 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#3 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#4 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#5 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 81
+[29-Jun-2026 18:51:10 Africa/Lagos] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 10 in /storage/emulated/0/webdev/backup/logger.php:81
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(81): mysqli_stmt->prepare('\n        INSERT...')
+#1 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#2 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#3 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#4 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#5 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 81
+[29-Jun-2026 18:53:13 Africa/Lagos] PHP Fatal error:  Uncaught TypeError: mysqli_stmt_prepare(): Argument #1 ($statement) must be of type mysqli_stmt, string given in /storage/emulated/0/webdev/backup/logger.php:81
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(81): mysqli_stmt_prepare('\n        INSERT...', Object(mysqli_stmt))
+#1 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#2 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#3 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#4 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#5 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 81
+[29-Jun-2026 18:53:15 Africa/Lagos] PHP Fatal error:  Uncaught TypeError: mysqli_stmt_prepare(): Argument #1 ($statement) must be of type mysqli_stmt, string given in /storage/emulated/0/webdev/backup/logger.php:81
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(81): mysqli_stmt_prepare('\n        INSERT...', Object(mysqli_stmt))
+#1 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#2 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#3 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#4 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#5 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 81
+[29-Jun-2026 18:54:05 Africa/Lagos] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 10 in /storage/emulated/0/webdev/backup/logger.php:81
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(81): mysqli_stmt_prepare(Object(mysqli_stmt), '\n        INSERT...')
+#1 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#2 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#3 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#4 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#5 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 81
+[29-Jun-2026 18:58:04 Africa/Lagos] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 10 in /storage/emulated/0/webdev/backup/logger.php:81
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(81): mysqli_stmt_prepare(Object(mysqli_stmt), '\n        INSERT...')
+#1 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#2 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#3 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#4 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#5 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 81
+[29-Jun-2026 18:58:06 Africa/Lagos] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 10 in /storage/emulated/0/webdev/backup/logger.php:81
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(81): mysqli_stmt_prepare(Object(mysqli_stmt), '\n        INSERT...')
+#1 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#2 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#3 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#4 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#5 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 81
+[29-Jun-2026 19:03:57 Africa/Lagos] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 could not be passed by reference in /storage/emulated/0/webdev/backup/logger.php:83
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#1 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#2 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#3 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#4 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 83
+[29-Jun-2026 19:04:00 Africa/Lagos] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 could not be passed by reference in /storage/emulated/0/webdev/backup/logger.php:83
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#1 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#2 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#3 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#4 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 83
+[29-Jun-2026 19:04:02 Africa/Lagos] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 could not be passed by reference in /storage/emulated/0/webdev/backup/logger.php:83
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#1 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#2 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#3 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#4 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 83
+[29-Jun-2026 19:04:08 Africa/Lagos] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 could not be passed by reference in /storage/emulated/0/webdev/backup/logger.php:83
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#1 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#2 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#3 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#4 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 83
+[29-Jun-2026 19:06:40 Africa/Lagos] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 could not be passed by reference in /storage/emulated/0/webdev/backup/logger.php:85
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#1 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#2 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#3 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#4 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 85
+[29-Jun-2026 19:06:42 Africa/Lagos] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 could not be passed by reference in /storage/emulated/0/webdev/backup/logger.php:85
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#1 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#2 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#3 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#4 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 85
+[29-Jun-2026 19:07:17 Africa/Lagos] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 could not be passed by reference in /storage/emulated/0/webdev/backup/logger.php:89
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#1 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#2 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#3 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#4 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 89
+[29-Jun-2026 19:08:57 Africa/Lagos] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #3 could not be passed by reference in /storage/emulated/0/webdev/backup/logger.php:89
+Stack trace:
+#0 /storage/emulated/0/webdev/backup/logger.php(39): Logger->notifyAdmin('Testing logging...')
+#1 /storage/emulated/0/webdev/backup/backup.php(31): Logger->error('Testing logging...')
+#2 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#3 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/backup/backup')
+#4 {main}
+  thrown in /storage/emulated/0/webdev/backup/logger.php on line 89
