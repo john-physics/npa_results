@@ -352,6 +352,7 @@ $sur = null_check($user_det["surname"],"Unknown");
 $oth = null_check($user_det["othernames"],"Unknown");
 $gender = null_check($user_det["gender"],"Unknown");
 $title = null_check($user_det["title"],"Unknown");
+$qaulify = null_check($user_det["qualifications"],"Unknown");
 $staff_cat = null_check($user_det["staff_cat"],"Unknown");
 
 
@@ -425,6 +426,14 @@ echo '<section id="profile_section" class="profile-container">
       <label>Other Name(s)</label>
       <span>'.$oth.'</span>
     </div>
+      <div class="info-row">
+      <label>Title</label>
+      <span>'.$title.'</span>
+    </div>
+      <div class="info-row">
+      <label>Qualification(s)</label>
+      <span>'.$qaulify.'</span>
+    </div>
     <div class="info-row">
       <label>Email</label>
       <span>'.$email.'</span>
@@ -438,7 +447,7 @@ echo '<section id="profile_section" class="profile-container">
       <span>'.$gender.'</span>
     </div>
     <div class="info-row">
-      <label>User Category</label>
+      <label>Staff Category</label>
       <span>'.$staff_cat.'</span>
     </div>
 

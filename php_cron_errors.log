@@ -1,0 +1,8 @@
+[22-Jun-2026 21:34:33 Africa/Lagos] PHP Fatal error:  Uncaught mysqli_sql_exception: Data truncated for column 'status' at row 1 in /storage/emulated/0/webdev/functions/functions.php:1593
+Stack trace:
+#0 /storage/emulated/0/webdev/functions/functions.php(1593): mysqli_stmt_execute(Object(mysqli_stmt))
+#1 /storage/emulated/0/webdev/process_mailque.php(196): update_user_data(Object(mysqli), 'mail_queue', 'status', 'id', 'failed', 112, 'is')
+#2 /storage/emulated/0/webdev/Router.php(40): require('/storage/emulat...')
+#3 /storage/emulated/0/webdev/index.php(9): Router->handle_route('/process_mailqu...')
+#4 {main}
+  thrown in /storage/emulated/0/webdev/functions/functions.php on line 1593

@@ -791,11 +791,11 @@ echo '<div class="print-remarks">
 <div class="footer-btns">
  <button type="button" class="download-btn" id="download-btn"  title="Back to previous page" onclick="goBack()">
  <i class="fa-solid fa-chevron-left"></i>
-    </button>';
+    Back</button>';
 
- echo '<button type="button" class="download-btn" id="download-btn" onclick="window.print()" title="Download this result sheet">
+ echo '<button type="button" class="download-btn" id="download-btn" onclick="window.print()" title="Print this result sheet">
  <i class="fa-solid fa-download" id="scoresheet-droping"></i>
-    </button>
+    Print Result</button>
       </div>
   </div>
 
@@ -1151,7 +1151,7 @@ scoresheetDroping.classList.add("droping");
      scoresheetdownloading.innerHTML =""; 
      scoresheetDroping.classList.remove("droping");
          
-     },5000); 
+     },2000); 
      
  }
 

@@ -186,7 +186,7 @@ elseif($btn == "get_broad_sheet"){
   $session = $explode[2];
   
   $resultTable = form_table_name("results_",$session);
-    $subjectTable = form_table_name("subject_records_",$session);
+  $subjectTable = form_table_name("subject_records_",$session);
   
  $class_set = collect_user_data3($conn,"class_set","session","term","class",$session,$term,$class,"sss");
   
@@ -194,8 +194,7 @@ elseif($btn == "get_broad_sheet"){
  $staff = collect_user_data($conn,"staffs","staff_id",$staff_id,"i");
  $staffname = $staff["title"]." ".$staff["surname"]." ".$staff["othernames"];
  
-  $students = convert_to_array($class_set["students"]);
- 
+ $students = sort_stds($conn,$resultTable, $class_set["students"],"sortbyaverage");
 
    // gather each std results 
   $sheets = [];
@@ -793,8 +792,7 @@ elseif($btn == "download_broad_sheet"){
  
  $subjects = get_class_subjects($conn,$class_set); 
  
-  $students = convert_to_array($class_set["students"]);
- 
+ $students = sort_stds($conn,$resultTable, $class_set["students"],"sortbyaverage");
 
    // gather each std results 
   $rows = [];

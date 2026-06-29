@@ -384,6 +384,12 @@ left:25px;
      color:#1A237E;
       color: #3F51B5;
  }
+ 
+ .fa-database{
+    color: #198754;
+}
+
+
    .dashb-conts #badge{
    
    display:inline-block;
@@ -518,19 +524,13 @@ else{
 $user = get_user_name($userId);
 $surname =  strtolower($user["surname"]);
 
- 
 echo '<section id="dashb-section" class="section">
- <!--
- <button type="button" class ="elipses">
- <i class="fas fa-ellipsis-v"></i>
- </button> 
- -->
  
   <h2>Result Dashboard</h2>';
   
  //Client_Jobs dashboard
- $name = $user["fullname"]??'Anonymous';
- $usercat = $user["user_cat"]??'Anonymous';
+ $name = $user["fullname_title"]??'Anonymous';
+ $usercat= $user["user_cat"]??'Anonymous';
  $ImpAuthorized = implode(":",$authorized);
 
 echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
@@ -563,21 +563,9 @@ echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
   <span id="text">Add Subject</span>
  </div>
  
-  <div class="dashb-conts" data-page="add_new?new_appoint_ment">
- <span><i class="fa-solid fa-calendar-check text-info"></i></span>
-  <span id="text">Appointment</span>
- </div>
-
  <div class="dashb-conts" data-page="add_new?upd_current_session">
  <span><i class="fa-solid fa-clock"></i></span>
- 
   <span id="text">Update Current Session</span>
- </div>
- 
-  <div class="dashb-conts" data-page="add_new?assign_class_teachers">
- <span><i class="fa-solid fa-chalkboard-teacher"></i></span>
- 
-  <span id="text">Assign Class Teachers</span>
  </div>
 
  <div class="dashb-conts" data-page="upload_results">
@@ -587,19 +575,36 @@ echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
 
   <div class="dashb-conts" data-page="results?view_results">
   <span><i class="fa-solid fa-chart-bar text-primary"></i></span>
-  <span id="text">View Results</span>
+  <span id="text">Check Results</span>
  </div>';
  
  if(in_array($usercat, $appointers)){
      
-  echo '<div class="dashb-conts" data-page="settings">
-  <span><i class="fa-solid fa-gear text-primary"></i></span>
-  <span id="text">Settings</span>
+  echo '
+ <div class="dashb-conts" data-page="add_new?new_appoint_ment">
+ <span><i class="fa-solid fa-calendar-check text-info"></i></span>
+  <span id="text">Appointment</span>
  </div>
+ 
+ <div class="dashb-conts" data-page="add_new?assign_class_teachers">
+ <span><i class="fa-solid fa-chalkboard-teacher"></i></span>
+  <span id="text">Assign Class Teachers</span>
+ </div>
+ 
  <div class="dashb-conts" data-page="view_staff">
   <span><i class="fa-solid fa-users text-primary"></i></span>
   <span id="text">Staff List</span>
- </div>';   
+ </div> 
+  
+  <div class="dashb-conts" data-page="settings">
+  <span><i class="fa-solid fa-gear text-primary"></i></span>
+  <span id="text">Settings</span>
+ </div>
+ 
+<div class="dashb-conts" data-page="backup?backup_access">
+    <span><i class="fa-solid fa-database text-success"></i></span>
+    <span id="text">Database Backup</span>
+</div>';   
      
  }
   
@@ -666,7 +671,7 @@ echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
  
   <div class="dashb-conts" data-page="results?view_results">
    <span><i class="fa-solid fa-chart-bar text-primary"></i></span>
-   <span id="text">View Results</span>
+   <span id="text">Check Results</span>
   </div>
  
   <div class="dashb-conts" data-page="profile">

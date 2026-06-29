@@ -135,16 +135,14 @@ $viewClass = $staff_class;//restrict view to staff class only & always.
     <select name="term">';
      
   $terms = generate_terms();
-  $mergeValue = [$term,"All"];
+ // $mergeValue = [$term,"All"];
+  $mergeValue = $term;
  $terms = merge_into_array($mergeValue,$terms,"front",false);
  
 foreach($terms as $termOption){
-
+   $exam = "Examination";   
  if($termOption == "All"){
      $exam = "Examinations";
- }
- else{
-   $exam = "Examination";   
  }
 
 echo '<option value="'.$termOption.'">'.$termOption.' '.$exam.'</option>';
@@ -179,8 +177,7 @@ echo '</select>
  }
  
  if($term == "All"){
-    
-    $term_session = $session;
+  $term_session = $session;
 }
 else{
     $term_session = $term." ".$session;
@@ -442,11 +439,12 @@ if($result_status && is_array($result_status)){
  $unpublished = $result_status["unpublished"]; 
  $class_size =$result_status["class_size"];
  $broadsheet =$result_status["broadsheet"];
+ $cteacher = $result_status["cteacher"];
  $notpublished = $class_size - $published;
 
- if($broadsheet){
+ if($broadsheet && $cteacher == $staff_id){
   
-  echo '<input type="hidden" id="staff_class" value="'.$viewClass.'">
+ echo '<input type="hidden" id="staff_class" value="'.$viewClass.'">
  <input type="hidden" id="term_session" value="'.$term_session.'">'; 
  
   require 'broad_sheet.php';

@@ -155,23 +155,23 @@ $ext = strtolower(pathinfo($prfName, PATHINFO_EXTENSION));
   }
   else{
   
- $rename = $staff_id.substr(time(),6,4);
-      
- $profile = 'profile_'.$rename.'.'.$ext;
  $prfPath = $_SERVER["DOCUMENT_ROOT"]."/images/staff";
  if(!is_dir($prfPath)){
      
  mkdir($prfPath,0755,true);   
      
-  }     
- 
- if(move_uploaded_file($tmp,"$prfPath/$profile")){
+  } 
+  
+ $targetFolder ="/images/staff/";
+ $filename = upload_image_as_webp($prf, $targetFolder, "profile_", $staff_id);
+
+ if($filename && $filename !== "extension_error"){
      
-update_user_data($conn,"staffs","Profile","staff_id",$profile,$staff_id,"si");
+update_user_data($conn,"staffs","Profile","staff_id",$filename,$staff_id,"si");
 // remove old prf from server 
 
 $oldprfDir = "$prfPath/$old_prf";
-if(file_exists($oldprfDir) && !is_dir($oldprfDir)){
+if(is_file($oldprfDir)){
  unlink($oldprfDir); 
    }
   

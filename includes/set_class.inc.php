@@ -45,7 +45,7 @@ $students = fetch_students($conn,$class);
   */ 
   $loadedstutdents = $students; //initially $loadedstutdents
 
-  $class_set = collect_user_data3($conn,"class_set","session","term","class",$session,$term,$class,"sss");
+  $class_set = collect_user_data4($conn,"class_set","staff_id","session","term","class",$userId,$session,$term,$class,"isss");
   
   if($class_set){
   $class_students = convert_to_array($class_set["students"]);
@@ -134,6 +134,8 @@ exit();
   $explode = explode(" ",$term_session);
   $term = $explode[0]." ".$explode[1];
   $session = $explode[2];
+ 
+  $students = sort_stds($conn,"students", $students,"sortbynames");
   $ImpStds = implode(":",$students);
     
    if(check_exist4($conn,"class_set","staff_id","session","term","class",$staff_id,$session,$term,$class,"isss")){
@@ -143,7 +145,7 @@ exit();
      
   update_user_data4($conn,"class_set","date_created","staff_id","session","term","class",$DayDateTime,$staff_id,$session,$term,$class,"sisss");
   
- update_stds_class($conn,$students,$class);
+update_stds_class($conn,$students,$class);
   
       $response = [
      "status" => "success",
@@ -184,7 +186,7 @@ exit();
  
  if($insert["status"] =="success"){
   
- update_stds_class($conn,$students,$class);
+update_stds_class($conn,$students,$class);
  
       $response = [
      "status" => "success",
@@ -248,6 +250,9 @@ exit();
   $explode = explode(" ",$term_session);
   $term = $explode[0]." ".$explode[1];
   $session = $explode[2];
+  
+ $subjects = sort_stds($conn, "variables", $subjects, "sortsubjects");
+  
   $ImpSubjects = implode(":",$subjects);
     
    if(check_exist4($conn,"class_set","staff_id","session","term","class",$staff_id,$session,$term,$class,"isss")){
@@ -331,7 +336,7 @@ exit();
   $term = $explode[0]." ".$explode[1];
   $session = $explode[2];
   
- $class_set = collect_user_data3($conn,"class_set","session","term","class",$session,$term,$std_class,"sss");
+ $class_set = collect_user_data4($conn,"class_set","staff_id","session","term","class",$userId,$session,$term,$std_class,"isss");
   $class_subjects = convert_to_array($class_set["subjects"]);
   
   $subjects = collect_table_data1($conn,"variables","type","Subject","s","value ASC","id");
@@ -498,6 +503,7 @@ exit();
   $newstds = remove_from_array($selected,$stds);
  
   if($newstds){
+  $newstds = sort_stds($conn,"students", $newstds,"sortbynames");
     $newStudents = implode(":",$newstds);
       
   }
@@ -559,6 +565,8 @@ $currentTerm = $sessionTerm["term"];
   $newsubjs = remove_from_array($selected,$subjs,"end",false);
   
   if($newsubjs){
+      
+  $newsubjs = sort_stds($conn, "variables", $newsubjs, "sortsubjects");
    $newSubjects = implode(":",$newsubjs);
       
   }
@@ -598,6 +606,7 @@ $currentTerm = $sessionTerm["term"];
      
    $stds = convert_to_array($classDet["students"]);     
   $newstds = merge_into_array($selected,$stds,"end",false);
+   $newstds = sort_stds($conn, "students", $newstds, "sortbynames");
   $newStudents = implode(":",$newstds);
     
  if(update_user_data4($conn,"class_set","students","staff_id","session","term","class",$newStudents,$userId,$CurrentSession,$currentTerm,$class,"sisss")){
@@ -634,6 +643,8 @@ elseif($btn == "save_add_subjects"){
      
    $subjs = convert_to_array($classDet["subjects"]);     
   $newsubjs = merge_into_array($selected,$subjs,"end",false);
+ 
+  $newsubjs = sort_stds($conn, "variables", $newsubjs, "sortsubjects");
   $newSubjects = implode(":",$newsubjs);
     
  if(update_user_data4($conn,"class_set","subjects","staff_id","session","term","class",$newSubjects,$userId,$CurrentSession,$currentTerm,$class,"sisss")){
@@ -1440,7 +1451,7 @@ exit();
         exit();
     }
 
-    $students = collect_table_data1($conn, "students", "current_class", $class, "s");
+    $students = collect_table_data1($conn, "students", "current_class", $class, "s","surname ASC");
 
     // Check if it is an array and has elements
     if (is_array($students) && count($students) > 0) {

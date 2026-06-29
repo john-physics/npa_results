@@ -8,13 +8,13 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP; 
 use PHPMailer\PHPMailer\POP3; 
 // Include library PHPMailer 
-  require 'vendor/autoload.php';
-
- //Include helper functions & constants
- require 'functions/functions.php';
+require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/functions/functions.php';
 
 $dirname = "/home/newphase/domains";
-$configfile = $dirname.'/config/npa.config.ini';
+//$dirname = "/storage/emulated/0";
+$configfile = $dirname . '/config/npa.config.ini';
+
 
 if(file_exists($configfile)){
     
@@ -29,6 +29,7 @@ $email_user= $config["data"]["email_user"];
 $email_psw  = $config["data"]["email_psw"];
 $email_sender = $config["data"]["email_sender"];
 $rurl = $config["data"]["rurl"];
+$site = $config["data"]["site"];
 $logourl = $rurl."/images/npa-logo.jpg";
  
 
@@ -43,7 +44,12 @@ catch(mysqli_sql_exception $error){
     
    $error -> getMessage();
    
- echo $error;
+ file_put_contents(
+    __DIR__ . "/cron_debug.log",
+    date("Y-m-d H:i:s") . " $error\n",
+    FILE_APPEND
+);
+ 
  exit();
  
     }   
@@ -52,24 +58,35 @@ catch(mysqli_sql_exception $error){
 else{
   $error = "Database name not specified"; 
    
-   echo $error;
-   exit();
+ file_put_contents(
+    __DIR__ . "/cron_debug.log",
+    date("Y-m-d H:i:s") . " $error\n",
+    FILE_APPEND
+);
+
+exit();
   
  }
 }
 else{
  
   $error = "Configuration file not found"; 
- echo $error;
+ 
+ file_put_contents(
+    __DIR__ . "/cron_debug.log",
+    date("Y-m-d H:i:s") . " $error\n",
+    FILE_APPEND
+);
+ 
+
  exit();
   
   
 }
 
-
-
+ $status = "pending";
  $limit = 3; //18 emails per hour with cron of 10 mins interval
- $mailque = collect_table_data1($conn,"mail_queue","status","pending","s","ASC","*",$limit);
+ $mailque = get_pending_mails($conn, $status, $limit);
  
  $sent = 0;
  $er = 0;
@@ -111,7 +128,7 @@ foreach ($mailque as $queue) {
        $mail->addAddress($email, $name);
 
      if ($attach) {
- $path = $_SERVER["DOCUMENT_ROOT"].'/vendor/attachment/';
+ $path = __DIR__.'/vendor/attachment/';
      $file = $path . $attach;
       
   if(is_file($file)){
@@ -135,10 +152,14 @@ foreach ($mailque as $queue) {
      $mail->send();
 
      $sent++;
-   update_user_data($conn,"mail_queue","status","id","sent",$msgId,"is");
+ date_default_timezone_set("Africa/Lagos");
+ $dateTime = date("d/m/Y h:i A");
+   update_user_data($conn,"mail_queue","status","id","sent",$msgId,"si");
+   update_user_data($conn,"mail_queue","sent_at","id",$dateTime,$msgId,"si");
+
 
      if ($attach) {
- $path = $_SERVER["DOCUMENT_ROOT"].'/vendor/attachment/';
+ $path = __DIR__.'/vendor/attachment/';
      $file = $path . $attach;
       
   if(is_file($file)){
@@ -151,9 +172,11 @@ foreach ($mailque as $queue) {
  } catch (Exception $e) {
 
             $er++;
-            update_user_data($conn,"mail_queue","status","id","failed",$msgId,"is");
+            update_user_data($conn,"mail_queue","status","id","failed",$msgId,"si");
             $errors .= $mail->ErrorInfo;
-        }
+        $errors .= $e->getMessage() . "; ";
+        
+ }
 
         
         $mail->clearAddresses();
@@ -164,20 +187,17 @@ foreach ($mailque as $queue) {
 }
  //end of loop 
  
- if($er){
- date_default_timezone_set("Africa/Lagos");
- $DateTime = date("d/m/Y h:i A");
+ if($er || $errors ){
  
-   $response = [
-      "process_status" => "executed",
-      "execution_time" => $DateTime,
-      "email_sent" => $sent,
-      "error_num" => $er, 
-      "errors" => $errors,
-      ];
-     echo json_encode($response);
+  file_put_contents(
+    __DIR__ . "/cron_debug.log",
+    date("Y-m-d H:i:s") . "Error sending mails. Error_num: $er, Errors: $errors\n",
+    FILE_APPEND
+);
+
   exit(); 
  
  }
  
+
 

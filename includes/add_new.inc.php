@@ -441,7 +441,7 @@ $staffName = $staff_det["title"]." ".$staff_det["surname"]." ".$staff_det["other
  $subject = "New Role Appointment";
 $body = "
 
-We’re pleased to inform you that you have been assigned to a new role on <strong>$site</strong> Result Platform.<br><br>
+We're pleased to inform you that you have been assigned to a new role on <strong>$site</strong> Result Platform.<br><br>
 
 <strong>Role Assigned:</strong> $role<br>
 <strong>Assigned By:</strong> $apptName<br><br>
@@ -496,12 +496,14 @@ $site</i>
  
  elseif(isset($_POST["submit-add-staff"])){
  
- $surname =  ucwords(strtolower(trim(htmlspecialchars($_POST["surname"],ENT_QUOTES,'UTF-8'))));
- $othernames =  ucwords(strtolower(trim(htmlspecialchars($_POST["othernames"],ENT_QUOTES,'UTF-8'))));
-$email =  strtolower(trim(htmlspecialchars($_POST["email"],ENT_QUOTES,'UTF-8')));
-$num = trim(htmlspecialchars($_POST["num"],ENT_QUOTES,'UTF-8'));
-$gender = trim(htmlspecialchars($_POST["gender"],ENT_QUOTES,'UTF-8'));
-$title = trim(htmlspecialchars($_POST["title"],ENT_QUOTES,'UTF-8'));
+ $surname =  ucwords(strtolower(trim($_POST["surname"])));
+ $othernames =  ucwords(strtolower(trim($_POST["othernames"])));
+$email =  strtolower(trim($_POST["email"]));
+$num = trim($_POST["num"]);
+$gender = trim($_POST["gender"]);
+$title = trim($_POST["title"]);
+$qualify = trim($_POST["qualify"]);
+
 $profile = $_FILES["profile"];
 $signature = $_FILES["signature"];
 $btnValue =  $_POST["submit-add-staff"];
@@ -512,6 +514,7 @@ $btnValue =  $_POST["submit-add-staff"];
   $_SESSION["othernames"] = $othernames;
   $_SESSION["email"] = $email;
   $_SESSION["number"] = $num;
+  $_SESSION["qualify"] = $qualify;
   $_SESSION["parent_name"] = "";
   $_SESSION["parent_email"] = "";
   $_SESSION["parent_number"] ="";
@@ -557,7 +560,7 @@ if(!$surname){
  }
  
  elseif(!$num){
-  $_SESSION["autofocus"] = "email";  
+  $_SESSION["autofocus"] = "number";  
   $_SESSION["error_msg"]  = "*Staff's phone number is required (preferably WhatsApp number)";
  header("Location: $location");
    die();    
@@ -632,9 +635,9 @@ $login_psw = $psw_str.$char.generate_id(4);
  $insertData = [
      "conn" =>$conn,
      "table" => "staffs",
-     "cols" => ['staff_id','staff_cat','title','surname','othernames','email','number','gender','status','status_reason','login_psw','timestamp'],
-     "vals" => [$Id,$cat,$title,$surname,$othernames,$email,$num,$gender,$status,$status_reason,$psw_hash,$DayDateTime],
-     "params" => "isssssssssss"
+     "cols" => ['staff_id','staff_cat','title','surname','othernames','email','number','gender','status','status_reason','login_psw','timestamp','qualifications'],
+     "vals" => [$Id,$cat,$title,$surname,$othernames,$email,$num,$gender,$status,$status_reason,$psw_hash,$DayDateTime,$qualify],
+     "params" => "issssssssssss"
      
      ];
  
@@ -663,20 +666,6 @@ if($filename && $filename !== "extension_error"){
 if($signature["name"]){
  
  $signatureRename = "";
-if (!empty($_POST['cleaned_signature'])) {
-    $data = $_POST['cleaned_signature'];
-    $data = str_replace('data:image/png;base64,', '', $data);
-    $data = base64_decode($data);
-    
-    $prefix = $Id.rand(10,99);
-    $signatureRename = 'signature_'.$prefix.'.png';
- file_put_contents($_SERVER["DOCUMENT_ROOT"].'/images/staff/'.$signatureRename, $data);
-    
- update_user_data($conn,"staffs","signature","staff_id",$signatureRename,$Id,"si");   
-    
-} 
-else{
-
  $signatureName = $signature["name"];
  $tempDir = $signature["tmp_name"];
  $signatureExt = strtolower(pathinfo($signatureName,PATHINFO_EXTENSION));
@@ -721,10 +710,8 @@ $allowedExt = ['png','jpg','jpeg','webp'];
   $_SESSION["error_msg"] = "signature not uploaded: upload of $signatureExt file as signature is not allowed";         
   }
  
+  }  
  }  
- }  
-
-}
 
 
  $subject = "Staff Portal Access Information";
@@ -787,8 +774,9 @@ if($Id){
  $staff_det = collect_user_data($conn,"staffs","staff_id",$Id,"i");
 
  $old_title = $staff_det["title"];
+$old_qualify=$staff_det["qualifications"];
  $old_surname = $staff_det["surname"];
- $old_othernames =$staff_det["othernames"];
+ $old_othernames=$staff_det["othernames"];
  $old_email =$staff_det["email"];
  $old_num = $staff_det["number"];
  $old_gender = $staff_det["gender"];
@@ -811,6 +799,20 @@ if($Id){
     $err++;  
    }
   }
+ 
+   if($qualify && $qualify != $old_qualify){
+  if(update_user_data($conn,"staffs","qualifications","staff_id",$qualify,$Id,"si")){
+  $_SESSION["success_msg"].="<br>• Staff's Qualification(s) updated successfully ✓";
+      
+   $upd++;   
+  }
+  else{
+      
+ $_SESSION["error_msg"].="<br>• Failed to update staff's Qualification: Database error"; 
+    $err++;  
+   }
+  }
+ 
     
  if($surname && $surname != $old_surname){
   if(update_user_data($conn,"staffs","surname","staff_id",$surname,$Id,"si")){
@@ -1132,11 +1134,12 @@ if(!$surname){
  if($btnValue == "submit-student-det"){
   
  //check duplicates
- 
+ $std_name = $surname . " " . $othernames;
+
  if(check_exist3($conn,"students","surname","othernames","current_class",$surname,$othernames,$currentClass,"sss") && !$allowDuplicate){
 
 $heShe = switch_gender($gender,"pronoun"); 
- $_SESSION["error_msg"] = "$surname $othernames already exist in $currentClass. If $heShe is another student in the same class, Please mark the checkbox 'Allow Duplicate Names' before proceeding";
+ $_SESSION["error_msg"] = "$std_name already exist in $currentClass. If $heShe is another student in the same class, Please mark the checkbox 'Allow Duplicate Names' before proceeding";
    
     $_SESSION["autofocus"] = "surname";  
  
@@ -1210,12 +1213,12 @@ if($filename && $filename !== "extension_error"){
 }
 
 
-$subject = "Access Details for Your Ward’s Result Portal";
-$std_name = $surname . " " . $othernames;
-
+ if($pemail){
+     
+ $subject = "Access Details for Your Ward’s Result Portal";
 $body = "Dear $pname,<br><br>
 We are pleased to inform you that your ward, <strong>$std_name</strong>, has been successfully registered on the school's result portal.<br><br>
-You can now access your ward’s academic results using the details below:<br><br>
+You can now access your ward's academic results using the details below:<br><br>
 <strong>Result Checking PIN:</strong> $pin<br>
 <strong>Portal Link:</strong> <a href='$rurl'>$rurl</a><br><br>
 
@@ -1232,8 +1235,9 @@ $site</i>";
       "body" => $body,
       "attach" => null,
       ];
-  
+      
  $insert = inser_into_queue($msg);
+ }
   
  $_SESSION["success_msg"] ="$std_name was added successfully ✓";  
   

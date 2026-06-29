@@ -1,0 +1,13 @@
+2026-06-22 21:27:30 Cron executed
+2026-06-22 21:27:30 Configuration file not found
+2026-06-22 21:34:22 Cron executed
+2026-06-22 21:34:22 Database connected.
+2026-06-22 21:34:22 Found 3 pending mail(s).
+2026-06-22 21:38:14 Cron executed
+2026-06-22 21:38:14 Database connected.
+2026-06-22 21:38:14 Found 3 pending mail(s).
+2026-06-22 21:38:28Error sending mails. Error_num: 3, Errors: SMTP Error: Could not authenticate.SMTP Error: Could not authenticate.; SMTP Error: Could not authenticate.SMTP Error: Could not authenticate.; SMTP Error: Could not authenticate.SMTP Error: Could not authenticate.; 
+2026-06-22 21:39:58 Cron executed
+2026-06-22 21:39:58 Configuration file not found
+2026-06-22 21:40:00 Cron executed
+2026-06-22 21:40:00 Configuration file not found

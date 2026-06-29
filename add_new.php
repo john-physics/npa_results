@@ -286,6 +286,7 @@ $surname = "";$othernames = "";
  $pnum ="";$autofocus = "";$lga = "";
  $state = "";$address="";
  $sel1 =""; $sel2 =""; $year=""; 
+ $qualify="";
 
  if(isset($_SESSION["sumbit-attempt"])){
    
@@ -304,7 +305,7 @@ $surname = "";$othernames = "";
   
   $dobValue = $_SESSION["dob"];
  $monthValue = $_SESSION["year_admitted"];
-  
+  $qualify = $_SESSION["qualify"];
   
  }
  
@@ -390,7 +391,7 @@ $staffName = $staff_det["title"]." ".$staff_det["surname"]." ".$staff_det["other
  $subject = "New Role Appointment";
 $body = "
 
-We’re pleased to inform you that you have been assigned to a new role on <strong>$site</strong> Result Platform.<br><br>
+We're pleased to inform you that you have been assigned to a new role on <strong>$site</strong> Result Platform.<br><br>
 
 <strong>Role Assigned:</strong> $role<br>
 <strong>Assigned By:</strong> $apptName<br><br>
@@ -491,7 +492,7 @@ $staffName = $staff_det["title"]." ".$staff_det["surname"]." ".$staff_det["other
  $subject = "New Class Assignment";
 $body = "
 
-We’re pleased to inform you that you have been assigned to a new class on <strong>$site</strong> Result Platform.<br><br>
+We're pleased to inform you that you have been assigned to a new class on <strong>$site</strong> Result Platform.<br><br>
 
 <strong>Class Assigned:</strong> $class<br>
 <strong>Assigned By:</strong> $apptName<br><br>
@@ -582,10 +583,10 @@ if(isset($_GET["action"]) && $_GET["action"] == "edit-record"){
  $num = $staff_det["number"];
  $gender = $staff_det["gender"];
  $title = $staff_det["title"];
- 
+ $qualify = $staff_det["qualifications"];
 }
 
- echo '<section id="about" class="section">
+echo '<section id="about" class="section">
   <h2>'.$h2.'</h2>
   <div class="form-container">
   
@@ -616,7 +617,7 @@ if(isset($_GET["action"]) && $_GET["action"] == "edit-record"){
      
  </select>       
   
- <label for="title"> Staff\'s Title</label>
+<label for="title"> Staff\'s Title</label>
  <select id="title" name="title">';
  if($title){
    echo '<option value="">'.$title.'</option>';
@@ -627,10 +628,10 @@ if(isset($_GET["action"]) && $_GET["action"] == "edit-record"){
      
  echo '<option>'.$staff_title.'</option>'; 
  }
-    
+ 
  echo '</select>       
-
- <input type="hidden" name="cleaned_signature" id="cleaned_signature_data">
+<label for="qualify"> Staff\'s Qualification(s)</label>
+<textarea id="qualify" name="qualify" rows="4" placeholder="Enter Staff\'s qualification here, use comma to seperate qualifications if they are 2 or more">'.$qualify.'</textarea>
 
  <div class="filesClass" id="filesClass">
  <div class="fileInputLabels">
@@ -1137,7 +1138,7 @@ echo '<section id="about" class="section">
   <label for="cat">Staff to be Appointed</label>
 <select id="staff" name="staff" required>';
 
-   $staffs = collect_table_data($conn,"staffs");
+   $staffs = collect_table_data1($conn,"staffs","status","Active","s","surname ASC");
  
   $AllStaffs = [];
 foreach($staffs as $staff){
@@ -1167,6 +1168,7 @@ echo '<option value="'.$Id.'">'.$name.'</option>';
     <option>ICT Director</option>
     <option>Asst. ICT Director</option>
     <option>School Manager</option>
+    <option>Asst. School Manager</option>
     <option>Accountant</option>
     <option>Secretary</option>
      <option>Teacher</option>

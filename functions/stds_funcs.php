@@ -1,5 +1,76 @@
 <?php
+function sort_stds($conn, $table, $students, $sort){
 
+  $students = convert_to_array($students);
+    // Nothing to sort
+    if(empty($students)){
+        return [];
+    }
+
+    // Convert IDs to comma-separated integers
+    $ids = implode(",", array_map("intval", $students));
+
+    // Sort by student names
+    if($sort === "sortbynames"){
+
+        $sql = "SELECT std_id
+                FROM students
+                WHERE std_id IN ($ids)
+                ORDER BY surname ASC, othernames ASC";
+
+      $result = mysqli_query($conn, $sql);
+
+        $sorted = [];
+
+        while($row = mysqli_fetch_assoc($result)){
+            $sorted[] = $row['std_id'];
+        }
+
+        return $sorted;
+    }
+
+    // Sort by overall average (Highest to Lowest)
+    if($sort === "sortbyaverage"){
+
+        $sql = "SELECT std_id
+                FROM `$table`
+                WHERE std_id IN ($ids)
+                ORDER BY overall_average DESC, std_id ASC";
+
+    $result = mysqli_query($conn, $sql);
+
+       $sorted = [];
+
+        while($row = mysqli_fetch_assoc($result)){
+            $sorted[] = $row['std_id'];
+        }
+
+        return $sorted;
+    }
+
+if($sort === "sortsubjects"){
+
+    $ids = implode(",", array_map("intval", $students));
+
+    $sql = "SELECT id
+            FROM `$table`
+            WHERE id IN ($ids)
+            ORDER BY value ASC";
+
+    $result = mysqli_query($conn, $sql);
+
+    $sorted = [];
+
+    while($row = mysqli_fetch_assoc($result)){
+        $sorted[] = $row['id'];
+    }
+
+    return $sorted;
+}
+
+    // Return original order if sort type is invalid
+    return $students;
+}
 function copy_processed_signature($sourceFile, $destinationDir)
 {
     // Check if source file exists
@@ -206,8 +277,8 @@ function check_result_status($conn,$term,$session,$class){
    
  $class_set = collect_user_data3($conn,"class_set","session","term","class",$session,$term,$class,"sss");
   $class_size = count(convert_to_array($class_set["students"]));
+ $cteacher = $class_set["staff_id"];
  
-
  $published = count_user_data3($conn,$resultTable,"term","class","result_status",$term,$class,"Published","sss");
  $unpublished = count_user_data3($conn,$resultTable,"term","class","result_status",$term,$class,"Unpublished","sss");
 $totalresults = count_user_data2($conn,$resultTable,"term","class",$term,$class,"ss"); 
@@ -224,7 +295,8 @@ $totalresults = count_user_data2($conn,$resultTable,"term","class",$term,$class,
      "unpublished" => $unpublished,
      "class_size" => $class_size,
      "total_uploads" =>$totalresults,
-     "broadsheet" => $broadsheet
+     "broadsheet" => $broadsheet,
+     "cteacher" => $cteacher,
      ];
 
      
@@ -942,6 +1014,14 @@ function inser_into_queue($msg){
   $msg_subj = $msg["subject"];
   $msg_body = $msg["body"];
   $attach = $msg["attach"]??null;
+
+
+$search  = ["’", "‘", "“", "”"];
+$replace = ["'", "'", '"', '"'];
+
+$msg_subj = str_replace($search, $replace, $msg_subj);
+$msg_body    = str_replace($search, $replace, $msg_body);
+
   
  $EmailData = [
      "conn" => $conn,

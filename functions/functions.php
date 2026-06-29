@@ -1,5 +1,34 @@
 <?php
 
+function get_pending_mails($conn, $status,$limit){
+   
+    $sql = "SELECT *
+            FROM mail_queue
+            WHERE status = ?
+            AND recipient_email IS NOT NULL
+            AND recipient_email != ''
+            ORDER BY id ASC
+            LIMIT ?";
+
+    $stmt = mysqli_prepare($conn, $sql);
+
+    mysqli_stmt_bind_param($stmt, "si", $status, $limit);
+
+  mysqli_stmt_execute($stmt);
+
+  $result = mysqli_stmt_get_result($stmt);
+
+    $data = [];
+
+ while ($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+
+    mysqli_stmt_close($stmt);
+
+    return $data ?: false;
+}
+
 function allow_result_deletion(){
   global $conn; 
  
@@ -2509,8 +2538,15 @@ elseif(isset($_SESSION["std_id"])){
     }
   }
   
+ $fullnameTitle ="None";
+if($fetchIdcol =="staff_id"){
+  $fullnameTitle = $userDet["title"]." ".$userDet["surname"]." "
+     .$userDet["othernames"];
+}
 
  $userName = [
+  
+     "fullname_title" => $fullnameTitle,
      "fullname" => $userDet["surname"]." "
      .$userDet["othernames"],
      "surname" => $userDet["surname"],
@@ -2527,7 +2563,7 @@ elseif(isset($_SESSION["std_id"])){
     "table" => $table,
     "id_col" => $idcol,
      "lastlogin" => $lastlogin,
- 
+   
       ];
      
   }

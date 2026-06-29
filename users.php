@@ -714,6 +714,8 @@ display:block;
   $staff_cat = $_SESSION["staff_cat"];
 
 $authorized[] = "Teacher";
+/*this will allow Teacher Category to view classes and subject lists because this script was used to display them, dont remove unless you change display script for classes and Subjects */
+
 if(in_array($staff_cat,$authorized)){
 //$autofocus = "autofocus";
 
@@ -793,7 +795,8 @@ echo '<section class="section" id="search_results">
 if($user_type == "Staff"){
     
   $classHandling = null_check($user["class_handling"],'None');
- $subjectsHandling = null_check($user["subject_handling"],'None');
+ $subjectsHandling = null_check($user["subject_handling"],null);
+$qualify = null_check($user["qualifications"],'Unknown');
 
   
    echo '<div class="info-item">
@@ -812,7 +815,7 @@ if($user_type == "Staff"){
      <span id="sp" class="status-badge blue_status">'.$user_cat.'</span>
     </div>';
   
-  if($user_cat == $dirgen){
+  if(str_word_count($user_cat)>=2){
       
    echo '<style>
    
@@ -825,9 +828,19 @@ if($user_type == "Staff"){
     echo '<div class="info-item">
     <span class="label">Class Handling:</span>
      <span class="value">'.$classHandling.' </span>
-    </div> <div class="info-item">
+    </div>';
+ 
+ if($subjectsHandling){
+   
+     echo '<div class="info-item">
     <span class="label">Subjects Handling:</span>
       <span class="value">'.$subjectsHandling.' </span>
+    </div>';   
+     
+ }
+     echo '<div class="info-item">
+    <span class="label">Qualification(s):</span>
+      <span class="value">'.$qualify.' </span>
     </div> 
     <div class="info-item">
     <span class="label">Last login:</span>
@@ -843,11 +856,14 @@ $resident = null_check($user["resident"],'Unknown');
 $pin = null_check($user["std_pin"],'None');
 $year = null_check($user["year_admitted"],'Unknown');
 $class = null_check($user["current_class"],'Not yet set');
-  
+ 
+$dob = null_check($user["birth_date"],'Unknown');
+ 
+ 
     echo '
       <div class="info-item">
     <span class="label">Year Admitted:</span>
-      <span class="value">'.$year.' </span>
+     <span class="value">'.$year.' </span>
     </div> 
 
       <div class="info-item">
@@ -876,8 +892,13 @@ $class = null_check($user["current_class"],'Not yet set');
       <span class="value">'.$lga.' </span>
     </div> 
     
+     <div class="info-item">
+     <span class="label">D.O.B:</span>
+      <span class="value">'.$dob.' </span>
+    </div> 
+    
       <div class="info-item">
-     <span class="label">Residential Address:</span>
+     <span class="label">Resident:</span>
       <span class="value">'.$resident.' </span>
     </div>
     

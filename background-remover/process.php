@@ -71,11 +71,12 @@ function processSignature($inputPath, $outputPath)
      * Helps separate ink from paper.
      */
 
-
+   
+   
     imagefilter(
         $image,
         IMG_FILTER_CONTRAST,
-        -20
+        -10
     );
 
 
@@ -163,21 +164,24 @@ function processSignature($inputPath, $outputPath)
              * Darker pixels become
              * more opaque.
              */
-            $alpha = min(
+     
+     /*    
+         $alpha = min(
                 127,
                 max(
                     0,
                     intval(($brightness / 255) * 60)
                 )
             );
-
-            $ink = imagecolorallocatealpha(
-                $output,
-                $r,
-                $g,
-                $b,
-                $alpha
-            );
+ */
+          
+  $ink = imagecolorallocatealpha(
+    $output,
+    max(0, $r - 10),
+    max(0, $g - 10),
+    min(255, $b + 10),
+    0
+);
 
             imagesetpixel(
                 $output,

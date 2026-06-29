@@ -72,7 +72,8 @@ echo '<div class="page-title">
       <label>Select Exam:</label>
   <select name="term">';
  $terms = generate_terms();
-  $mergeValue = [$term,"All"];
+ //$mergeValue = [$term,"All"];
+ $mergeValue = $term;
  $terms = merge_into_array($mergeValue,$terms,"front",false);
  
 foreach($terms as $termOption){

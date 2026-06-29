@@ -438,10 +438,11 @@ echo '<div class="class-container">
        <th>Staff\'s Photo</th>
         <th>Staff\'s Name</th>
       <th>Staff\'s Position</th>
-       <th>Class Handling</th>
-         <th>Subject(s) Handling</th>
+      <th>Qualification(s)</th>
        <th>Staff\'s Number</th>
         <th>Staff\'s Email</th>
+       <th>Class Handling</th>
+ <!-- <th>Subject(s) Handling</th> -->
          <th>Status</th>
          <th>Lastlogin</th>
          <th>Actions</th>
@@ -487,6 +488,7 @@ $title = $staff["title"];
 $classhandling = null_check($staff["class_handling"],'None');
  $subjectshandling= get_staff_subjects($conn,$staff_id);
 $position = null_check($staff["staff_cat"],'Unknown');
+$qulify = null_check($staff["qualifications"],'Unknown');
 
 
     $sn++;
@@ -499,11 +501,12 @@ $position = null_check($staff["staff_cat"],'Unknown');
       </td>
       <td>'.$staff_name.'</td>
       <td>'.$position.'</td>
-      <td>'.$classhandling.'</td>
-      <td>'.$subjectshandling.'</td>
-     <td>'.$staff_num.'</td>
+      <td>'.$qulify.'</td>
+      <td>'.$staff_num.'</td>
       <td>'.$staff_email.'</td>
-      <td>'.$acct_status.'</td>
+      <td>'.$classhandling.'</td>
+   <!--   <td>'.$subjectshandling.'</td> -->
+         <td>'.$acct_status.'</td>
      <td>'.$lastlogin.'</td>
   <td>   
  <div class="action-btns">  
