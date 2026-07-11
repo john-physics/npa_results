@@ -227,7 +227,7 @@ animation: droping 1.1s linear infinite;
             </span>
 
         </div>
-
+        </div>
 
   <div class="sheet-table-wrapper">
 

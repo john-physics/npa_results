@@ -1,4 +1,41 @@
 <?php
+
+function get_processed_results($conn,$staff_id,$record_id=null){
+ 
+ if($record_id){
+//fetch specific subject for staff_id using the record_id     
+
+ $results = collect_table_data2($conn,"subject_results","staff_id","record_id",$staff_id,$record_id,"ii","serial ASC");
+
+ }
+ else{
+ //fetch all subjects for staff_id   
+ $results = [];
+$records = collect_table_data1($conn,"subject_results","staff_id",$staff_id,"i","id DESC","record_id");
+foreach ($records as $record_id){
+ 
+ $result = collect_user_data2($conn,"subject_results","staff_id","record_id",$staff_id,$record_id,"ii");
+ 
+   
+   $resultArray = [
+    "term" => $result["term"],
+   "session" => $result["session"],
+   "class" => $result["class"],
+   "date_created" => $result["date_created"],
+   "subject" => $result["subject"],
+   "record_id" => $result["record_id"],  
+      
+       ];  
+   
+   $results[] = $resultArray;  
+    
+   }
+ }
+ 
+ return $results; 
+    
+}
+
 function sort_stds($conn, $table, $students, $sort){
 
   $students = convert_to_array($students);
@@ -240,6 +277,7 @@ if(strpos($subject,"crop") !== false && strpos($subject,'production') !== false 
         "home economics" => "HME",
         "business studies" => "BST",
         "social studies" => "SOS",
+        "social and citizenship studies" => "SCS",
 
         "christian religious studies" => "CRS",
         "islamic religious studies" => "IRS",
@@ -437,6 +475,43 @@ foreach ($averages as $index =>$average){
     return false; // Prevent publishing of this class results. 
  }
 }
+
+function posInSubject($conn,$table,$record_id,$staff_id,$totalscore){
+  
+  $sql = "SELECT total FROM $table 
+            WHERE staff_id = ? 
+            AND record_id = ?";
+
+   $stmt = mysqli_prepare($conn, $sql);
+    if(!$stmt){
+        return null;
+    }
+
+  mysqli_stmt_bind_param($stmt,"ii",$staff_id,$record_id);
+    
+    mysqli_stmt_execute($stmt);
+ $result = mysqli_stmt_get_result($stmt);
+ $records = [];
+
+ while($row = mysqli_fetch_assoc($result)){
+  $records[] = $row["total"];
+    }
+   mysqli_stmt_close($stmt);
+
+  rsort($records);
+  
+  if(!in_array($totalscore,$records)){
+   return null;   
+  }
+  
+ $pos = array_search($totalscore,$records)+1;
+  
+  $position = format_position($pos);
+  
+  return $position;
+    
+}
+
 
 function pos_in_subject($conn,$subjectTable,$term,$class,$subject,$totalscore){
   

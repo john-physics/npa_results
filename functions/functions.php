@@ -1,5 +1,34 @@
 <?php
 
+function determine_badge($classGrade){
+ 
+ $green =['A1','B2','B3'];
+ $blue =['C4','C5','C6'];
+ $orange =['D7','E8'];
+ $red = ['F9'];
+
+ 
+ if(in_array($classGrade,$green)){
+   $badge = "green_status";
+ }
+ 
+ elseif(in_array($classGrade,$blue)){
+  
+   $badge = "blue_status";   
+     
+ }
+ elseif(in_array($classGrade,$orange)){
+     
+      $badge = "yellow_status";
+ }
+ else{
+     
+  $badge = "red_status";    
+ }
+
+return $badge;    
+}
+
 function get_pending_mails($conn, $status,$limit){
    
     $sql = "SELECT *
@@ -1967,37 +1996,37 @@ function result_grades($total,$prefix=null){
       
   if($total >=0 && $total<40){
         $grade= 'F';
-        $remark = "Poor";
+        $remark = "Fail";
     }
     elseif($total >=40 && $total<45){
         $grade= 'E';
-        $remark = "Fair"; 
+        $remark = "Pass"; 
     }
     elseif($total >=45 && $total<50){
         $grade= 'D';
         $remark = "Pass";
     }
-    elseif($total >=50 && $total<55){
-        $grade= 'C';
-        $remark = "Credit";
-    }
-    elseif($total >=55 && $total<60){
+    elseif($total >=50 && $total<60){
         $grade= 'C';
         $remark = "Credit";
     }
     elseif($total >=60 && $total<65){
         $grade= 'C';
-        $remark = "Good";
+        $remark = "Credit";
     }
     elseif($total >=65 && $total<70){
-        $grade= 'B';
+        $grade= 'C';
         $remark = "Good";
     }
     elseif($total >=70 && $total<75){
         $grade= 'B';
         $remark = "Very Good";
     }
-    elseif($total >=75 && $total<=100){
+      elseif($total >=75 && $total<80){
+        $grade= 'B';
+        $remark = "Very Good";
+    }
+    elseif($total >=80 && $total<=100){
         $grade= 'A';
         $remark = "Excellent";
     }
@@ -2013,37 +2042,37 @@ function result_grades($total,$prefix=null){
       
   if($total >=0 && $total<40){
         $grade= 'F9';
-         $remark = "Poor";
+         $remark = "Fail";
     }
     elseif($total >=40 && $total<45){
         $grade= 'E8';
-         $remark = "Fair";
+         $remark = "Pass";
     }
     elseif($total >=45 && $total<50){
         $grade= 'D7';
         $remark = "Pass";
     }
-    elseif($total >=50 && $total<55){
+    elseif($total >=50 && $total<60){
         $grade= 'C6';
-        $remark = "Lower Credit";
-    }
-    elseif($total >=55 && $total<60){
-        $grade= 'C5';
         $remark = "Credit";
     }
     elseif($total >=60 && $total<65){
-        $grade= 'C4';
-        $remark = "Upper Credit";
+        $grade= 'C5';
+        $remark = "Credit";
     }
     elseif($total >=65 && $total<70){
-        $grade= 'B3';
+        $grade= 'C4';
         $remark = "Good";
     }
     elseif($total >=70 && $total<75){
+        $grade= 'B3';
+        $remark = "Very Good";
+    }
+     elseif($total >=75 && $total<80){
         $grade= 'B2';
         $remark = "Very Good";
     }
-    elseif($total >=75 && $total<=100){
+    elseif($total >=80 && $total<=100){
         $grade= 'A1';
         $remark = "Excellent";
     }

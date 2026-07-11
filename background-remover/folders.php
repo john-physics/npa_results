@@ -113,7 +113,6 @@ body{
 }
 
 
-
 .container{
 
     max-width:1100px;
@@ -123,8 +122,6 @@ body{
     padding:30px 20px;
 
 }
-
-
 
 .header{
 
@@ -141,8 +138,6 @@ body{
 
 }
 
-
-
 .header h1{
 
     margin:0 0 10px;
@@ -157,8 +152,6 @@ body{
 
 }
 
-
-
 .grid{
 
     display:grid;
@@ -172,8 +165,6 @@ body{
     gap:20px;
 
 }
-
-
 
 .card{
 

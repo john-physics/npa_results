@@ -389,6 +389,9 @@ left:25px;
     color: #198754;
 }
 
+.fa-file-lines{
+   color: #0ea5e9;
+}
 
    .dashb-conts #badge{
    
@@ -512,7 +515,6 @@ left:25px;
 
 if(check_staff_login($conn)){
  
- 
  if(isset($_SESSION["staff_id"])){
     $userId = $_SESSION["staff_id"];
 }
@@ -625,6 +627,11 @@ echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
  <span id="text">Signature Cleaner</span>
  </div>
 
+ <div class="dashb-conts" data-page="subject_records">
+  <span><i class="fa-solid fa-file-lines text-primary"></i></span>
+  <span id="text">Subject Records</span>
+ </div>
+
 <div class="dashb-conts" data-page="profile">
   <span><i class="fa-solid fa-user-shield text-primary"></i></span>
   <span id="text">Staff Profile</span>
@@ -673,6 +680,11 @@ echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
    <span><i class="fa-solid fa-chart-bar text-primary"></i></span>
    <span id="text">Check Results</span>
   </div>
+ 
+ <div class="dashb-conts" data-page="subject_records">
+  <span><i class="fa-solid fa-file-lines text-primary"></i></span>
+  <span id="text">Subject Records</span>
+ </div>
  
   <div class="dashb-conts" data-page="profile">
    <span><i class="fa-solid fa-user-shield text-primary"></i></span>

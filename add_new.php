@@ -1416,7 +1416,7 @@ RegForm.addEventListener("submit",(e)=>{
     spinner.style.display= "none";  
    prep1.style.display = "none";
  
-  },20000); 
+  },10000); 
    
    
 });

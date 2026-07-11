@@ -3,17 +3,18 @@
 function head($meta,$title,$dashb='portal'){
 
  global $siteName,$conn;
+ $canonical = "https://" . $_SERVER['HTTP_HOST'] . strtok($_SERVER['REQUEST_URI'], '?');
 
  echo '<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name ="description" content="'.$meta.'">
-<meta name ="key words" content="NewPhase, Academy,Result,'.$dashb.',Check result,ABC">
+<meta name ="keywords" content="NewPhase, Academy,Result,'.$dashb.',Check result,ABC">
 <meta name="author" content="John Ella">
- 
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 <title>'.$title.'</title>
+<link rel="canonical" href="'. htmlspecialchars($canonical).'">
 <link rel="stylesheet" href="/css/new_styles.css">
 <link rel="stylesheet" href="/css/styles.css">
  <link rel="stylesheet" href="/css/form_styles.css">
