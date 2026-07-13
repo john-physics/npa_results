@@ -175,8 +175,9 @@ echo '<div class="class-container">
         <th>Class Name</th>
        <th>Class Category</th>
         <th>Assessment Pattern</th>
-         <th>Number of Students</th>
+         <th>Students Number</th>
          <th>Class Teacher</th>
+         <th>Current Term\'s Result</th>
          <th>Actions</th>
             </tr>
         </thead>
@@ -204,6 +205,23 @@ echo '<div class="class-container">
     $totalStds+=$stdNum; 
     $session = $classDets["session"];
     $term = $classDets["term"];
+   
+ $result_status = check_result_status($conn,$term,$session,$class);
+ $currentResult = "None";
+ if($result_status){
+ $published = $result_status["published"];
+ $unpublished = $result_status["unpublished"]; 
+ $class_size =$result_status["class_size"];
+ 
+ if($class_size){
+  $notpublished = $class_size - $published;
+  $currentResult = "Published";
+ if($notpublished > 0){
+  $currentResult = "Not published";   
+    }  
+  }
+ }
+ 
     $sn++;
      echo '<tr>
        <td>'.$sn.'.</td>
@@ -212,6 +230,7 @@ echo '<div class="class-container">
       <td>'.$assPattern.'</td>
       <td>'.$stdNum.'</td>
       <td>'.$classTeacher.'</td>
+      <td>'.$currentResult.'</td>
       <td>
      <a href="#" class="preview-btn" data-class="'.$class.'">Remove </a>
     

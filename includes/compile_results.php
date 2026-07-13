@@ -359,7 +359,7 @@ if(result_signataries($conn,$resultTable,$term,$class,$std_id,true)){
  $overallaverage = round($overallscore/$subjectNum,2);
  $totalscoreable = $subjectNum*100;
 if($overallaverage){
- $gradeRemark = result_grades($overallaverage,'None');
+ $gradeRemark = result_grades($overallaverage);
  $overallgrade = $gradeRemark["grade"];
  $remark = $gradeRemark["remark"];
 }

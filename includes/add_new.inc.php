@@ -1778,6 +1778,231 @@ elseif(isset($_POST["submit-staff-signature"])){
  }
 }
 
+elseif(isset($_POST["submit-add-grades"])){
+    
+$score_range =trim($_POST["score_range"]);
+$grade_suffix = strtoupper(trim($_POST["grade_suffix"]));
+$grade_nonsuffix = strtoupper(trim($_POST["grade_nonsuffix"]));
+$remark = ucwords(strtolower(trim($_POST["remark"])));
+$btnValue = strtolower(trim($_POST["submit-add-grades"]));
+ 
+ $_SESSION["submit-attempt"]=true;
+ $_SESSION["score_range"] = $score_range;
+ $_SESSION["grade_suffix"]= $grade_suffix;
+ $_SESSION["grade_nonsuffix"]=$grade_nonsuffix;
+ $_SESSION["remark"] =$remark;
+ 
+ 
+$grade_suffix = preg_replace('/\s+/', '', trim($grade_suffix));
+$validGrade = '/^[A-Za-z][0-9]+$/';
+ 
+// Remove extra spaces around the dash
+$score_range = preg_replace('/\s*-\s*/', ' - ', trim($score_range));
+$validRange = '/^\d+\s-\s\d+$/';
+
+
+// Split into lower and upper limits
+[$lowerRange, $upperRange] = array_map('intval', explode(' - ', $score_range));
+
+
+if (!preg_match($validRange, $score_range)) {
+  $_SESSION["score_range"]="";
+    $_SESSION["error_msg"] = "Please enter a valid score range.";
+    header("Location:$location");
+    die();
+
+}
+
+elseif ($lowerRange >= $upperRange) {
+   $_SESSION["score_range"] ="";
+    $_SESSION["error_msg"] = "The lower score must be less than the upper score.";
+    header("Location:$location");
+    die();
+
+}
+ elseif(!$grade_suffix || !$grade_nonsuffix || !$remark){
+     
+  $_SESSION["error_msg"] ="*All fields are required";  
+    header("Location:$location");
+    die();    
+     
+ }
+ elseif(is_numeric($remark) || str_word_count($remark >3)){
+   $_SESSION["remark"]="";  
+  $_SESSION["error_msg"] ="Please enter a valid remark e.g Credit, Good, Very Good or Excellent";  
+    header("Location:$location");
+    die();  
+     
+ }
+ elseif(is_numeric($grade_nonsuffix) || strlen($grade_nonsuffix) >1){
+     $_SESSION["grade_nonsuffix"]="";
+    $_SESSION["error_msg"] ="Please enter a valid grade with no suffix e.g A, B, C, D, E or F";  
+    header("Location:$location");
+    die();    
+     
+ }
+   
+elseif (!preg_match($validGrade, $grade_suffix)) {
+$_SESSION["grade_suffix"]="";
+    $_SESSION["error_msg"] = "Please enter a valid grade with suffix e.g. A1, B2, B3, C4, etc.";
+    header("Location:$location");
+    die();
+
+}
+ else{
+ //good to go
+ 
+ if($btnValue == "submit-grade-details"){
+     
+ if(check_exist($conn,"grading_system","score_range",$score_range,"s")){
+     
+   $_SESSION["score_range"]="";
+   $_SESSION["error_msg"] = "The entered range already exist, please enter another range";
+    header("Location:$location");
+    die();  
+     
+ }  
+    
+    $insertData =[
+     "conn" => $conn,
+     "table"=> "grading_system",
+     "cols"=> ['score_range','grade_suffix','grade_nonsuffix','remark','lower_limit','upper_limit'],
+     "vals"=> [$score_range,$grade_suffix,$grade_nonsuffix,$remark,$lowerRange,$upperRange],
+     "params"=> "ssssii"
+     
+     ];
+    
+ $insert = insert_user_data($insertData);
+ if($insert["status"]=="success"){
+  
+  if(isset($_SESSION["submit-attempt"])){
+  unset($_SESSION["submit-attempt"]);  
+  }
+  
+$msg_report = http_build_query([
+    'msg_report' => 'Grade saved successfully',
+    'report' => 'success'
+]);
+
+if (strpos($location, '?') === false) {
+    $location .= '?' . $msg_report;
+} else {
+    $location .= '&' . $msg_report;
+}
+
+header("Location: $location");
+die();
+     
+ }
+  else{
+      
+  $_SESSION["error_msg"] ="Sorry,something went wrong while prossesing your request, please try again.";  
+    header("Location:$location");
+    die();     
+  }   
+ }
+ elseif($btnValue == "edit-grade-details"){
+  $grade_id = trim($_POST["grade_id"]);
+  $location = $_SERVER["HTTP_REFERER"];
+  if(!$grade_id){
+      
+ $_SESSION["error_msg"] ="Sorry,something went wrong while prossesing your request, please reload the page and try again.";  
+    header("Location:$location");
+    die();  
+      
+  }
+  else{
+   
+ $grade_det = collect_user_data($conn,"grading_system","id",$grade_id,"i");
+
+$old_score_range  = $grade_det["score_range"];
+$old_grade_suffix = $grade_det["grade_suffix"];
+$old_grade_nonsuffix = $grade_det["grade_nonsuffix"];
+$old_remark = $grade_det["remark"];
+$old_lowerRange = $grade_det["lower_limit"];
+$old_upperRange = $grade_det["upper_limit"];
+    
+   
+  $upd=0;
+  $_SESSION["success_msg"] = "";
+  if($score_range && $score_range != $old_score_range){
+  if(update_user_data($conn,"grading_system","score_range","id",$score_range,$grade_id,"si")) {
+   $upd++;   
+   $_SESSION["success_msg"].="<br>Score Range updated successfully"; 
+    }  
+  }
+  
+   if($lowerRange && $lowerRange != $old_lowerRange){
+  if(update_user_data($conn,"grading_system","lower_limit","id",$lowerRange,$grade_id,"si")) {
+   $upd++;   
+   $_SESSION["success_msg"].="<br>Score Range updated successfully"; 
+    }  
+  } 
+  
+     if($upperRange && $upperRange != $old_upperRange){
+  if(update_user_data($conn,"grading_system","upper_limit","id",$upperRange,$grade_id,"si")) {
+   $upd++;   
+   $_SESSION["success_msg"].="<br>Score Range updated successfully"; 
+    }  
+  }
+  
+   if($grade_suffix && $grade_suffix != $old_grade_suffix){
+  if(update_user_data($conn,"grading_system","grade_suffix","id",$grade_suffix,$grade_id,"si")) {
+   $upd++;   
+   $_SESSION["success_msg"].="<br>Grade with suffix updated successfully"; 
+    }  
+  }
+  
+   if($grade_nonsuffix && $grade_nonsuffix != $old_grade_nonsuffix){
+  if(update_user_data($conn,"grading_system","grade_nonsuffix","id",$grade_nonsuffix,$grade_id,"si")) {
+   $upd++;   
+   $_SESSION["success_msg"].="<br>Grade without suffix updated successfully"; 
+    }  
+  }
+  
+  if($remark && $remark != $old_remark){
+  if(update_user_data($conn,"grading_system","remark","id",$remark,$grade_id,"si")) {
+   $upd++;   
+   $_SESSION["success_msg"].="<br>Grade remark updated successfully"; 
+    }  
+  }
+  
+ if(!$upd){
+  
+  $_SESSION["success_msg"] = "No changes was made";   
+ }
+  
+ $msg_report = http_build_query([
+    'msg_report' => 'Update completed successfully',
+    'report' => 'success'
+]);
+
+$location = "/grading_system";
+if (strpos($location, '?') === false) {
+    $location .= '?' . $msg_report;
+} else {
+    $location .= '&' . $msg_report;
+}
+
+  if(isset($_SESSION["submit-attempt"])){
+  unset($_SESSION["submit-attempt"]);  
+  }
+
+header("Location: $location");
+die(); 
+  
+  }
+ }
+ else{
+  
+    $_SESSION["error_msg"] ="unknown request";  
+    header("Location:$location");
+    die();    
+           
+  }
+ }
+}
+
   //you can add more btns here.
 else{
      $_SESSION["error_msg"] ="unknown button name";  

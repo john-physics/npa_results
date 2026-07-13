@@ -57,7 +57,7 @@ exit();
         $response = [
       "stat" => "failed",
       "err" => "em",
-      "message" => "Your account is not active !, please check your email for a confirmation message from us and confirm your email to activate your account or send us a feed back using this email $email",
+      "message" => "Your account is not active !, please visit the school's ICT unit to tender this complain.",
       ];
 echo json_encode($response);
 exit();    

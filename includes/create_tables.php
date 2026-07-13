@@ -195,6 +195,7 @@ $subjectTableDetails = [
         "total",
         "position",
          "grade",
+         "remark",
         "result_status",
         "date_created",
     ],
@@ -213,6 +214,7 @@ $subjectTableDetails = [
         "INT",
         "INT",
         "INT",
+        "VARCHAR",
         "VARCHAR",
         "VARCHAR",
         "VARCHAR",
@@ -238,10 +240,12 @@ $subjectTableDetails = [
         "100",
         "100",
         "100",
+        "100",
     ],
 
     "column_default" => [
         "",
+        null,
         null,
         null,
         null,
@@ -263,6 +267,7 @@ $subjectTableDetails = [
 
     "column_null" => [
         "NOT NULL",
+        "NULL",
         "NULL",
         "NULL",
         "NULL",

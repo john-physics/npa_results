@@ -125,10 +125,12 @@ if($total > 100){
   
   $gradeRemark ="";//clear previous grade  
   $grade = "";//clear previous grade 
+  $remark ="";
     if($total > 0){
-    $gradeRemark = result_grades($total,"None");
+    $gradeRemark = result_grades($total);
     $grade = $gradeRemark["grade"];
-      
+    $remark = $gradeRemark["remark"];
+    
     } 
     
   $subjectTableName = form_table_name("subject_records_",$session);
@@ -159,6 +161,11 @@ if($total > 100){
    if($grade){
   update_user_data4($conn,$subjectTableName,"grade","std_id","term","class","subject",$grade,$std_id,$term,$class,$subject_id,"sisss");    
   }
+  
+    if($remark){
+  update_user_data4($conn,$subjectTableName,"remark","std_id","term","class","subject",$remark,$std_id,$term,$class,$subject_id,"sisss");    
+  }
+  
   $sucmsg = "Results updated successfully";
   
  }

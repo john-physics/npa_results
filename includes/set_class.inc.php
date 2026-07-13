@@ -16,6 +16,9 @@ if(isset($_SESSION["staff_id"])){
 $CurrentSession = $current['session'];
 $currentTerm = $current["term"];
 
+$staff_det = get_user_name($userId); 
+$staff_name= $staff_det["fullname_title"];
+ 
 }
 else{
     
@@ -737,6 +740,7 @@ $subjectTableName = form_table_name("subject_records_",$session);
 delete_user_data($conn,$subjectTableName,"term",$term,"s");
   
   //log action 
+  $action = "Deleted All Results";
 $log = log_admin_action($conn,$userId,$staff_name,$action,$delete_reason, $records,$session,$term,$backup);
  
    $response = [
@@ -910,6 +914,13 @@ exit();
  //clean up subject_records 
  delete_user_data3($conn,$subjectTableName,"std_id","term","class",$std_id,$term,$class,"iss");     
      
+    //log action 
+  $action = "Deleted one result";
+  $delete_reason = "Not specified";
+  $backup = "Not available";
+  $records = 1;
+ $log = log_admin_action($conn,$userId,$staff_name,$action,$delete_reason, $records,$session,$term,$backup);
+    
       $response = [
      "status" => "success",
      "error" => "none",
@@ -1065,6 +1076,14 @@ exit();
      
   update_user_data($conn,"variables","value","type",$value,$setting,"ss");
   
+  
+    //log action 
+  $action = "Updated $setting to $value";
+  $delete_reason = "Not specified";
+  $backup = "Not available";
+  $records = 1;
+ $log = log_admin_action($conn,$userId,$staff_name,$action,$delete_reason, $records,$CurrentSession,$currentTerm,$backup);
+   
       $response = [
      "status" => "success",
      "error" => "none",
@@ -1483,14 +1502,255 @@ exit();
     exit();
 }
 
+elseif($btn == "del_subject_records"){
+  
+  $staff_id = trim($data["staff_id"]);
+  $record_id = trim($data["record_id"]);
+  
+  if(!$record_id || !$staff_id){
+      
+       $response = [
+     "status" => "failed",
+     "error" => "Empty Input",
+     "message" => "Sorry something went wrong, Please reload the page and try again.",
+      ];
+echo json_encode($response);
+exit();    
+    
+  }
+  
+ elseif(!check_exist2($conn,"subject_results","record_id","staff_id",$record_id,$staff_id,"ii")){
+   
+       $response = [
+     "status" => "failed",
+     "error" => "Invalid Input",
+     "message" => "Sorry something went wrong, Please reload the page and try again.",
+      ];
+echo json_encode($response);
+exit();    
+
+ }
  
+ else{
+ //delete records 
+ 
+ if(delete_user_data2($conn,"subject_results","record_id","staff_id",$record_id,$staff_id,"ii")){
+  
+  $response = [
+     "status" => "success",
+     "error" => "None",
+     "message" => "Records deleted successfully",
+      ];
+echo json_encode($response);
+exit();   
+     
+ }
+ else{
+ 
+ $response = [
+     "status" => "failed",
+     "error" => "SQL Error",
+     "message" => "Failed to delete records, Please reload the page and try again.",
+      ];
+echo json_encode($response);
+exit();    
+     
+ }
+ }
+}
+
+
+elseif($btn == "del_score_range"){
+    
+ $grade_id = trim($data["grade_id"]);  
+ $staff_cat = $_SESSION["staff_cat"];
+ 
+ if(!in_array($staff_cat,$authorized)){
+     
+  $response = [
+     "status" => "failed",
+     "error" => "Authorization",
+     "message" => "Unauthorized user attempt .",
+      ];
+echo json_encode($response);
+exit();    
+     
+ }
+ else{
+     
+  if(check_exist($conn,"grading_system","id",$grade_id,"i")){
+ 
+$rangeDet = collect_user_data($conn,"grading_system","id",$grade_id,"i");
+$score_range = $rangeDet["score_range"];
+ 
+ if(delete_user_data($conn,"grading_system","id",$grade_id,"i")){
+  
+     //log action 
+  $action = "Deleted score range for grading system";
+  $delete_reason = "Not specified";
+  $backup = $score_range;
+  $records = 1;
+ $log = log_admin_action($conn,$userId,$staff_name,$action,$delete_reason, $records,$CurrentSession,$currentTerm,$backup); 
+  
+  
+  $response = [
+     "status" => "success",
+     "error" => "None",
+     "message" => "Score range deleted successfully",
+      ];
+echo json_encode($response);
+exit();   
+     
+ }
+ else{
+ 
+ $response = [
+     "status" => "failed",
+     "error" => "SQL Error",
+     "message" => "Failed to delete Score range, Please reload the page and try again.",
+      ];
+echo json_encode($response);
+exit();    
+     
+   }
+  }
+  else{
+      
+     
+       $response = [
+     "status" => "failed",
+     "error" => "Invalid Input",
+     "message" => "Sorry something went wrong, Please reload the page and try again.",
+      ];
+echo json_encode($response);
+exit();      
+      
+  }
+ }
+}
+ 
+elseif($btn =="switchgradeinuse"){
+  
+  $staff_cat = $_SESSION["staff_cat"];
+  $Inuse  = trim($data["in_use"]);
+  $vartype = "grading_system_inuse";
+  $varcat = "General";
+ 
+ 
+ if(!$Inuse){
+   
+  $response = [
+     "status" => "failed",
+     "error" => "Empty Input",
+     "message" => "Sorry something went wrong, Please reload the page and try again.",
+      ];
+echo json_encode($response);
+exit();  
+  
+ }
+ 
+ elseif(!in_array($staff_cat,$authorized)){
+   
+ $response = [
+     "status" => "failed",
+     "error" => "Authorization",
+     "message" => "Unauthorized user attempt .",
+      ];
+echo json_encode($response);
+exit();  
+  
+ }
+ else{
+ 
+      //log action 
+   if($Inuse =="grade_suffix"){
+     $InuseText = "grade with suffix";
+    }
+   else{
+     $InuseText = "grade without suffix";
+     
+   } 
+    
+  $action = "Updated grading system to $InuseText";
+  $delete_reason = "Not specified";
+  $backup = "Not available";
+  $records = 1;
+ $log = log_admin_action($conn,$userId,$staff_name,$action,$delete_reason, $records,$CurrentSession,$currentTerm,$backup); 
+ 
+ if(check_exist($conn,"variables","type",$vartype,"s")){
+ //update $vartype    
+  
+ if(update_user_data($conn,"variables","value","type",$Inuse,$vartype,"ss")){
+    
+   $response = [
+     "status" => "success",
+     "error" => "None",
+     "message" => "Choice saved",
+      ];
+echo json_encode($response);
+exit();    
+     
+ }
+  else{
+  
+ $response = [
+     "status" => "failed",
+     "error" => "SQL Error",
+     "message" => "Failed to update grade in use, Please reload the page and try again.",
+      ];
+echo json_encode($response);
+exit();     
+      
+  }  
+ }
+ else{
+//insert $vartype
+
+ $insertData = [
+     "conn"=>$conn,
+     "table"=>"variables",
+     "cols"=> ['type','value','classification'],
+     "vals"=> [$vartype,$Inuse,$varcat],
+     "params"=> "sss"
+
+     ];
+     
+ $insert = insert_user_data($insertData);
+ 
+ if($insert["status"]=="success"){
+     
+   $response = [
+     "status" => "success",
+     "error" => "None",
+     "message" => "Choice saved",
+      ];
+echo json_encode($response);
+exit();    
+     
+ }
+  else{
+ 
+ $response = [
+     "status" => "failed",
+     "error" => "SQL Error",
+     "message" => "Failed to update grade in use, Please reload the page and try again.",
+      ];
+echo json_encode($response);
+exit();     
+      
+    }   
+
+   }
+ }
+ 
+}
  
  //more btns here.
  else{
      
     $response = [
      "status" => "failed",
-     "error" => "button_name",
+     "error" => "Button Name",
      "message" => "Unrecognized button name !",
       ];
 echo json_encode($response);

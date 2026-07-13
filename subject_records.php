@@ -143,7 +143,7 @@ body{
 
     display:inline-block;
     margin: 10px;
-    padding:10px 18px;
+    padding:10px 16px;
     text-decoration:none;
     color:#fff;
     background:#5b1028;
@@ -172,7 +172,7 @@ body{
 }
 
 
-#spinner, #spinner2 {
+#spinner {
         display: none;
         border: 4px solid #f3f3f3;
         border-top: 4px solid #3498db;
@@ -182,7 +182,19 @@ body{
         animation: spin 0.5s linear infinite;
         margin: 10px auto;
     }
-
+.spinner2{
+    position:absolute;
+    right:27%;
+  
+    display:none;
+    border:4px solid #f3f3f3;
+    border-top:4px solid #dc2626;
+    border-radius:50%;
+    width:35px;
+    height:35px;
+    animation:spin 0.4s linear infinite;
+    margin:20px auto 10px auto;
+}
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
@@ -834,6 +846,98 @@ tr:nth-child(odd){
 }
 
 
+/* Modal Background */
+.delete-modal{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    
+    display:none;
+    
+    justify-content:center;
+    align-items:center;
+    
+    z-index:9999;
+}
+
+/* Modal Box */
+.delete-modal-content{
+    background:#fff;
+    width:90%;
+    max-width:600px;
+    
+    padding:20px;
+    border-radius:10px;
+    
+    text-align:center;
+    
+    animation:popup .2s ease;
+}
+
+/* Animation */
+@keyframes popup{
+    from{
+        transform:scale(0.8);
+        opacity:0;
+    }
+    
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+/* Buttons */
+.delete-modal-actions{
+    margin-top:20px;
+    
+    display:flex;
+    justify-content:center;
+    gap:20%;
+}
+
+.cancel-btn,
+.confirm-btn{
+    border:none;
+    padding:10px 18px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.cancel-btn{
+    background:#ccc;
+}
+
+.confirm-btn{
+    background:#d9534f;
+    color:#fff;
+}
+.delete-modal-content h3{
+    color:#2b78b7;
+    
+    margin-bottom:10px;
+    
+    font-size:22px;
+    
+    font-weight:600;
+}
+
+@media screen and (min-width:800px){
+    
+ .btn{
+ font-size:10px;
+  padding: 10px 12px; 
+}
+
+.spinner2{
+    
+right:38%;    
+    
+  }
+}
 </style>';
 
 if(isset($_GET["new_subject_records"])){
@@ -1369,6 +1473,10 @@ Date Created: '.$date.'
 View Result Sheet
 </a>
 
+<a href="" id="delete-record" data-record-id='.$record_id.' data-staff-id='.$staff_id.' title="click here to delete this record" class="btn delete-record">
+Delete this Record
+</a>
+
 
 </div>';
  
@@ -1384,6 +1492,38 @@ echo '</div>';
 
 Addfooter($site); 
 ?>
+
+<!-- Popup Modal -->
+<div id="deleteModal" class="delete-modal">
+    
+    <div class="delete-modal-content">
+        
+       <h3>Delete Processed Records</h3>
+        
+        <p>
+           Are you sure you want to delete the selected record?
+            <br>
+            This action cannot be undone.
+        </p>
+
+       <div class="spinner2" id="deleteSpinner2"></div>
+        <div class="delete-modal-actions">
+            
+            <button type="button" id="cancelDelete" class="cancel-btn">
+                Cancel
+            </button>
+
+            <button type="button" id="confirmDelete" class="confirm-btn">
+                Yes, Delete
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 
 <script>
 
@@ -1412,6 +1552,7 @@ RegForm.addEventListener("submit",(e)=>{
  <script>
  
  const updBtn = document.getElementById("upd-btn");
+ 
 const Resultform = document.getElementById("resultForm");
 resultForm.addEventListener("submit",(e)=>{
     
@@ -1425,5 +1566,109 @@ resultForm.addEventListener("submit",(e)=>{
   },10000); 
    
 });    
+     
+ </script>
+ 
+ <script>
+ let staffId = ""; 
+ let recordId ="";
+ 
+ document.addEventListener("click",(e)=>{
+    
+ const delBtn = e.target.closest(".delete-record"); 
+ const modal = document.getElementById("deleteModal");
+  
+  if(delBtn){
+ e.preventDefault();
+ 
+ staffId = delBtn.dataset.staffId;
+ recordId = delBtn.dataset.recordId;
+
+modal.style.display="flex";
+modal.classList.add("shown");
+
+   } 
+ 
+ 
+  document.getElementById("confirmDelete").addEventListener("click",(e)=>{
+   
+  const spinner2 = document.getElementById("deleteSpinner2");
+  
+  spinner2.style.display ="flex";
+    
+      fetch("/includes/set_class.inc", {
+
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+       body:JSON.stringify({
+     button_name:"del_subject_records",
+     staff_id:staffId,
+     record_id: recordId,
+      })
+
+    })
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        if(data.status == "success"){
+           showToast( data.message);
+          spinner2.style.display = "none";
+            setTimeout(() => {
+                closePopup("deletePopup");
+            window.location.reload();
+
+            }, 1000);
+            
+        }else{
+        spinner2.style.display = "none";
+        modal.classList.remove("shown");
+        modal.style.display="none"; 
+      
+     showError(data.message,data.error);
+        }
+
+    })
+
+    .catch(error => {
+
+        spinner2.style.display = "none";
+        modal.classList.remove("shown");
+        modal.style.display="none"; 
+  
+    showError(error,"Ajax Error");
+
+    });
+   
+ });
+ 
+   
+ document.getElementById("cancelDelete").addEventListener("click",(e)=>{
+   
+        modal.classList.remove("shown");
+        modal.style.display="none"; 
+     
+ });
+  
+ document.addEventListener("click", (e) => {
+
+    const modal = e.target;
+    // Close only if the background overlay itself was clicked
+    if (modal.classList.contains("shown")) {
+        modal.classList.remove("shown");
+        modal.style.display="none";
+    }
+
+}); 
+   
+ }); 
+ 
+ 
+  
+   
      
  </script>

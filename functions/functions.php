@@ -1,5 +1,69 @@
 <?php
 
+function search_users($conn, $table, $cols, $value)
+{
+    if (empty($cols) || !is_array($cols)) {
+        return null;
+    }
+
+    // Build WHERE clause
+    $where = [];
+
+    foreach ($cols as $col) {
+        $where[] = "`$col` LIKE ?";
+    }
+
+    $sql = "SELECT * FROM `$table` WHERE " . implode(" OR ", $where);
+
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        return null;
+    }
+
+    // Same search value for every column
+    $search = "%{$value}%";
+    $params = str_repeat("s", count($cols));
+    $values = array_fill(0, count($cols), $search);
+
+    $stmt->bind_param($params, ...$values);
+
+    if (!$stmt->execute()) {
+        return null;
+    }
+
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+function select_table_data($conn, $table, $cols) {
+
+//this function selects all data from the passed columns on the table without any where condition, cols is an array
+  
+    if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) {
+        return null;
+    }
+
+    foreach ($cols as $col) {
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $col)) {
+            return null;
+        }
+    }
+
+    $columns = implode(", ", $cols);
+
+    $sql = "SELECT $columns FROM $table";
+    $result = $conn->query($sql);
+
+    if (!$result) {
+        return [];
+    }
+
+ return $result->fetch_all(MYSQLI_ASSOC);
+}
+
+
+
+
 function determine_badge($classGrade){
  
  $green =['A1','B2','B3'];
@@ -832,11 +896,10 @@ function log_admin_action(
 ){
 
     $ip = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
-
     $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? 'UNKNOWN';
-
     $session_id = session_id();
-
+    global $DayDateTime;
+   
     $stmt = mysqli_prepare($conn,"
         INSERT INTO admin_activity_logs(
             staff_id,
@@ -849,14 +912,15 @@ function log_admin_action(
             ip_address,
             user_agent,
             session_id,
-            backup_file
+            backup_file,
+            timestamp
         )
-        VALUES(?,?,?,?,?,?,?,?,?,?,?)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
     ");
 
     mysqli_stmt_bind_param(
         $stmt,
-        "isssissssss",
+        "isssisssssss",
         $staff_id,
         $staff_name,
         $action,
@@ -867,7 +931,8 @@ function log_admin_action(
         $ip,
         $user_agent,
         $session_id,
-        $backup
+        $backup,
+        $DayDateTime
     );
 
   return mysqli_stmt_execute($stmt); 
@@ -1990,107 +2055,41 @@ function generate_id($len){
     return $num;
 }
 
-function result_grades($total,$prefix=null){
+function result_grades($total){
+  global $conn;
+ $Inuse = collect_user_data($conn,"variables","type","grading_system_inuse","s");
+$InuseValue = $Inuse["value"];
+ 
+ $gradeData = collect_table_data($conn,"grading_system","upper_limit DESC");
+
+   foreach ($gradeData as $grades){
+  $lowerLimit = $grades["lower_limit"];
+  $upperLimit = $grades["upper_limit"];
+  $remark = $grades["remark"]; 
+      
+  if($total >= $lowerLimit && $total < ($upperLimit+1)){
+     
+  if($InuseValue == "grade_suffix"){
+   $grade = $grades["grade_suffix"];
    
-  if($prefix == "None"){
-      
-  if($total >=0 && $total<40){
-        $grade= 'F';
-        $remark = "Fail";
-    }
-    elseif($total >=40 && $total<45){
-        $grade= 'E';
-        $remark = "Pass"; 
-    }
-    elseif($total >=45 && $total<50){
-        $grade= 'D';
-        $remark = "Pass";
-    }
-    elseif($total >=50 && $total<60){
-        $grade= 'C';
-        $remark = "Credit";
-    }
-    elseif($total >=60 && $total<65){
-        $grade= 'C';
-        $remark = "Credit";
-    }
-    elseif($total >=65 && $total<70){
-        $grade= 'C';
-        $remark = "Good";
-    }
-    elseif($total >=70 && $total<75){
-        $grade= 'B';
-        $remark = "Very Good";
-    }
-      elseif($total >=75 && $total<80){
-        $grade= 'B';
-        $remark = "Very Good";
-    }
-    elseif($total >=80 && $total<=100){
-        $grade= 'A';
-        $remark = "Excellent";
-    }
+    } 
     else{
-     $grade = null;
-     $remark = null;
+     $grade = $grades["grade_nonsuffix"];
     }
-      
-      
-  }
-  else{
-      
-      
-  if($total >=0 && $total<40){
-        $grade= 'F9';
-         $remark = "Fail";
-    }
-    elseif($total >=40 && $total<45){
-        $grade= 'E8';
-         $remark = "Pass";
-    }
-    elseif($total >=45 && $total<50){
-        $grade= 'D7';
-        $remark = "Pass";
-    }
-    elseif($total >=50 && $total<60){
-        $grade= 'C6';
-        $remark = "Credit";
-    }
-    elseif($total >=60 && $total<65){
-        $grade= 'C5';
-        $remark = "Credit";
-    }
-    elseif($total >=65 && $total<70){
-        $grade= 'C4';
-        $remark = "Good";
-    }
-    elseif($total >=70 && $total<75){
-        $grade= 'B3';
-        $remark = "Very Good";
-    }
-     elseif($total >=75 && $total<80){
-        $grade= 'B2';
-        $remark = "Very Good";
-    }
-    elseif($total >=80 && $total<=100){
-        $grade= 'A1';
-        $remark = "Excellent";
-    }
-    else{
-      
-       $grade= null;
-        $remark = null;   
-        
-    }
-      
-  }
     
-    $GradeRemark = [
+      $GradeRemark = [
         "grade" => $grade,
         "remark" => $remark,
         ];
     
     return $GradeRemark;
+    }
+  }
+
+
+ //Unknown grading system    
+ return [];   
+  
 }
 
 function sec_to_time($seconds) {

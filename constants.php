@@ -12,6 +12,7 @@ $ictdir =$config["data"]["ictdir"];
 $asstictdir = $config["data"]["asstictdir"];
 $principal = $config["data"]["principal"];
 $secretary = $config["data"]["secretary"];
+$accountant = $config["data"]["accountant"];
 $exam_officer = $config["data"]["exam_officer"];
 $asst_exam_officer = $config["data"]["asst_exam_officer"];
 $site = $config["data"]["site"];
@@ -20,7 +21,7 @@ $siteEmail = $config["data"]["siteEmail"];
 $schoolAddress = $config["data"]["schoolAddress"];
 $siteName = $site;
 $schoolName = "$site MARARABA";
-$authorized =[$dirgen,$manager,$asstmanager,$ictdir,$principal,$asstictdir,$exam_officer,$asst_exam_officer,$secretary];
+$authorized =[$dirgen,$manager,$asstmanager,$ictdir,$principal,$asstictdir,$exam_officer,$asst_exam_officer,$secretary,$accountant];
 $teacher = "Teacher";
 $appointers = [$dirgen,$principal,$manager,$asstictdir];
 

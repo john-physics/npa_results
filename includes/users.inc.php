@@ -12,6 +12,10 @@ if(isset($_SESSION["staff_id"])){
     
  $userId= $_SESSION["staff_id"];
  $userCat = $_SESSION["staff_cat"];
+
+$staff_det = get_user_name($userId); 
+$staff_name = $staff_det["fullname_title"];
+ 
 }
 else{
     
@@ -31,25 +35,39 @@ exit();
  if($btn == "search_users"){
  
  $searchBy= trim($data["search_by"]);
- $searchValue = trim($data["search_value"]);
+$searchValue = trim($data["search_value"]);
  
  $results = [];
   if($searchBy && $searchValue){
   
   if($searchBy == "Email"){
+ $searchs = search_users($conn, "staffs", ["email"], $searchValue);   
+ 
+   if($searchs){
+   foreach ($searchs as $search){
+       
+    $fullname = $search["title"]." ".$search["surname"]." ".$search["othernames"];
+    $email = $search["email"];
+    $Id = $search["staff_id"];
+    $cat = $search["staff_cat"];
+  $lastlogin= null_check(timeAgo($search["lastlogin"],'d/m/Y h:i A'),"Lastlogin: Unknown");
+    
+   $result = [
+       "fullname" => $fullname,
+       "user_cat" =>$cat,
+       "user_id" => $Id,
+       "email" =>$email,
+       "lastlogin" =>$lastlogin,
+        "pin" => $Id
+       
+       ];
    
- if(check_exist($conn,"staffs","email",$searchValue,"s")){
-     
- $dets = collect_table_data1($conn,"staffs","email",$searchValue,"s","ASC","staff_id");
-  
-  foreach ($dets as $det){
-  
-$results[] = get_user_name($det);
-    
-    }
-  }   
-    
+   $results[] = $result; 
+       
+   }
 
+  }  
+ 
   $response = [
      "status" => "success",
      "error" => "none",
@@ -64,17 +82,33 @@ exit();
   
  elseif($searchBy == "Class"){
    
- if(check_exist($conn,"students","current_class",$searchValue,"s")){
-     
- $dets = collect_table_data1($conn,"students","current_class",$searchValue,"s","ASC","std_id");
+  $searchs = search_users($conn, "students", ["current_class"], $searchValue);   
+   if($searchs){
+   foreach ($searchs as $search){
+       
+    $fullname = $search["surname"]." ".$search["othernames"];
+    $email = null_check($search["parent_number"],'No Contact');
+    $Id = $search["std_id"];
+    $cat = "Student";
+   $lastlogin = "Class: ".null_check($search["current_class"],'Unknown');
+    $pin = $search["std_pin"];
   
-  foreach ($dets as $det){
-  
-$results[] = get_user_name($det);
-    
-    }
-  }   
-    
+   $result = [
+       "fullname" => $fullname,
+       "user_cat" =>$cat,
+       "user_id" => $Id,
+       "email" =>$email,
+       "lastlogin" =>$lastlogin,
+        "pin" => $pin
+       
+       ];
+   
+   $results[] = $result; 
+       
+   }
+
+  }  
+ 
 
   $response = [
      "status" => "success",
@@ -88,31 +122,62 @@ exit();
       
   }
   
- elseif($searchBy == "Surname"){
+ elseif($searchBy == "Name"){
      
-   if(check_exist($conn,"students","surname",$searchValue,"s")){
-     
- $dets = collect_table_data1($conn,"students","surname",$searchValue,"s","ASC","std_id");
-  
-  foreach ($dets as $det){
-  
-$results[] = get_user_name($det);
-    
-    }
-  }   
-    
-  if(check_exist($conn,"staffs","surname",$searchValue,"s")){
-     
- $dets = collect_table_data1($conn,"staffs","surname",$searchValue,"s","ASC","staff_id");
+  $searchs = search_users($conn, "staffs", ["surname","othernames"], $searchValue);   
  
- foreach ($dets as $det){
-  
-$results[] = get_user_name($det);
+   if($searchs){
+   foreach ($searchs as $search){
+       
+    $fullname = $search["title"]." ".$search["surname"]." ".$search["othernames"];
+    $email = $search["email"];
+    $Id = $search["staff_id"];
+    $cat = $search["staff_cat"];
+  $lastlogin= null_check(timeAgo($search["lastlogin"],'d/m/Y h:i A'),"Lastlogin: Unknown");
     
-  }
- }   
-      
+   $result = [
+       "fullname" => $fullname,
+       "user_cat" =>$cat,
+       "user_id" => $Id,
+       "email" =>$email,
+       "lastlogin" =>$lastlogin,
+         "pin" => $Id
+       
+       ];
+   
+   $results[] = $result; 
+       
+   }
+
+  }  
+ 
+  $searchs2 = search_users($conn, "students", ["surname","othernames"], $searchValue);   
+   if($searchs2){
+   foreach ($searchs2 as $search){
+       
+    $fullname = $search["surname"]." ".$search["othernames"];
+    $email = null_check($search["parent_number"],'No Contact');
+    $Id = $search["std_id"];
+    $cat = "Student";
+   $lastlogin = "Class: ".null_check($search["current_class"],'Unknown');
+    $pin = $search["std_pin"];
   
+   $result = [
+       "fullname" => $fullname,
+       "user_cat" =>$cat,
+       "user_id" => $Id,
+       "email" =>$email,
+       "lastlogin" =>$lastlogin,
+        "pin" => $pin
+       
+       ];
+   
+   $results[] = $result; 
+       
+   }
+
+  }    
+    
   $response = [
      "status" => "success",
      "error" => "none",
@@ -127,30 +192,63 @@ exit();
  }
  
  elseif($searchBy == "Id"){
-      
- if(check_exist($conn,"students","std_id",$searchValue,"i")){
-     
- $dets = collect_table_data1($conn,"students","std_id",$searchValue,"i","ASC","std_id");
-  
-  foreach ($dets as $det){
-  
- $results[] = get_user_name($det);
-    
-    }
-  } 
-   
-    
-  if(check_exist($conn,"staffs","staff_id",$searchValue,"i")){
-     
- $dets = collect_table_data1($conn,"staffs","staff_id",$searchValue,"i","ASC","staff_id");
  
- foreach ($dets as $det){
-  
- $results[] = get_user_name($det);
+   $searchs = search_users($conn, "staffs", ["staff_id"], $searchValue);   
+ 
+   if($searchs){
+   foreach ($searchs as $search){
+       
+    $fullname = $search["title"]." ".$search["surname"]." ".$search["othernames"];
+    $email = $search["email"];
+    $Id = $search["staff_id"];
+    $cat = $search["staff_cat"];
+  $lastlogin= null_check(timeAgo($search["lastlogin"],'d/m/Y h:i A'),"Lastlogin: Unknown");
     
-  }
- }   
+   $result = [
+       "fullname" => $fullname,
+       "user_cat" =>$cat,
+       "user_id" => $Id,
+       "email" =>$email,
+       "lastlogin" =>$lastlogin,
+         "pin" => $Id
+       
+       ];
+   
+   $results[] = $result; 
+       
+   }
+
+  }  
+ 
   
+ $searchs2 = search_users($conn, "students", ["std_id"], $searchValue);   
+   if($searchs2){
+   foreach ($searchs2 as $search){
+       
+    $fullname = $search["surname"]." ".$search["othernames"];
+    $email = null_check($search["parent_number"],'No Contact');
+    $Id = $search["std_id"];
+    $cat = "Student";
+   $lastlogin = "Class: ".null_check($search["current_class"],'Unknown');
+    $pin = $search["std_pin"];
+  
+   $result = [
+       "fullname" => $fullname,
+       "user_cat" =>$cat,
+       "user_id" => $Id,
+       "email" =>$email,
+       "lastlogin" =>$lastlogin,
+        "pin" => $pin
+       
+       ];
+   
+   $results[] = $result; 
+       
+   }
+
+  }      
+  
+    
   $response = [
      "status" => "success",
      "error" => "none",
@@ -166,29 +264,33 @@ exit();
  
   elseif($searchBy == "PIN"){
       
- if(check_exist($conn,"students","std_pin",$searchValue,"s")){
-     
- $dets = collect_table_data1($conn,"students","std_pin",$searchValue,"s","ASC","std_id");
+   $searchs = search_users($conn, "students", ["std_pin"], $searchValue);   
+   if($searchs){
+   foreach ($searchs as $search){
+       
+    $fullname = $search["surname"]." ".$search["othernames"];
+    $email = null_check($search["parent_number"],'No Contact');
+    $Id = $search["std_id"];
+    $cat = "Student";
+   $lastlogin = "Class: ".null_check($search["current_class"],'Unknown');
+    $pin = $search["std_pin"];
   
-  foreach ($dets as $det){
-  
- $results[] = get_user_name($det);
-    
-    }
-  } 
+   $result = [
+       "fullname" => $fullname,
+       "user_cat" =>$cat,
+       "user_id" => $Id,
+       "email" =>$email,
+       "lastlogin" =>$lastlogin,
+        "pin" => $pin
+       
+       ];
    
+   $results[] = $result; 
+       
+   }
+
+  } 
     
-  if(check_exist($conn,"staffs","staff_id",$searchValue,"i")){
-     
- $dets = collect_table_data1($conn,"staffs","staff_id",$searchValue,"i","ASC","staff_id");
- 
- foreach ($dets as $det){
-  
- $results[] = get_user_name($det);
-    
-  }
- }   
-  
   $response = [
      "status" => "success",
      "error" => "none",
@@ -199,7 +301,6 @@ exit();
 echo json_encode($response);
 exit();    
    
-     
  }
 else{
     
@@ -233,7 +334,7 @@ elseif($btn == "del-this-user"){
 $user = convert_to_array($data["user_id"]);
 $user_id = $user[0];
 $user_cat = $user[1];
- $user_type = trim($data["user_type"]);
+$user_type = trim($data["user_type"]);
  
  if(!$user_id || !$user_cat || !$user_type){
      
@@ -270,7 +371,7 @@ echo json_encode($response);
 exit();    
      
  }
- elseif($_SESSION["staff_cat"] == $dirgen || $_SESSION["staff_cat"] == $principal){
+ elseif(in_array($userCat,$authorized)){
   
  $switch = switch_user($user_cat);
  $conn = $switch["conn"];
@@ -278,7 +379,47 @@ exit();
  $idcol = $switch["id_col"];
  $userdet = collect_user_data($conn,$table,$idcol,$user_id,"i");
 
-  if(delete_user_data($conn,$table,$idcol,$user_id,"i")){
+if($table == "students" && student_have_results($conn,$user_id)){
+  // no deleting of stds that has results
+    $response = [
+     "status" => "failed",
+     "error" => "Permission Denied",
+     "message" => "The selected student already have results and hence cannot be removed. Unless the rules are changed",
+      ];
+echo json_encode($response);
+exit();      
+    
+}
+
+if($table == "staffs"){  
+// no deleting of staffs with Class 
+ $classhandling = null_check($userdet["class_handling"],""); 
+  $heshe = strtolower(null_check(switch_gender($userdet["gender"],"pronoun"),"he/she"));
+  
+  if($classhandling){
+  
+    $response = [
+     "status" => "failed",
+     "error" => "Permission Denied",
+     "message" => "The selected staff is currently handling $classhandling  and hence cannot be removed unless $heshe is replaced.",
+      ];
+echo json_encode($response);
+exit();       
+      
+  }
+}
+
+
+if(delete_user_data($conn,$table,$idcol,$user_id,"i")){
+ $action ="Removed $user_cat";
+ $action_reason ="Not specified";
+ $records = 1;
+ $current = get_current_session();
+  $session = trim($current['session']);
+  $term = trim($current['term']);
+  $backup = $user_id;
+  
+ $logAction = log_admin_action($conn,$userId,$staff_name,$action,$action_reason, $records,$session,$term,$backup);
   
 if(in_array($user_cat,$staffCats)){
    
@@ -298,13 +439,13 @@ $prf_dir = $_SERVER["DOCUMENT_ROOT"]."/images/students/$profile";
 
 
 
-if(file_exists($prf_dir)){
+if(is_file($prf_dir)){
     
  unlink($prf_dir);  
     
 }
 
-if(file_exists($sign_dir)){
+if(is_file($sign_dir)){
     
  unlink($sign_dir);  
     
@@ -355,6 +496,8 @@ $user = convert_to_array($data["user_id"]);
 $user_id = $user[0];
 $user_cat = $user[1];
  $user_type = trim($data["user_type"]);
+ $reason =  trim($data["suspend_reason"]);
+
 
  if(!$user_id || !$user_cat || !$user_type){
      
@@ -362,6 +505,18 @@ $user_cat = $user[1];
      "status" => "failed",
      "error" => "Empty Input",
      "message" => "user details not complete !",
+      ];
+echo json_encode($response);
+exit();   
+       
+ }
+ 
+  elseif(!$reason){
+     
+  $response = [
+     "status" => "failed",
+     "error" => "Empty Input",
+     "message" => "Suspension reason is required !",
       ];
 echo json_encode($response);
 exit();   
@@ -391,7 +546,7 @@ echo json_encode($response);
 exit();    
      
  }
- elseif($_SESSION["staff_cat"] == $dirgen || $_SESSION["staff_cat"] == $principal){
+ elseif(in_array($userCat,$authorized)){
   
   $switch = switch_user($user_cat);
  $conn = $switch["conn"];
@@ -400,10 +555,42 @@ exit();
  $userdet = collect_user_data($conn,$table,$idcol,$user_id,"i");
 $iniStatus = $userdet["status"];
  
+ if($table == "staffs"){  
+// no deleting of staffs with Class 
+ $classhandling = null_check($userdet["class_handling"],""); 
+  $heshe = strtolower(null_check(switch_gender($userdet["gender"],"pronoun"),"he/she"));
+  
+  if($classhandling){
+  
+    $response = [
+     "status" => "failed",
+     "error" => "Permission Denied",
+     "message" => "The selected staff is currently handling $classhandling  and hence cannot be suspended unless $heshe is replaced.",
+      ];
+echo json_encode($response);
+exit();       
+      
+  }
+}
+ 
+ 
  if($iniStatus !== "Suspended"){
      
    if(update_user_data($conn,$table,"status",$idcol,"Suspended",$user_id,"si")){
   
+   update_user_data($conn,$table,"status_reason",$idcol,$reason,$user_id,"si");
+
+$action ="Suspended $user_cat";
+ $action_reason = $reason;
+ $records = 1;
+ $current = get_current_session();
+  $session = trim($current['session']);
+  $term = trim($current['term']);
+  $backup = $user_id;
+  
+ $logAction = log_admin_action($conn,$userId,$staff_name,$action,$action_reason, $records,$session,$term,$backup);
+  
+
    $response = [
      "status" => "success",
      "error" => "none",
@@ -461,6 +648,7 @@ $user = convert_to_array($data["user_id"]);
 $user_id = $user[0];
 $user_cat = $user[1];
  $user_type = trim($data["user_type"]);
+ $reason = trim($data["unsuspend_reason"]);
 
  if(!$user_id || !$user_cat || !$user_type){
      
@@ -474,7 +662,7 @@ exit();
        
  }
  
- elseif($_SESSION["staff_cat"] == $dirgen || $_SESSION["staff_cat"] == $principal){
+ elseif(in_array($userCat,$authorized)){
   
   $switch = switch_user($user_cat);
  $conn = $switch["conn"];
@@ -486,6 +674,18 @@ $iniStatus = $userdet["status"];
  if($iniStatus == "Suspended"){
   
    if(update_user_data($conn,$table,"status",$idcol,"Active",$user_id,"si")){
+ 
+  update_user_data($conn,$table,"status_reason",$idcol,$reason,$user_id,"si");
+ 
+ $action ="Unsuspended $user_cat";
+ $action_reason = $reason;
+ $records = 1;
+ $current = get_current_session();
+  $session = trim($current['session']);
+  $term = trim($current['term']);
+  $backup = $user_id;
+  
+ $logAction = log_admin_action($conn,$userId,$staff_name,$action,$action_reason, $records,$session,$term,$backup);
   
    $response = [
      "status" => "success",
@@ -561,6 +761,16 @@ if(!$limit){
  
  if(update_user_data($conn,"students","std_pin","std_id",$pin,$std_Id,"si")){
   
+  $action ="Regenerated result pin";
+ $action_reason ="Not specified";
+ $records = 1;
+ $current = get_current_session();
+  $session = trim($current['session']);
+  $term = trim($current['term']);
+  $backup = $std_Id.':'.$pin;
+  
+ $logAction = log_admin_action($conn,$userId,$staff_name,$action,$action_reason, $records,$session,$term,$backup);
+  
   $response = [
      "status" => "success",
      "error" => "None",
@@ -617,6 +827,16 @@ exit();
   
   if(delete_user_data2($conn,"variables","type","value",$type,$class,"ss")){
        
+$action ="Removed a class";
+ $action_reason ="Not specified";
+ $records = 1;
+ $current = get_current_session();
+  $session = trim($current['session']);
+  $term = trim($current['term']);
+  $backup = $class;
+  
+ $logAction = log_admin_action($conn,$userId,$staff_name,$action,$action_reason, $records,$session,$term,$backup);
+  
    $response = [
      "status" => "success",
      "error" => "None",
@@ -654,10 +874,13 @@ elseif($btn =="remove-subj"){
   
   $subj = trim($data["subj_name"]);
   $type = "Subject";
+  
   if(check_exist2($conn,"variables","type","value",$type,$subj,"ss")){
    
+ $det = collect_user_data2($conn,"variables","type","variables",$type,$subj,"ss");
+ $subjId = $det["id"];
+  
  if(variable_contain_results($conn,$subj,$type)){
-   
     $response = [
     "status"  => "failed",
     "error"   => "Removal blocked",
@@ -669,8 +892,19 @@ exit();
       
   }
       
-  if(delete_user_data2($conn,"variables","type","value",$type,$subj,"ss")){
-       
+ if(delete_user_data2($conn,"variables","type","value",$type,$subj,"ss")){
+   
+  $action ="Removed a subject";
+ $action_reason ="Not specified";
+ $records = 1;
+ $current = get_current_session();
+  $session = trim($current['session']);
+  $term = trim($current['term']);
+  $backup = $subjId.':'.$subj;
+  
+ $logAction = log_admin_action($conn,$userId,$staff_name,$action,$action_reason, $records,$session,$term,$backup);
+      
+   
    $response = [
      "status" => "success",
      "error" => "None",

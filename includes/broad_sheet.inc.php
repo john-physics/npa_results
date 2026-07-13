@@ -138,6 +138,7 @@ $stdname = get_student_name($conn,$std_id);
  $total=null_check($records["total"],"-");
  $position = null_check($records["position"],"-");
  $grade=null_check($records["grade"],"-");
+ $remark = null_check($records["remark"],"-");
  $dateCreated = $records["date_created"];
    $cas = []; //gather cas as array 
    foreach ($pattern as $index => $value){
@@ -151,7 +152,8 @@ $stdname = get_student_name($conn,$std_id);
      "exam" => $exam,
      "total" => $total,
      "position" => $position,
-     "grade" => $grade
+     "grade" => $grade,
+     "remark" => $remark
      
      ];
      
@@ -294,6 +296,7 @@ $exam = null_check($records["exam"],"-");
 $total =null_check($records["total"],"-");
 $position = null_check($records["position"],"-");
 $grade =null_check($records["grade"],"-");
+$remark = null_check($records["remark"],"-");
 $dateCreated = $records["date_created"];
    $cas = []; //gather cas as array 
    foreach ($pattern as $index => $value){
@@ -307,8 +310,9 @@ $dateCreated = $records["date_created"];
      "exam" => $exam,
      "total" => $total,
      "position" => $position,
-     "grade" => $grade
-     
+     "grade" => $grade,
+     "remark" => $remark
+    
      ];
      
     $rows[] = $row;
@@ -612,6 +616,17 @@ $table->addCell(800)->addText(
 ]
 );
 
+$table->addCell(800)->addText(
+"Remark",
+[
+"bold" => true,
+"size" => 10
+],
+[
+"alignment" => Jc::CENTER
+]
+);
+
 // TABLE DATA
 
 foreach($scoresheet["rows"] as $key => $row){
@@ -688,6 +703,14 @@ $table->addCell(900)->addText(
 
 $table->addCell(800)->addText(
     $row["grade"],
+    ["size"=>10],
+    ["alignment"=>Jc::CENTER]
+);
+
+
+// Remark
+$table->addCell(800)->addText(
+    $row["remark"],
     ["size"=>10],
     ["alignment"=>Jc::CENTER]
 );
@@ -880,7 +903,7 @@ foreach($broadsheet["rows"] as $row){
 
 $classPerformance = !empty($totals) ? round((array_sum($totals)/array_sum($scorables))*100,2) : 0;
 
-$gradeRemark = result_grades($classPerformance,'None');
+$gradeRemark = result_grades($classPerformance);
 $classRemark = $gradeRemark["remark"];
 
 $saveDir = $_SERVER["DOCUMENT_ROOT"]."/downloads/";

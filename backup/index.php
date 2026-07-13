@@ -117,6 +117,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   if ($token === $BackupToken) {
 
      $_SESSION["backup_access"] = true;
+   $time = time()+3600;
+   setcookie("backup_access",1,$time,"/");
+   
      $msg = "Token Verified";
         header("Location: /backup?backup_access_verified&report=success&msg_report=".$msg);
         exit();
@@ -369,8 +372,8 @@ display:block;
      color:rgb(50,200,50);
      font-size:10px;
      position:absolute;
-     right:0;
-     top:1px;
+     top:30px;
+     left:20%;
      font-weight:bold;
  }
     #spinner2 {
@@ -378,12 +381,14 @@ display:block;
         border: 4px solid #f3f3f3;
         border-top: 4px solid #3498db;
         border-radius: 50%;
-        width: 30px;
-        height: 30px;
+        width: 28px;
+        height:28px;
       animation: spin 0.5s linear infinite;
       position:absolute;
-      top: -30px;
-      right:15%;
+        margin-bottom:20px;
+       top:30px;
+       left:40%;
+       z-index:100;
     }
 
     @keyframes spin {
@@ -394,8 +399,12 @@ display:block;
  .backup_images{
   
   position:relative;
-  display:block;
+  top:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   width:100%;
+  margin:auto;
   
  }
 
@@ -409,31 +418,30 @@ display:block;
   padding:5px;
   display:block;
   width:40%;
-  float:right;
   font-size:12px;
   position:relative;
-  top:-30px;
-  right:0;
+  top:-20px;
+  margin:10px auto;
  }
  
  .backup_images a:hover{
   
   background:rgba(150,200,150,0.8);
-   text-decoration:underline;
+   
  }
  
  @media screen and (min-width:800px){
      
  .backup_images a{
-   right:15%;
+   width:25%;
   }
   
  #spinner2{
-  right:35%;
+  left:45%;
  }
  
  #prep2{
-  right:25%;
+  left:40%;
  
    }
  
@@ -527,6 +535,7 @@ Invalid Backup Signature.
  
  echo '<div class="backup_images">
  <a href="backup_images" id="backup-images-btn">Backup Images</a> 
+  <a href="backup" id="backup-database-btn">Backup Database</a> 
  <div id="spinner2"></div>
 <span id="prep2">Preparing backup, please wait...</span>
  </div>';
@@ -594,7 +603,26 @@ Addfooter($site);
  
  });
  
-    
+ 
+ const database = document.getElementById("backup-database-btn");
+ database.addEventListener("click",(e)=>{
+ 
+// e.preventDefault();
+  const spinner2 = document.getElementById("spinner2");
+  const prep2 = document.getElementById("prep2");
+  
+ spinner2.style.display ="flex";
+ prep2.style.display = "block";
+ 
+ setTimeout(()=>{
+  
+ spinner2.style.display ="none";
+ prep2.style.display = "none";
+     
+ },10000);
+ 
+ });
+ 
 </script>
 
 

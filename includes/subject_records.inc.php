@@ -120,7 +120,7 @@ if($processby == "totals"){
   $remark = "";//clear previous remark 
   
    if($total > 0){
-    $gradeRemark = result_grades($total,"prefix");
+    $gradeRemark = result_grades($total);
     $grade = $gradeRemark["grade"];
     $remark = $gradeRemark["remark"];
     

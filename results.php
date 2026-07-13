@@ -316,7 +316,7 @@ echo '  <style>
 if($_SERVER["REQUEST_METHOD"]=="POST"){
  
  $viewer = trim($_POST["viewer"]);  
- $pin = trim($_POST["std_pin"]);
+ $pin = strtoupper(trim($_POST["std_pin"]));
  $class = trim($_POST["std_class"]);
  $term = trim($_POST["term"]);
  $session = trim($_POST["session"]);
@@ -332,8 +332,9 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
   $std_details = collect_user_data($conn,"students","std_pin",$pin,"s");
    $std_name = $std_details["surname"]." ".$std_details["othernames"];
   $std_name = normalize_user_name($std_details["surname"]." ".$std_details["othernames"],"upper");
+ $std_status = $std_details["status"];
+ $status_reason = $std_details["status_reason"];
 
- 
   $std_id = $std_details["std_id"];
   $profile = null_check($std_details["profile"],"null.jpg");
   $std_cat = null_check($std_details["std_cat"],'N/A');
@@ -398,6 +399,28 @@ if(strtolower($result_status) !== "published" && $viewer !== "staff"){
    <br><br>
    <b><i class="fa-solid fa-clock"></i>
    Please check again later</b>
+   </span>
+   </div>
+ 
+ </section>'; 
+ 
+ 
+ Addfooter($site); 
+ die();  
+}
+
+
+if(strtolower($std_status) !== "active" && $viewer !== "staff"){
+ 
+  //only active stds can check results    
+  echo '<section class="section">
+  <h2>'.$std_name.'</h2>
+ <div id="resultDisplay" class="result-feedback">
+   <span id="feed_back"><br>
+   🔍 '.$term_session.' Results for '.$std_name.' ('.$class.') are not available at the moment!
+   <br><br>Reason(s): '.$status_reason.' <br><br>
+   <b><i class="fa-solid fa-clock"></i>
+   Please visit the school to fix the problem then check again</b>
    </span>
    </div>
  
@@ -558,6 +581,7 @@ echo '<div class="result-container" id="result-container">
         <th>Total <br> '.$maxtotal.'%</th>
          <th>Position</th>
         <th>Grade</th>
+        <th>Remark</th>
                 
                 </tr>';
             
@@ -569,7 +593,8 @@ echo '<div class="result-container" id="result-container">
        $total = $records["total"];
        $pos = $records["position"];
        $grade = $records["grade"];
-       
+       $remark = $records["remark"];
+     
           echo '<tr>
              <td>'.$sn.'</td>
              <td>'.$subject.'</td>';
@@ -584,7 +609,8 @@ echo '<div class="result-container" id="result-container">
        echo '<td>'.$exam.'</td>
      <td>'.$total.'</td>
      <td>'.$pos.'</td>
-     <td>'.$grade.'</td>';
+     <td>'.$grade.'</td>
+     <td>'.$remark.'</td>';
 
      }
         

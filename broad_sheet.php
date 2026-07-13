@@ -677,6 +677,7 @@ function renderTable(results){
         <small>In Subject</small></th>
 
             <th>Grade</th>
+           <th>Remark</th>
 
         </tr>
     `;
@@ -723,6 +724,8 @@ function renderTable(results){
                 <td>${row.position}</td>
 
                 <td>${row.grade}</td>
+             
+              <td>${row.remark}</td>
 
             </tr>
         `;

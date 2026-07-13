@@ -939,6 +939,7 @@ $dob = null_check($user["birth_date"],'Unknown');
     <h2 id="resend-h2">Suspend '.$user_type.'</h2>
  <p id="resendstaffName"></p>
   <input type="hidden" id="resend_notify_id">
+  <input type="text" id="suspend_reason" placeholder="Please enter a reason for this action" required>
   
 <button class="submit-btn" id="confirmResend">Yes, Suspend</button>
     <button class="close-btn" id="cancelResend">Cancel</button>
@@ -947,7 +948,22 @@ $dob = null_check($user["birth_date"],'Unknown');
     <div id="spinner3"></div>
     <small id="prep3">Suspending user, Please wait ...</small>
   </div>
-</div>';
+</div>
+
+<style>
+
+#suspend_reason{
+ width:95%;
+ padding: 8px; 
+ border-radius:3px;
+  outline:none;
+  border:1px solid #ddd;
+}
+
+#suspend_reason:focus{
+  border-color:skyblue;  
+}
+</style>';
 
 
   echo '<!-- unsuspend Confirmation Overlay -->
@@ -957,7 +973,7 @@ $dob = null_check($user["birth_date"],'Unknown');
    <p id="staff_name">Are you sure you want to unsuspend this '.$user_type.'?</p>
   
   <input type="hidden" id="man_notify_id">
- 
+   <input type="text" id="unsuspend_reason" placeholder="Please enter a reason for this action" required>
  <button class="submit-btn" id="confirmManage">Yes, Unsuspend</button>
     <button class="close-btn" id="cancelManage">Cancel</button>
     
@@ -966,7 +982,20 @@ $dob = null_check($user["birth_date"],'Unknown');
     <div id="spinner2"></div>
     <small id="prep2">Removing Suspension, Please wait ...</small>
   </div>
-</div>';
+</div>
+<style>
+#unsuspend_reason{
+ width:95%;
+ padding: 8px; 
+ border-radius:3px;
+  outline:none;
+  border:1px solid #ddd;
+}
+
+#unsuspend_reason:focus{
+  border-color:skyblue;  
+}
+</style>';
  
  
 }
@@ -1009,7 +1038,7 @@ else{
 <form id="search-users" class="contact-form">
 <label for="search-by">Search By:</label>
  <select id="search-by" onchange="showClass()">
-<option>Surname</option>
+<option>Name</option>
 <option>Class</option>
 <option>PIN</option>
 <option>Email</option>
@@ -1018,10 +1047,10 @@ else{
 </select>
 
 <label id="sval-label" for="search-value">Email/Name/Id</label>
-<input type="text" id="search-value" placeholder="Type to search" oninput="searchUsers()" '.$autofocus.' required>
+<input type="text" id="search-value" placeholder="Type to search" oninput="debounceSearch()" '.$autofocus.' required>
 
 <div class="search_class">
- <select id="search-class" onchange="searchUsers()">';
+ <select id="search-class" onchange="debounceSearch()">';
  $classes = sortClasses(collect_table_data1($conn,"variables","type","Class","s","","value"));
  foreach ($classes as $class){
      
@@ -1064,6 +1093,8 @@ else{
 
 <script>
  
+ let searchTimer;
+ 
  const Search = document.getElementById("search-users");
  Search.addEventListener("click",(e)=>{
    e.preventDefault();
@@ -1072,14 +1103,23 @@ else{
      
  });
  
+ function debounceSearch() {
+
+    clearTimeout(searchTimer);
+
+    searchTimer = setTimeout(() => {
+        searchUsers();
+    }, 300);
+
+}
    
  function searchUsers(){
   
  const noResults = document.getElementById("no-results");  
  const searchBy = document.getElementById("search-by").value;    
      
-const searchValue1 = document.getElementById("search-value").value;
-const searchValue2 = document.getElementById("search-class").value;
+const searchValue1 = document.getElementById("search-value").value.trim();
+const searchValue2 = document.getElementById("search-class").value.trim();
 let searchValue ="";
 
 if(searchValue1){
@@ -1087,21 +1127,16 @@ if(searchValue1){
 }
 else if(searchValue2){
   searchValue = searchValue2;  
-    
 }
-
 
 const searchResults = document.getElementById("search-results");
 
 noResults.innerHTML =  "Searching started...";
   if(!searchValue){
-  
   searchResults.innerHTML = "";
   noResults.innerHTML = "All search results will appear here !";
 return;
   }
- 
-  
  
   fetch("/includes/users.inc", {
   method: "POST",
@@ -1135,8 +1170,7 @@ const Lastlogin = document.createElement("h6");
  url.href = `/users?user_found&user_cat=${Result.user_cat}&user_id=${Result.user_id}`;
   Name.innerHTML= Result.fullname;   
  Cat.innerHTML = Result.user_cat;
-   Email.innerHTML = `${Result.email} • ${Result.user_id}`;
-  
+   Email.innerHTML = `${Result.email} • ${Result.pin}`;
  Lastlogin.innerHTML = Result.lastlogin;
      
      Name.appendChild(Cat);
@@ -1201,8 +1235,6 @@ const ManageOverlay = document.getElementById("manageOverlay");
   const spinner2 = document.getElementById("spinner2");
   const prep2 = document.getElementById("prep2");
   const manError = document.getElementById("man-error");
-
-
 
 //ResendOverlay to Admins
   const ResendOverlay = document.getElementById("resendOverlay");
@@ -1412,7 +1444,21 @@ menu.style.left = rect.left + window.scrollX + offsetX + "px";
     e.preventDefault();
     const userId = resendNotifyId.value;
   const userType = document.getElementById("user_type").value;
-  
+  const SuspendReason = document.getElementById("suspend_reason").value.trim();
+ 
+  prep3.style.display = "none";
+  prep3.innerHTML = `Suspending ${user_type}, Please wait ...`;
+  prep3.style.color="rgb(50,200,50)";
+   
+ 
+ if(!SuspendReason){
+    prep3.style.display = "block";
+  prep3.innerHTML = "Please enter a reason for this action";
+  prep3.style.color="red";
+     
+  return;   
+ }
+ 
     spinner3.style.display = "flex";
     prep3.style.display = "block";
 
@@ -1423,7 +1469,7 @@ menu.style.left = rect.left + window.scrollX + offsetX + "px";
        submit_button_name: "suspend-user",
        user_id: userId,
        user_type: userType,
-     
+       suspend_reason:SuspendReason,
       })
     })
     .then(resp => resp.json())
@@ -1465,7 +1511,20 @@ else {
     e.preventDefault();
     const staffId = manNotifyId.value;
   const userType = document.getElementById("user_type").value;
-  
+   
+ const unSuspendReason = document.getElementById("unsuspend_reason").value.trim();
+ 
+  prep2.style.display = "none";
+  prep2.innerHTML = "Removing Suspension, Please wait ...";
+  prep2.style.color="rgb(50,200,50)";
+   
+ if(!unSuspendReason){
+    prep2.style.display = "block";
+  prep2.innerHTML = "Please enter a reason for this action";
+  prep2.style.color="red";
+     
+  return;   
+ }
      manError.innerText = "";
     spinner2.style.display = "flex";
     prep2.style.display = "block";
@@ -1477,6 +1536,7 @@ else {
         submit_button_name: "un-suspend-user",
         user_id: staffId,
         user_type: userType,
+        unsuspend_reason: unSuspendReason,
       })
     })
     .then(response => response.json())
