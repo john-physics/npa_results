@@ -154,16 +154,18 @@ echo '<nav id="nav-section" class="menu">
          <a href="/results">
          <i class="fa-solid fa-certificate" aria-hidden="true" title="click here to Check results"></i>   
        Check Result
-           </a></li>
-             <li>
+           </a></li>';
+      
+  if(isset($_SESSION["staff_cat"]) && $_SESSION["staff_id"]){
+ 
+ echo '<li>
          <a href="/grading_system">
          <i class="fa-solid fa-chart-column" aria-hidden="true" title="View Grading System"></i>   
        Grading System
-           </a></li>';
-      
-   if(isset($_SESSION["staff_cat"]) && $_SESSION["staff_id"]){
+           </a></li>'; 
+   
     $staff_cat = $_SESSION["staff_cat"];   
-     
+    
    if(in_array($staff_cat, $authorized)){
        
      echo '

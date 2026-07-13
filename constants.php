@@ -23,12 +23,12 @@ $siteName = $site;
 $schoolName = "$site MARARABA";
 $authorized =[$dirgen,$manager,$asstmanager,$ictdir,$principal,$asstictdir,$exam_officer,$asst_exam_officer,$secretary,$accountant];
 $teacher = "Teacher";
-$appointers = [$dirgen,$principal,$manager,$asstictdir];
+$appointers = [$dirgen,$principal,$manager,$ictdir,$asstictdir];
 
 $staffCats = collect_table_data($conn,"staffs","","staff_cat");
 
 $naira = "₦";
 $dollar = "💲";
 $dollarsack ="💰";
-$passmark = 50;
+$passmark = 40;
 $BackupToken = $config["data"]["backupToken"];

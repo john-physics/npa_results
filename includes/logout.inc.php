@@ -9,17 +9,18 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
  
  if($btn == "npa_staff_logout"){
      
-  if(isset($_SESSION['staff_id'])){
+  if(isset($_SESSION['staff_id']) && isset($_SESSION["staff_cat"])){
       
   unset($_SESSION['staff_id']);
+  unset($_SESSION['staff_cat']);
+ 
   session_destroy();
   
  if(isset($_COOKIE['staff_cookie'])){
      
-  $exp = time() - 100;
+  $exp = time() - 1000;
   $val = "staff";
   setcookie('staff_cookie',$val,$exp,'/');   
-     
  }
  
   $response = [

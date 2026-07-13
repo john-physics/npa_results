@@ -136,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 
-head('Database Restore Utility',"$site | Database Restore Utility","Restore Database");
+head('Database Backup Utility',"$site | Database Backup Utility","Backup Database");
 
 require $root.'/menu.php';
 
@@ -462,7 +462,7 @@ if ($backup['valid'] === true){
   echo '<div id="profile_section" class="profile-container">
   <div class="profile-top">
     <div>
- <!--    <h2>Database Restore Utility</h2></h2> -->
+ <!--    <h2>Database Backup Utility</h2></h2> -->
       <p class="sub-note">View and Restore Database Backup</p>
     </div>
   </div>
@@ -514,7 +514,7 @@ Restore Backup
      
   echo '
    <div class="back_container">
-<h2>Database Restore Utility</h2>
+<h2>Database Backup Utility</h2>
   <p id="backup_error">
 Invalid Backup Signature.
 </p></div>'; 
@@ -526,7 +526,7 @@ Invalid Backup Signature.
 
    echo '
    <div class="back_container">
-<h2>Database Restore Utility</h2>
+<h2>Database Backup Utility</h2>
 <p id="backup_error">
  '.$backup["reason"].'
 </p></div>'; 
@@ -545,7 +545,7 @@ Invalid Backup Signature.
 elseif(isset($_GET["backup_access"])){
     
  echo '<div class="back_container">
-<h2>Database Restore Utility</h2>
+<h2>Database Backup Utility</h2>
  <form method="post" id="regForm">
 <input
 type="password"

@@ -73,7 +73,7 @@ body{
 .header h1{
 
     margin:0 0 10px;
-
+   font-size:24px;
 }
 
 
@@ -1188,7 +1188,7 @@ echo '<div class="result-wrapper">
    }
    
    echo '<th>Exam 
-    <small>('.$maxexam.')</small></th></tr>';
+ <small>('.$maxexam.')</small></th></tr>';
    
   foreach($records as $record){
 
@@ -1389,12 +1389,12 @@ if($cas){
     
      <div class="info-item">
      <span class="label">Sum Total:</span>
-      <span class="value">'.array_sum($classScores).' </span>
+      <span class="value">'.number_format(array_sum($classScores)).' </span>
     </div>
     
      <div class="info-item">
      <span class="label">Class Average:</span>
-      <span class="value">'.$classAverage.' </span>
+      <span class="value">'.number_format($classAverage,2).' </span>
     </div>  
     
     
@@ -1459,7 +1459,7 @@ $get_session=str_replace("/","_",$session);
     
  echo '<div class="card">
 <div class="folder-name">
-'.$subjectname.' for '.$session.'</div>
+'.$subjectname.' for '.$term.'<br>'.$session.'</div>
 
 <div class="meta">
 Class: '.$class.'

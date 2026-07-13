@@ -763,19 +763,25 @@ const stdClass = document.getElementById("std_class").value;
 
 }
 
-function doneWithUploads(){
-   
-const Term = document.getElementById("term").value;
-const Session = document.getElementById("session").value;
-const stdClass = document.getElementById("std_class").value;
+let isProcessing = false;
+function doneWithUploads() {
+    // Prevent multiple executions
+    if (isProcessing) {
+        return;
+    }
 
- const doneBtn = document.getElementById("done-btn");
- 
- doneBtn.classList.add("blink");
-   
- window.location.href = `/includes/compile_results?done_with_uploads&std_class=${stdClass}&term=${Term}&session=${Session}`;
+    isProcessing = true;
 
+    const Term = document.getElementById("term").value;
+    const Session = document.getElementById("session").value;
+    const stdClass = document.getElementById("std_class").value;
+
+    const doneBtn = document.getElementById("done-btn");
+
+    doneBtn.classList.add("blink");
+    doneBtn.disabled = true; // Prevent further clicks
+
+    window.location.href = `/includes/compile_results?done_with_uploads&std_class=${encodeURIComponent(stdClass)}&term=${encodeURIComponent(Term)}&session=${encodeURIComponent(Session)}`;
 }
-
 
 </script>
