@@ -18,7 +18,8 @@ $currentTerm = $current["term"];
 
 $staff_det = get_user_name($userId); 
 $staff_name= $staff_det["fullname_title"];
- 
+$fullname=ucwords($staff_det["fullname"]);
+  
 }
 else{
     
@@ -854,7 +855,7 @@ else{
  $response = [
      "status" => "failed",
      "error" => "Missing constants",
-     "message" => "Unable to perform your request, Please try again.   <br>awError desc: Some important constants are missing, if this error persist consult the developer of this system to fix the missing files.",
+     "message" => "Unable to perform your request, Please try again.   <br>Error desc: Some important constants are missing, if this error persist consult the developer of this system to fix the missing files.",
       ];
 echo json_encode($response);
 exit();     
@@ -990,7 +991,6 @@ exit();
       
   update_user_data($conn,"variables","value","type",$score,$type,"ss");
   
-  
       $response = [
      "status" => "success",
      "error" => "none",
@@ -1069,12 +1069,39 @@ exit();
  
  if($setting == "delete_result"){
  $setting = "result_deletion";
+ 
+ if(!in_array($userCat,$reserved) &&  !password_verify($fullname,$developerToken)){
+     
+     $response = [
+     "status" => "failed",
+     "error" => "Authorization",
+     "message" => "Sorry, you are not authorized to perform this action",
+      ];
+echo json_encode($response);
+exit(); 
+  
+  }
  }
+ 
+
+ if($setting == "result_lock"){
+ if(!in_array($userCat,$reserved) &&  !password_verify($fullname,$developerToken)){
+   
+     $response = [
+     "status" => "failed",
+     "error" => "Authorization",
+     "message" => "Sorry, you are not authorized to perform this action",
+      ];
+echo json_encode($response);
+exit(); 
+  
+  }
+ } 
  
  
  if(check_exist($conn,"variables","type",$setting,"s")){
      
-  update_user_data($conn,"variables","value","type",$value,$setting,"ss");
+update_user_data($conn,"variables","value","type",$value,$setting,"ss");
   
   
     //log action 

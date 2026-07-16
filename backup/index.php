@@ -4,6 +4,25 @@ $root = $_SERVER["DOCUMENT_ROOT"];
  require $root."/page_init.php";
 require_once $root."/backup/config.php";
 
+if(!check_staff_login($conn)){
+
+header("Location:/home");
+exit();
+}
+
+ $staff_id = $_SESSION["staff_id"];
+ $staff_cat = $_SESSION["staff_cat"];
+ $user = get_user_name($staff_id);
+$fullname =  ucwords($user["fullname"]);
+
+ if(!in_array($staff_cat,$reserved) &&  !password_verify($fullname,$developerToken)){
+     
+ header("Location:/home");
+exit();
+  
+ }
+
+
 /**
  * Get information about the latest backup.
  *

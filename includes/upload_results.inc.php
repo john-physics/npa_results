@@ -63,6 +63,15 @@ if(result_lock($term,$session)){
     
 }
 
+$minscore = minimum_total_score();
+$Inuse = collect_user_data($conn,"variables","type","grading_system_inuse","s");
+ $gradeData = collect_table_data($conn,"grading_system","upper_limit DESC"); 
+ $gradingSystem = [
+     "grading_inuse" => $Inuse["value"],
+     "grade_data" => $gradeData
+     
+     ];
+     
 
   //  SUBJECT RESULTS 
 if(isset($_POST['subject_id'])){
@@ -90,7 +99,6 @@ if(isset($_POST['subject_id'])){
   }
   
  $total = array_sum($cas) + $exam;
- $minscore = minimum_total_score();
 $subject_name = get_subject_name($subject_id);
 
 if($exam > 0 && $total < $minscore){
@@ -127,7 +135,7 @@ if($total > 100){
   $grade = "";//clear previous grade 
   $remark ="";
     if($total > 0){
-    $gradeRemark = result_grades($total);
+    $gradeRemark = result_grades($total,$gradingSystem);
     $grade = $gradeRemark["grade"];
     $remark = $gradeRemark["remark"];
     
@@ -137,37 +145,43 @@ if($total > 100){
    
   if(check_exist4($conn,$subjectTableName,"std_id","term","class","subject",$std_id,$term,$class,$subject_id,"isss")){
   
-  //update ca
- foreach ($cas as $index => $ca){
-  $updcol = "ca".$index+1;
+  $updateData = [];
+  foreach ($cas as $index => $ca) {
+   if($ca){
   
-  if($ca){
-  update_user_data4($conn,$subjectTableName,$updcol,"std_id","term","class","subject",$ca,$std_id,$term,$class,$subject_id,"iisss"); 
+   $updateData["ca".($index + 1)] = $ca;    
+   }
+}
+  
+  $updateData["exam"] = $exam;
+  $updateData["total"] = $total;
+  $updateData["grade"] = $grade;
+  $updateData["remark"] = $remark;
     
-  }
- }
- 
- //update exam
- if($exam){
-     
-  update_user_data4($conn,$subjectTableName,"exam","std_id","term","class","subject",$exam,$std_id,$term,$class,$subject_id,"iisss");    
-  }
+    $conditions = [
+      "std_id" => $std_id,
+      "term"=> $term,
+      "class"=> $class,
+      "subject"=> $subject_id,
+      
+      ];
   
- //update total and grade 
-  if($total){
-  update_user_data4($conn,$subjectTableName,"total","std_id","term","class","subject",$total,$std_id,$term,$class,$subject_id,"iisss");    
-  }
- 
-   if($grade){
-  update_user_data4($conn,$subjectTableName,"grade","std_id","term","class","subject",$grade,$std_id,$term,$class,$subject_id,"sisss");    
-  }
   
-    if($remark){
-  update_user_data4($conn,$subjectTableName,"remark","std_id","term","class","subject",$remark,$std_id,$term,$class,$subject_id,"sisss");    
-  }
+  if(!empty($updateData)){
+      
+    $update = new_update_user_data(
+    $conn,
+    $subjectTableName,
+     $updateData,
+     $conditions,
+    null,
+    false,
+    );   
   
+    
   $sucmsg = "Results updated successfully";
-  
+      
+   }
  }
   
   else{
@@ -222,14 +236,18 @@ if($total > 100){
      
  }
   
- if($pp_cmt){
-  update_user_data3($conn,$resultTableName,"principal_comment","std_id","term","class",$pp_cmt,$std_id,$term,$class,"siss");
+  
+  $updateData = [];//build update data
+   
+  if($pp_cmt){
+$updateData["principal_comment"] = $pp_cmt;
  }
   
   if($ct_cmt){
-  update_user_data3($conn,$resultTableName,"teacher_comment","std_id","term","class",$ct_cmt,$std_id,$term,$class,"siss");
- }
+  $updateData["teacher_comment"] = $ct_cmt;
 
+ }
+ 
   // DEVELOPMENT RATINGS  
 if(isset($_POST['development'])){
 $minrating = 5; $maxrating = 10;
@@ -241,11 +259,9 @@ if($rating){
  if($rating >= $minrating && $rating <= $maxrating){
 
  $development = strtolower($development);
- update_user_data3($conn,$resultTableName,$development,"std_id","term","class",$rating,$std_id,$term,$class,"iiss");
- 
- if(!$sucmsg){
-  $sucmsg = "Ratings updated successfully";  
-    }
+
+  $updateData[$development] = $rating;
+
    }
   else{
    $errmsg .= "<br>$development rating must be between $minrating and $maxrating";    
@@ -270,13 +286,10 @@ if($rating){
  if($rating >= $minrating && $rating <= $maxrating){
  
  $skill = strtolower($skill);
- update_user_data3($conn,$resultTableName,$skill,"std_id","term","class",$rating,$std_id,$term,$class,"iiss");
-  
-  if(!$sucmsg){
-  $sucmsg = "Ratings updated successfully"; 
+ 
+   $updateData[$skill] = $rating;
+   
   }
-  
-   }
   else{
    $errmsg .= "<br>$skill rating must be between $minrating and $maxrating";    
     }   
@@ -291,6 +304,29 @@ if($rating){
    }
   }
  
+ 
+//update $resultTableName 
+
+    $conditions = [
+      "std_id" => $std_id,
+      "term"=> $term,
+      "class"=> $class,
+       
+      ];
+  
+if(!empty($updateData)){
+  
+   $update = new_update_user_data(
+    $conn,
+    $resultTableName,
+     $updateData,
+     $conditions,
+    null,
+    false,
+    );  
+    
+}
+
 
   if(strpos($location,"?")){
 

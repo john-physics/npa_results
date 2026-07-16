@@ -81,75 +81,63 @@ foreach ($records as $record_id){
 function sort_stds($conn, $table, $students, $sort){
 
   $students = convert_to_array($students);
+
     // Nothing to sort
-    if(empty($students)){
+    if (empty($students)) {
         return [];
     }
 
     // Convert IDs to comma-separated integers
     $ids = implode(",", array_map("intval", $students));
 
-    // Sort by student names
-    if($sort === "sortbynames"){
+    if ($sort === "sortbynames") {
 
         $sql = "SELECT std_id
                 FROM students
                 WHERE std_id IN ($ids)
                 ORDER BY surname ASC, othernames ASC";
 
-      $result = mysqli_query($conn, $sql);
-
-        $sorted = [];
-
-        while($row = mysqli_fetch_assoc($result)){
-            $sorted[] = $row['std_id'];
-        }
-
-        return $sorted;
-    }
-
-    // Sort by overall average (Highest to Lowest)
-    if($sort === "sortbyaverage"){
+    } elseif ($sort === "sortbyaverage") {
 
         $sql = "SELECT std_id
                 FROM `$table`
                 WHERE std_id IN ($ids)
                 ORDER BY overall_average DESC, std_id ASC";
 
-    $result = mysqli_query($conn, $sql);
+    } elseif ($sort === "sortsubjects") {
 
-       $sorted = [];
+        $sql = "SELECT id
+                FROM `$table`
+                WHERE id IN ($ids)
+                ORDER BY value ASC";
 
-        while($row = mysqli_fetch_assoc($result)){
-            $sorted[] = $row['std_id'];
-        }
-
-        return $sorted;
+    } else {
+        // Invalid sort type
+        return $students;
     }
 
-if($sort === "sortsubjects"){
-
-    $ids = implode(",", array_map("intval", $students));
-
-    $sql = "SELECT id
-            FROM `$table`
-            WHERE id IN ($ids)
-            ORDER BY value ASC";
-
     $result = mysqli_query($conn, $sql);
+
+    if (!$result) {
+        return [];
+    }
 
     $sorted = [];
 
-    while($row = mysqli_fetch_assoc($result)){
-        $sorted[] = $row['id'];
+    while ($row = mysqli_fetch_assoc($result)) {
+
+        if ($sort === "sortsubjects") {
+            $sorted[] = $row['id'];
+        } else {
+            $sorted[] = $row['std_id'];
+        }
     }
+
+    mysqli_free_result($result);
 
     return $sorted;
 }
 
-    // Return original order if sort type is invalid
-    return $students;
-}
 function copy_processed_signature($sourceFile, $destinationDir)
 {
     // Check if source file exists
@@ -402,29 +390,33 @@ function get_student_name($conn, $std_id){
     mysqli_stmt_execute($stmt);
 
   $result = mysqli_stmt_get_result($stmt);
-
+   $stdname = [];
    $row = mysqli_fetch_assoc($result);
 
     if($row){
 
-        $stdname = $row["surname"]." ".$row["othernames"];
-
-        return $stdname;
+       $stdname = $row["surname"]." ".$row["othernames"];
+        
     }
 
-    return null;
+   mysqli_free_result($result);
+   mysqli_stmt_close($stmt);
+    return $stdname;
 }
  
 function result_signataries($conn,$resultTable,$term,$class,$std_id,$checkcomments=false){
 
-//false from this function will Prevent publishing of the selected stds results 
+//false from this function will Prevent publishing of the selected stds 
+
+$cteach = collect_user_data($conn,"staffs","class_handling",$class,"s");
+ $cteachSignature = $cteach["signature"]; 
+    
+ $principal = collect_user_data($conn,"staffs","staff_cat","Principal","s");
  
-$cteach = collect_user_data($conn,"staffs","class_handling",$class,"s");   
-  $cteachSignature = $cteach["signature"];  
-  $principal = collect_user_data($conn,"staffs","staff_cat","Principal","s");   
 $principalSignature = $principal["signature"];
- 
+
 if(!$cteachSignature || !$principalSignature){
+ 
  return false;   
 }
 
@@ -433,7 +425,7 @@ $path = $_SERVER["DOCUMENT_ROOT"].'/images/staff/';
 $principalSignatureImg = $path.$principalSignature;
   
  if(!is_file($cteachSignatureImg) || !is_file($principalSignatureImg)){
-   
+    
    return false;  
  }
  
@@ -449,16 +441,36 @@ $todayTimestamp = strtotime($todaysDate);
 if (empty($next_term) ||
     $nextTimestamp === false ||
     $nextTimestamp <= $todayTimestamp){
+   
     return false;
 }
  
 if($checkcomments){
  
- $result = collect_user_data3($conn,$resultTable,"std_id","term","class",$std_id,$term,$class,"iss");
+
+    $fetch = [
+       "conn" =>$conn,
+       "table" => $resultTable,
+       "cols" => ["teacher_comment","principal_comment"],
+      "conditions" =>["std_id"=>$std_id,"term"=>$term,"class"=>$class],
+       "params" => "iss",
+        "order" => "id asc",
+        "limit" => 1,
+        "distinct" => false
+        ];
+  
+ $results = fetch_user_data($fetch);
+     
+ $data = $results["data"];
  
- $cteach_cmt = $result["teacher_comment"];
- $principal_cmt = $result["principal_comment"];
+ foreach ($data as $dat){
+  
+  $cteach_cmt = $dat["teacher_comment"];
+$principal_cmt= $dat["principal_comment"];
+    
+ }
  
+    
  if(!$cteach_cmt || !$principal_cmt){
    
     return false;
@@ -495,8 +507,9 @@ function pos_in_class($conn,$term,$class,$resultTable){
   
    }
    
- mysqli_stmt_close($stmt);
-
+  mysqli_free_result($result);
+   mysqli_stmt_close($stmt);
+   
 $upd = 0;
 foreach ($averages as $index =>$average){   
   $std_id = $std_ids[$index];
@@ -538,8 +551,8 @@ function posInSubject($conn,$table,$record_id,$staff_id,$totalscore){
  while($row = mysqli_fetch_assoc($result)){
   $records[] = $row["total"];
     }
+  mysqli_free_result($result);
    mysqli_stmt_close($stmt);
-
   rsort($records);
   
   if(!in_array($totalscore,$records)){
@@ -575,9 +588,9 @@ function pos_in_subject($conn,$subjectTable,$term,$class,$subject,$totalscore){
 
  while($row = mysqli_fetch_assoc($result)){
   $records[] = $row["total"];
-    }
+     }
+  mysqli_free_result($result);
    mysqli_stmt_close($stmt);
-
   rsort($records);
   
   if(!in_array($totalscore,$records)){
@@ -843,7 +856,7 @@ function normalize_user_name($username,$normalizer){
 
 function table_contains_data($conn, $table) {
 
-    // Prevent SQL injection through table name
+    // Prevent empty table name
     $table = trim($table);
 
     if (empty($table)) {
@@ -851,14 +864,18 @@ function table_contains_data($conn, $table) {
     }
 
     // Check if at least one row exists
-$query = "SELECT 1 FROM `$table` LIMIT 1";
-$result = mysqli_query($conn, $query);
+    $query = "SELECT 1 FROM `$table` LIMIT 1";
+    $result = mysqli_query($conn, $query);
 
-  if ($result && mysqli_num_rows($result) > 0) {
-        return true;
+    if (!$result) {
+        return false;
     }
 
-    return false;
+    $hasData = mysqli_num_rows($result) > 0;
+
+    mysqli_free_result($result);
+
+    return $hasData;
 }
 
 function remove_from_array($value = null, $array = null){
@@ -889,33 +906,37 @@ function update_stds_class($conn,$students,$class){
  //get class cat 
   $classVar = collect_user_data2($conn,"variables","type","value","Class",$class,"ss");
  $classCat = $classVar["classification"];
-   
+  $students = convert_to_array($students);
+  
    if(is_array($students)){
    //$students is an array of std Ids  
    foreach ($students as $std){
-    update_user_data($conn,"students","current_class","std_id",$class,$std,"si"); 
+   
+     $updateData = [
+      
+      "current_class" => $class,
+      "std_cat" => $classCat,
+      "added_subjects" => null, //reset added_subjects
+      "removed_subjects" => null, //Reset removed_subjects
+      ];
+  $conditions = [
+      "std_id" => $std,
+      
+      ];
+  
+ $update = new_update_user_data(
+    $conn,
+    'students',
+     $updateData,
+     $conditions,
+    'ssi',
+    true);
     
-     update_user_data($conn,"students","std_cat","std_id",$classCat,$std,"si");  
- 
- //reset added_subjects & removed_subjects
-  $null = null;
-  update_user_data($conn,"students","added_subjects","std_id",$null,$std,"si");
-  update_user_data($conn,"students","removed_subjects","std_id",$null,$std,"si");
-     
    }
        
     return true;    
    }
-   else{
-    //single std id
-  if(update_user_data($conn,"students","current_class","std_id",$class,$students,"si")){
-     
-     update_user_data($conn,"students","std_cat","std_id",$classCat,$students,"si");  
-    
-     return true;
-     }  
-   }
-    
+
  return false;   
 }
  
@@ -1508,7 +1529,7 @@ function convert_to_array($value){
 
     }
     else{
-
+  //value is single data
         $values = [$value];
 
     }

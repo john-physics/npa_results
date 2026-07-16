@@ -198,6 +198,21 @@ elseif(isset($_GET["done_with_uploads"])){
    $class_set = collect_user_data3($conn,"class_set","session","term","class",$session,$term,$class,"sss");
    $students = convert_to_array($class_set["students"]);
    
+ $Asspattern = collect_user_data2($conn,"variables","type","value","Class",$class,"ss");
+$pattern = convert_to_array($Asspattern["assessment_pattern"]);
+ $totalca = array_sum($pattern);
+ $maxexam = 100 - $totalca;
+ $mintotal = minimum_total_score();
+  
+  $Inuse = collect_user_data($conn,"variables","type","grading_system_inuse","s");
+ $gradeData = collect_table_data($conn,"grading_system","upper_limit DESC"); 
+ $gradingSystem = [
+     "grading_inuse" => $Inuse["value"],
+     "grade_data" => $gradeData
+     
+     ];
+
+
    foreach ($students as $std_id){
   
  $std_dets = collect_user_data($conn,"students","std_id",$std_id,"i");
@@ -207,6 +222,12 @@ elseif(isset($_GET["done_with_uploads"])){
  $hisher = strtolower(switch_gender($gender,"possessive_adj"));
  $himher = strtolower(switch_gender($gender,"object"));
    
+ $result_status = null;
+ if(result_signataries($conn,$resultTable,$term,$class,$std_id,true)){
+    $result_status ="Published";
+ }
+ 
+
    if(!in_array($std_id,$doneResults)){
        
  $_SESSION["std_identity"] = $std_id;
@@ -260,17 +281,11 @@ if($removed){
 
 //records found, proceed
 
-$Asspattern = collect_user_data2($conn,"variables","type","value","Class",$class,"ss");
-$pattern = convert_to_array($Asspattern["assessment_pattern"]);
- $totalca = array_sum($pattern);
- $maxexam = 100 - $totalca;
- 
   $records = collect_user_data4($conn,$subjectTable,"std_id","term","class","subject",$std_id,$term,$class,$subject,"isss");
 
   $exam = null_check($records["exam"],0);
   $totalscore = null_check($records["total"],0);
-  $mintotal = minimum_total_score();
-   
+    
   
  foreach ($pattern as $index => $maxca){
  $cakey = "ca".$index+1; 
@@ -331,21 +346,29 @@ if($totalscore < $mintotal){
   //std position in this subject
  $posInsubject = pos_in_subject($conn,$subjectTable,$term,$class,$subject,$totalscore);
 
-
-if($posInsubject){
-update_user_data4($conn,$subjectTable,"position","std_id","term","class","subject",$posInsubject,$std_id,$term,$class,$subject,"sisss");
-}
-
-if($DayDateTime){
-    
-update_user_data4($conn,$subjectTable,"date_created","std_id","term","class","subject",$DayDateTime,$std_id,$term,$class,$subject,"sisss"); 
-    
-}
-
-if(result_signataries($conn,$resultTable,$term,$class,$std_id,true)){
-  $result_status = "Published";
- update_user_data4($conn,$subjectTable,"result_status","std_id","term","class","subject",$result_status,$std_id,$term,$class,$subject,"sisss");
-}
+ $updateData = [
+      
+      "position" => $posInsubject,
+      "date_created" => $DayDateTime,
+      "result_status"=>$result_status,
+      
+      ];
+  $conditions = [
+      "std_id" => $std_id,
+      "term"=> $term,
+      "class"=> $class,
+      "subject"=> $subject,
+      
+      ];
+  
+ $update = new_update_user_data(
+    $conn,
+    $subjectTable,
+     $updateData,
+     $conditions,
+    'ssissss',
+    true
+    );
 
 
   $totalscores[] = $totalscore; 
@@ -353,57 +376,52 @@ if(result_signataries($conn,$resultTable,$term,$class,$std_id,true)){
  } 
  
  //done with subject loop, calculate overall_average
+ if($totalscores){
   
  $subjectNum = count($totalscores);
  $overallscore = array_sum($totalscores);
  $overallaverage = round($overallscore/$subjectNum,2);
  $totalscoreable = $subjectNum*100;
 if($overallaverage){
- $gradeRemark = result_grades($overallaverage);
+ $gradeRemark = result_grades($overallaverage,$gradingSystem);
  $overallgrade = $gradeRemark["grade"];
  $remark = $gradeRemark["remark"];
-}
-
-
-if($subjectNum){
-update_user_data3($conn,$resultTable,"subject_num","std_id","term","class",$subjectNum,$std_id,$term,$class,"siss");
-}
-
-if($overallscore){
-update_user_data3($conn,$resultTable,"total_score","std_id","term","class",$overallscore,$std_id,$term,$class,"siss");
+ 
+  }   
+    
 } 
  
- if($totalscoreable){
-update_user_data3($conn,$resultTable,"total_scorable","std_id","term","class",$totalscoreable,$std_id,$term,$class,"siss");
-}
- 
- if($overallaverage){
-update_user_data3($conn,$resultTable,"overall_average","std_id","term","class",$overallaverage,$std_id,$term,$class,"siss");
-}
 
-  if($overallgrade){
-update_user_data3($conn,$resultTable,"overall_grade","std_id","term","class",$overallgrade,$std_id,$term,$class,"siss");
- }
- 
-  if($remark){
-update_user_data3($conn,$resultTable,"general_remark","std_id","term","class",$remark,$std_id,$term,$class,"siss");
- }
- 
- if($DayDateTime){
-     
- update_user_data3($conn,$resultTable,"date_created","std_id","term","class",$DayDateTime,$std_id,$term,$class,"siss");   
-     
- }
- 
-  if(result_signataries($conn,$resultTable,$term,$class,$std_id,true)){
-  $result_status = "Published"; 
- update_user_data3($conn,$resultTable,"result_status","std_id","term","class",$result_status,$std_id,$term,$class,"siss");    
-     
-  }
+ $updateData = [
+      
+      "subject_num" => $subjectNum,
+      "total_score" => $overallscore,
+      "total_scorable"=>$totalscoreable,
+      "overall_average"=> $overallaverage,
+      "overall_grade" =>$overallgrade,
+      "general_remark"=>$remark,
+      "date_created" => $DayDateTime,
+      "result_status" => $result_status,
+      
+      ];
+  $conditions = [
+      "std_id" => $std_id,
+      "term"=> $term,
+      "class"=> $class,
+      
+      ];
   
+ $update = new_update_user_data(
+    $conn,
+    $resultTable,
+     $updateData,
+     $conditions,
+    'iiisssssiss',
+    true
+    );  
 }
  
-  
+ 
  //end of student loop, find position_inclass 
  $posInclass = pos_in_class($conn,$term,$class,$resultTable);
  

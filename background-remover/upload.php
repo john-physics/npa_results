@@ -216,7 +216,7 @@ if(!is_dir($folder)){
                     PATHINFO_FILENAME
                 )
                 .
-                ".png";
+                ".webp";
 
 
             $outputPath =

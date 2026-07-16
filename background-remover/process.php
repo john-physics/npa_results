@@ -260,11 +260,20 @@ if ($cropped !== false) {
     imagesavealpha($output, true);
 }
 
+/*
     imagepng(
         $output,
         $outputPath,
         9
     );
+*/
+
+imagewebp(
+    $output,
+    $outputPath,
+    80
+);
+
 
     imagedestroy($image);
     imagedestroy($output);

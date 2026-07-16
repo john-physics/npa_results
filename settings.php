@@ -248,7 +248,9 @@ body{
 
  $staff_id = $_SESSION["staff_id"];
  $staff_cat = $_SESSION["staff_cat"];
- 
+ $user = get_user_name($staff_id);
+$fullname =  ucwords($user["fullname"]);
+
 
  if(in_array($staff_cat, $appointers)){
  
@@ -328,14 +330,16 @@ if($showpos =="ON"){
 
             <label class="switch">
                 <input type="checkbox" id="site_lock" '.$site_lock_checked.'>
-                <span class="slider"></span>
+               <span class="slider"></span>
             </label>
 
         </div>
 
-    </div>
-
-    <!-- Result Lock -->
+    </div>';
+    
+ if(in_array($staff_cat,$reserved) || password_verify($fullname,$developerToken)){
+  
+  echo ' <!-- Result Lock -->
 
     <div class="setting-box">
 
@@ -351,7 +355,7 @@ if($showpos =="ON"){
 
             <label class="switch">
                 <input type="checkbox" id="result_lock" '.$result_lock_checked.'>
-                <span class="slider"></span>
+            <span class="slider"></span>
             </label>
 
         </div>
@@ -379,9 +383,19 @@ if($showpos =="ON"){
 
         </div>
 
-    </div>
-
-    <!-- Show Failure Red Ink -->
+    </div>';
+    
+   }
+   else{
+  //set some ids for js   
+  
+ echo '<span id="result_lock_text"></span>
+  <span id="result_lock"></span>
+ <span id="delete_result_text"></span> 
+ <span id="delete_result"></span> ';
+    
+}
+   echo '<!-- Show Failure Red Ink -->
 
     <div class="setting-box">
 

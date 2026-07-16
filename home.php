@@ -392,7 +392,9 @@ left:25px;
 .fa-file-lines{
    color: #0ea5e9;
 }
-
+.fa-wand-magic-sparkles{
+    color: #0d6efd;
+}
    .dashb-conts #badge{
    
    display:inline-block;
@@ -524,7 +526,7 @@ else{
 }
 
 $user = get_user_name($userId);
-$surname =  strtolower($user["surname"]);
+$fullname =  ucwords($user["fullname"]);
 
 echo '<section id="dashb-section" class="section">
  
@@ -551,7 +553,7 @@ echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
  </div>
  
  <div class="dashb-conts" data-page="add_new?add_new_stds">
-  <span><i class="fa-solid fa-user-graduate text-success"></i></span>
+  <span><i class="fa-solid fa-user-graduate "></i></span>
   <span id="text">Add Students</span>
  </div>
  
@@ -571,12 +573,12 @@ echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
  </div>
 
  <div class="dashb-conts" data-page="upload_results">
-  <span><i class="fa-solid fa-upload text-success"></i></span>
+  <span><i class="fa-solid fa-upload "></i></span>
   <span id="text">View Uploaded Results</span>
  </div>
 
   <div class="dashb-conts" data-page="results?view_results">
-  <span><i class="fa-solid fa-chart-bar text-primary"></i></span>
+  <span><i class="fa-solid fa-chart-bar "></i></span>
   <span id="text">Check Results</span>
  </div>';
  
@@ -584,7 +586,7 @@ echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
      
   echo '
  <div class="dashb-conts" data-page="add_new?new_appoint_ment">
- <span><i class="fa-solid fa-calendar-check text-info"></i></span>
+ <span><i class="fa-solid fa-calendar-check "></i></span>
   <span id="text">Appointment</span>
  </div>
  
@@ -594,46 +596,53 @@ echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
  </div>
  
  <div class="dashb-conts" data-page="view_staff">
-  <span><i class="fa-solid fa-users text-primary"></i></span>
+  <span><i class="fa-solid fa-users "></i></span>
   <span id="text">Staff List</span>
  </div> 
   
   <div class="dashb-conts" data-page="settings">
-  <span><i class="fa-solid fa-gear text-primary"></i></span>
+  <span><i class="fa-solid fa-gear"></i></span>
   <span id="text">Settings</span>
- </div>
+ </div>';
  
-<div class="dashb-conts" data-page="backup?backup_access">
-    <span><i class="fa-solid fa-database text-success"></i></span>
-    <span id="text">Database Backup</span>
-</div>';   
+ if(in_array($usercat,$reserved) || password_verify($fullname,$developerToken)){
      
+  echo '<div class="dashb-conts" data-page="backup?backup_access">
+    <span><i class="fa-solid fa-database"></i></span>
+    <span id="text">Database Backup</span>
+</div>
+ <div class="dashb-conts" data-page="optimize_images">
+  <span><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+ <span id="text">Optimize Images</span>
+ </div>';
+    
+   }
  }
   
   echo '
 
  <div class="dashb-conts" data-page="add_new?add_stds_photo">
-  <span><i class="fa-solid fa-images text-success"></i></span>
+  <span><i class="fa-solid fa-images "></i></span>
  <span id="text">Add Students Photo</span>
  </div>
 
  <div class="dashb-conts" data-page="view_students?view_class">
-  <span><i class="fa-solid fa-user text-success"></i></span>
+  <span><i class="fa-solid fa-user "></i></span>
  <span id="text">View Students Details</span>
  </div>
  
   <div class="dashb-conts" data-page="background-remover">
-  <span><i class="fa-solid fa-signature text-success"></i></span>
+  <span><i class="fa-solid fa-signature "></i></span>
  <span id="text">Signature Cleaner</span>
  </div>
 
  <div class="dashb-conts" data-page="subject_records">
-  <span><i class="fa-solid fa-file-lines text-primary"></i></span>
+  <span><i class="fa-solid fa-file-lines "></i></span>
   <span id="text">Subject Records</span>
  </div>
 
 <div class="dashb-conts" data-page="profile">
-  <span><i class="fa-solid fa-user-shield text-primary"></i></span>
+  <span><i class="fa-solid fa-user-shield "></i></span>
   <span id="text">Staff Profile</span>
  </div>
 
@@ -651,43 +660,43 @@ echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
  echo '<div class="dashb" id="dashb">
  
   <div class="dashb-conts" data-page="add_new?add_new_stds">
-  <span><i class="fa-solid fa-user-graduate text-success"></i></span>
+  <span><i class="fa-solid fa-user-graduate "></i></span>
   <span id="text">Add Students</span>
  </div>
  
 <div class="dashb-conts" data-page="add_new?add_stds_photo">
-    <span><i class="fa-solid fa-images text-success"></i></span>
+    <span><i class="fa-solid fa-images "></i></span>
     <span id="text">Add Students Photo</span>
 </div>
  
   <div class="dashb-conts" data-page="view_students?view_class">
-  <span><i class="fa-solid fa-user text-success"></i></span>
+  <span><i class="fa-solid fa-user "></i></span>
  <span id="text">View Students Details</span>
  </div>
  
    <div class="dashb-conts" data-page="users?manage_subjects">
-  <span><i class="fa-solid fa-book-open text-success"></i></span>
+  <span><i class="fa-solid fa-book-open "></i></span>
  <span id="text">View Subjects</span>
  </div>
  
 
  <div class="dashb-conts" data-page="upload_results">
-  <span><i class="fa-solid fa-upload text-success"></i></span>
+  <span><i class="fa-solid fa-upload "></i></span>
   <span id="text">Upload Results</span>
  </div>
  
   <div class="dashb-conts" data-page="results?view_results">
-   <span><i class="fa-solid fa-chart-bar text-primary"></i></span>
+   <span><i class="fa-solid fa-chart-bar "></i></span>
    <span id="text">Check Results</span>
   </div>
  
  <div class="dashb-conts" data-page="subject_records">
-  <span><i class="fa-solid fa-file-lines text-primary"></i></span>
+  <span><i class="fa-solid fa-file-lines "></i></span>
   <span id="text">Subject Records</span>
  </div>
  
   <div class="dashb-conts" data-page="profile">
-   <span><i class="fa-solid fa-user-shield text-primary"></i></span>
+   <span><i class="fa-solid fa-user-shield "></i></span>
    <span id="text">Staff Profile</span>
   </div>
 

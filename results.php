@@ -716,7 +716,7 @@ echo '<div class="result-container" id="result-container">
 
             <tr>
                 <td>Overall Average</td>
-                <td>'.$overall_average.'</td>';
+                <td>'.number_format($overall_average,2).'</td>';
                 
                if($showpos){
                
@@ -1177,7 +1177,7 @@ scoresheetDroping.classList.add("droping");
      scoresheetdownloading.innerHTML =""; 
      scoresheetDroping.classList.remove("droping");
          
-     },2000); 
+     },1000); 
      
  }
 

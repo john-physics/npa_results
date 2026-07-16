@@ -109,9 +109,17 @@ $class   =   trim($_POST['class']);
   //  SUBJECT RESULTS 
 if(isset($_POST['serial_no'])){
 $serials = $_POST['serial_no'];
-  $upd = 0;
-if($processby == "totals"){
 
+  $Inuse = collect_user_data($conn,"variables","type","grading_system_inuse","s");
+ $gradeData = collect_table_data($conn,"grading_system","upper_limit DESC"); 
+ $gradingSystem = [
+     "grading_inuse" => $Inuse["value"],
+     "grade_data" => $gradeData
+     
+     ];
+
+if($processby == "totals"){
+  $update = false;
   foreach ($serials as $index => $serial){
   
     $total = (int) trim($_POST['totals'][$index] ?? 0);    
@@ -120,29 +128,40 @@ if($processby == "totals"){
   $remark = "";//clear previous remark 
   
    if($total > 0){
-    $gradeRemark = result_grades($total);
+    $gradeRemark = result_grades($total,$gradingSystem);
     $grade = $gradeRemark["grade"];
     $remark = $gradeRemark["remark"];
-    
-    }
-    
-   if($total){
-  update_user_data3($conn,"subject_results","total","record_id","staff_id","serial",$total,$record_id,$staff_id,$serial,"iiii");    
-      $upd++; 
-   }
- 
-    if($grade){
-  update_user_data3($conn,"subject_results","grade","record_id","staff_id","serial",$grade,$record_id,$staff_id,$serial,"siii");    
-      $upd++; 
-   }   
-     
-    if($remark){
-  update_user_data3($conn,"subject_results","remark","record_id","staff_id","serial",$remark,$record_id,$staff_id,$serial,"siii");    
-   $upd++;    
-   }      
-  }   
+  
 
-if($upd){
+  $updateData = [
+      
+      "total" => $total,
+      "grade" => $grade,
+      "remark"=>$remark,
+      
+      ];
+  $conditions = [
+      "record_id" => $record_id,
+      "staff_id"=> $staff_id,
+      "serial"=> $serial,
+
+      ];
+  
+  $update = new_update_user_data(
+    $conn,
+    "subject_results",
+     $updateData,
+     $conditions,
+    'issiii',
+    true
+    );
+        
+  }
+  
+ } 
+  
+  
+if($update){
 
 //determine position
 $totalscores = $_POST["totals"];
@@ -157,6 +176,7 @@ foreach ($totalscores as $index => $totalscore){
   }
     
 }
+
 
 
   $msg ="Records processed successfully";
@@ -180,7 +200,7 @@ else{
 $assPattern = convert_to_array($classdet["assessment_pattern"]);
 $maxexam = 100 - array_sum($assPattern);
 $totalscores = [];
- 
+ $update = false;
    foreach($serials as $index => $serial){
 
   $ca1 = (int) trim($_POST['ca1'][$index] ?? 0);
@@ -199,43 +219,41 @@ $totalscores = [];
   $grade = "";//clear previous grade 
   $remark = "";//clear previous remark 
   
-   if($total > 0){
-    $gradeRemark = result_grades($total,"prefix");
+    if($total > 0){
+    $gradeRemark = result_grades($total,$gradingSystem);
     $grade = $gradeRemark["grade"];
     $remark = $gradeRemark["remark"];
     
     }
-    
-    if($cas){
-  update_user_data3($conn,"subject_results","cas","record_id","staff_id","serial",$implodecas,$record_id,$staff_id,$serial,"siii");    
-      $upd++; 
-   } 
-   
-   if($exam){
-  update_user_data3($conn,"subject_results","exam","record_id","staff_id","serial",$exam,$record_id,$staff_id,$serial,"siii");    
-      $upd++; 
-   } 
-   
   
-   if($total){
-  update_user_data3($conn,"subject_results","total","record_id","staff_id","serial",$total,$record_id,$staff_id,$serial,"iiii");    
-      $upd++; 
-   }
- 
-    if($grade){
-  update_user_data3($conn,"subject_results","grade","record_id","staff_id","serial",$grade,$record_id,$staff_id,$serial,"siii");    
-      $upd++; 
-   }   
-     
-    if($remark){
-  update_user_data3($conn,"subject_results","remark","record_id","staff_id","serial",$remark,$record_id,$staff_id,$serial,"siii");    
-   $upd++;    
-   }      
- 
+  $updateData = [
+      "cas"=> $implodecas,
+      "exam" => $exam,
+      "total" => $total,
+      "grade" => $grade,
+      "remark"=>$remark,
+      
+      ];
+  $conditions = [
+      "record_id" => $record_id,
+      "staff_id"=> $staff_id,
+      "serial"=> $serial,
+
+      ];
+  
+  $update = new_update_user_data(
+    $conn,
+    "subject_results",
+     $updateData,
+     $conditions,
+    'siissiii',
+    true
+    );
+  
  }
   
 
-if($upd){ 
+if($update){ 
  foreach ($totalscores as $index => $totalscore){
   $serial = $serials[$index];
   $pos = posInSubject($conn,"subject_results",$record_id,$staff_id,$totalscore);
@@ -284,4 +302,4 @@ else{
   header("Location: $location");
   die();
     
-}
+} 

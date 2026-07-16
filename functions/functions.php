@@ -1,5 +1,456 @@
 <?php
 
+function delete_table_data($delete)
+{
+    $conn  = $delete['conn'] ?? null;
+    $table = trim($delete['table'] ?? '');
+    $conditions = $delete['conditions'] ?? [];
+  $params = trim($delete['params'] ?? '');
+
+    // Validate connection
+    if (!$conn) {
+        return [
+            "status" => "failed",
+            "message" => "failed to delete data",
+            "error" => "database connection was not supplied",
+            "affected_rows" => 0
+        ];
+    }
+
+    // Validate table
+    if (empty($table)) {
+        return [
+            "status" => "failed",
+            "message" => "failed to delete data",
+            "error" => "database table was not supplied",
+            "affected_rows" => 0
+        ];
+    }
+
+    if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) {
+        return [
+            "status" => "failed",
+            "message" => "failed to delete data",
+            "error" => "invalid table name",
+            "affected_rows" => 0
+        ];
+    }
+
+    // Validate conditions
+    if (!is_array($conditions) || empty($conditions)) {
+        return [
+            "status" => "failed",
+            "message" => "failed to delete data",
+            "error" => "at least one condition must be supplied",
+            "affected_rows" => 0
+        ];
+    }
+
+    foreach ($conditions as $col => $value) {
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $col)) {
+            return [
+                "status" => "failed",
+                "message" => "failed to delete data",
+                "error" => "invalid condition column: $col",
+                "affected_rows" => 0
+            ];
+        }
+    }
+
+    // Validate params
+    if (strlen($params) != count($conditions)) {
+        return [
+            "status" => "failed",
+            "message" => "failed to delete data",
+            "error" => "number of parameter types does not match the number of conditions",
+            "affected_rows" => 0
+        ];
+    }
+
+    if (!preg_match('/^[idsb]+$/', $params)) {
+        return [
+            "status" => "failed",
+            "message" => "failed to delete data",
+            "error" => "parameter types can only contain i, d, s and b",
+            "affected_rows" => 0
+        ];
+    }
+
+    // Build SQL
+    $sql = "DELETE FROM `$table`";
+
+    $where = [];
+    $values = [];
+
+    foreach ($conditions as $col => $value) {
+        $where[] = "`$col` = ?";
+        $values[] = $value;
+    }
+
+    $sql .= " WHERE " . implode(" AND ", $where);
+
+    $stmt = mysqli_prepare($conn, $sql);
+
+    if (!$stmt) {
+        return [
+            "status" => "failed",
+            "message" => "failed to delete data",
+            "error" => mysqli_error($conn),
+            "affected_rows" => 0
+        ];
+    }
+
+    if (!mysqli_stmt_bind_param($stmt, $params, ...$values)) {
+
+        $error = mysqli_stmt_error($stmt);
+        mysqli_stmt_close($stmt);
+
+        return [
+            "status" => "failed",
+            "message" => "failed to delete data",
+            "error" => $error,
+            "affected_rows" => 0
+        ];
+    }
+
+    if (!mysqli_stmt_execute($stmt)) {
+
+        $error = mysqli_stmt_error($stmt);
+        mysqli_stmt_close($stmt);
+
+        return [
+            "status" => "failed",
+            "message" => "failed to delete data",
+            "error" => $error,
+            "affected_rows" => 0
+        ];
+    }
+
+    $affectedRows = mysqli_stmt_affected_rows($stmt);
+
+    mysqli_stmt_close($stmt);
+
+    return [
+        "status" => "success",
+        "message" => "data deleted successfully",
+        "error" => "no errors",
+        "affected_rows" => $affectedRows
+    ];
+}
+
+function fetch_user_data($fetch)
+{
+    $conn  = $fetch['conn'] ?? null;
+    $table  = trim($fetch['table'] ?? '');
+    $cols       = $fetch['cols'] ?? [];
+    $conditions = $fetch['conditions'] ?? [];
+    $params = trim($fetch['params'] ?? '');
+    $order  = trim($fetch['order'] ?? 'id desc');
+    $limit      = $fetch['limit'] ?? null;
+    $distinct   = $fetch['distinct'] ?? false;
+
+    // Validate connection
+    if (!$conn) {
+        return [
+            "status" => "failed",
+            "message" => "failed to fetch data",
+            "error" => "database connection was not supplied",
+            "data" => []
+        ];
+    }
+
+    // Validate table
+    if (empty($table)) {
+        return [
+            "status" => "failed",
+            "message" => "failed to fetch data",
+            "error" => "database table was not supplied",
+            "data" => []
+        ];
+    }
+
+    if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) {
+        return [
+            "status" => "failed",
+            "message" => "failed to fetch data",
+            "error" => "invalid table name",
+            "data" => []
+        ];
+    }
+
+    // Validate columns
+    if (!is_array($cols) || empty($cols)) {
+        return [
+            "status" => "failed",
+            "message" => "failed to fetch data",
+            "error" => "columns must be supplied as a non-empty array",
+            "data" => []
+        ];
+    }
+
+    foreach ($cols as $col) {
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $col)) {
+            return [
+                "status" => "failed",
+                "message" => "failed to fetch data",
+                "error" => "invalid column name: $col",
+                "data" => []
+            ];
+        }
+    }
+
+    // Validate conditions
+    if (!is_array($conditions)) {
+        return [
+            "status" => "failed",
+            "message" => "failed to fetch data",
+            "error" => "conditions must be an array",
+            "data" => []
+        ];
+    }
+
+    foreach ($conditions as $col => $value) {
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $col)) {
+            return [
+                "status" => "failed",
+                "message" => "failed to fetch data",
+                "error" => "invalid condition column: $col",
+                "data" => []
+            ];
+        }
+    }
+
+    // Validate params
+    if (strlen($params) != count($conditions)) {
+        return [
+            "status" => "failed",
+            "message" => "failed to fetch data",
+            "error" => "number of parameter types does not match the number of conditions",
+            "data" => []
+        ];
+    }
+
+    if (!preg_match('/^[idsb]*$/', $params)) {
+        return [
+            "status" => "failed",
+            "message" => "failed to fetch data",
+            "error" => "parameter types can only contain i, d, s and b",
+            "data" => []
+        ];
+    }
+
+    // Build SELECT
+    $select = $distinct ? "select distinct" : "select";
+
+    $columnList = "`" . implode("`,`", $cols) . "`";
+
+    $sql = "$select $columnList from `$table`";
+
+    $values = [];
+
+    if (!empty($conditions)) {
+
+        $where = [];
+
+        foreach ($conditions as $col => $value) {
+            $where[] = "`$col` = ?";
+            $values[] = $value;
+        }
+
+        $sql .= " where " . implode(" and ", $where);
+    }
+
+    $sql .= " order by $order";
+
+    if (!empty($limit)) {
+    $sql .= " limit " . intval($limit);
+    }
+
+    $stmt = mysqli_prepare($conn, $sql);
+
+    if (!$stmt) {
+        return [
+            "status" => "failed",
+            "message" => "failed to fetch data",
+            "error" => mysqli_error($conn),
+            "data" => []
+        ];
+    }
+
+    if (!empty($values)) {
+
+        if (!mysqli_stmt_bind_param($stmt, $params, ...$values)) {
+
+            $error = mysqli_stmt_error($stmt);
+            mysqli_stmt_close($stmt);
+
+            return [
+                "status" => "failed",
+                "message" => "failed to fetch data",
+                "error" => $error,
+                "data" => []
+            ];
+        }
+    }
+
+    if (!mysqli_stmt_execute($stmt)) {
+
+        $error = mysqli_stmt_error($stmt);
+        mysqli_stmt_close($stmt);
+
+        return [
+            "status" => "failed",
+            "message" => "failed to fetch data",
+            "error" => $error,
+            "data" => []
+        ];
+    }
+
+  $result = mysqli_stmt_get_result($stmt);
+
+    $data = $result->fetch_all(MYSQLI_ASSOC);
+
+    mysqli_free_result($result);
+    mysqli_stmt_close($stmt);
+
+    return [
+        "status" => "success",
+        "message" => "data fetched successfully",
+        "error" => "no errors",
+        "data" => $data
+    ];
+}
+
+
+function new_update_user_data(
+    $conn,
+    $table,
+    array $updateData,
+    array $conditions,
+    $types = null,
+    $allownull = false
+){
+
+   
+   if(!$allownull){
+    // Remove NULL update values
+    $updateData = array_filter(
+        $updateData,
+        function($value){
+            return $value !== null;
+        }
+    );    
+       
+   }
+
+
+    // Nothing to update
+    if(empty($updateData)){
+        return false;
+    }
+
+    /*
+     * Must have at least one condition
+     */
+    if(empty($conditions)){
+     return false;
+    }
+
+    /*
+     * Build SET clause
+     */
+    $setParts = [];
+
+    foreach($updateData as $column => $value){
+
+        $setParts[] = "$column = ?";
+
+    }
+
+    /*
+     * Build WHERE clause
+     */
+    $whereParts = [];
+
+    foreach($conditions as $column => $value){
+
+        $whereParts[] = "$column = ?";
+
+    }
+
+    $sql = "UPDATE $table
+            SET ".implode(", ", $setParts)."
+            WHERE ".implode(" AND ", $whereParts);
+
+    $stmt = mysqli_stmt_init($conn);
+
+    if(!mysqli_stmt_prepare($stmt,$sql)){
+
+   //   die("Error: ".mysqli_stmt_error($stmt)); enable this for testing
+   
+   return false;
+
+    }
+
+    /*
+     * Arrange parameters
+     * Updates first, then conditions.
+     */
+    $params = array_merge(
+
+        array_values($updateData),
+
+        array_values($conditions)
+
+    );
+    
+/*
+ * Auto-detect parameter types
+ */
+if($types === null){
+    $types = "";
+    foreach($params as $value){
+
+        if(is_int($value)){
+
+            $types .= "i";
+
+        }
+        else{
+
+            $types .= "s";
+
+        }
+
+    }
+
+}    
+   
+   
+  if(strlen($types) != count($params)){
+    mysqli_stmt_close($stmt);
+  // die("Parameter count does not match type definition."); //enable for testing
+  return false; 
+} 
+    
+  /*
+     * Bind dynamically
+     */
+    mysqli_stmt_bind_param(
+        $stmt,
+        $types,
+        ...$params
+    );
+
+    $success = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+
+    return $success;
+
+}
+
+
 function search_users($conn, $table, $cols, $value)
 {
     if (empty($cols) || !is_array($cols)) {
@@ -29,16 +480,25 @@ function search_users($conn, $table, $cols, $value)
     $stmt->bind_param($params, ...$values);
 
     if (!$stmt->execute()) {
+        $stmt->close();
         return null;
     }
 
-    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    $result = $stmt->get_result();
+
+    $data = $result->fetch_all(MYSQLI_ASSOC);
+
+    $result->free();
+    $stmt->close();
+
+    return $data;
 }
 
 function select_table_data($conn, $table, $cols) {
 
-//this function selects all data from the passed columns on the table without any where condition, cols is an array
-  
+// This function selects all data from the passed columns on the table without any WHERE condition.
+// $cols is an array.
+
     if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) {
         return null;
     }
@@ -58,11 +518,12 @@ function select_table_data($conn, $table, $cols) {
         return [];
     }
 
- return $result->fetch_all(MYSQLI_ASSOC);
+    $data = $result->fetch_all(MYSQLI_ASSOC);
+
+    $result->free(); // Free the result set
+
+    return $data;
 }
-
-
-
 
 function determine_badge($classGrade){
  
@@ -116,7 +577,8 @@ function get_pending_mails($conn, $status,$limit){
  while ($row = mysqli_fetch_assoc($result)) {
         $data[] = $row;
     }
-
+   
+    mysqli_free_result($result);
     mysqli_stmt_close($stmt);
 
     return $data ?: false;
@@ -320,7 +782,8 @@ From add class, create another dynamic input that can switch suggested class cat
             "name" => $row["surname"]." ".$row["othernames"]
         ];
     }
-
+    
+    mysqli_stmt_free_result($result1);
     mysqli_stmt_close($stmt1);
 
 
@@ -378,8 +841,8 @@ From add class, create another dynamic input that can switch suggested class cat
                     "name" => $row["surname"]." ".$row["othernames"]
                 ];
             }
-
-            mysqli_stmt_close($stmt2);
+       mysqli_stmt_free_result($result2);
+        mysqli_stmt_close($stmt2);
         }
     }
 
@@ -854,35 +1317,6 @@ function generate_psw($len = 10) {
     return str_shuffle($password);
 }
 
-function get_data_id($conn,$table){
-    
-  $sql = "SELECT id FROM $table ORDER BY id DESC LIMIT 1"; 
-  $result = mysqli_query($conn,$sql);
-  
-  if($result){
-      
-  $row = mysqli_fetch_assoc($result); 
-  $data_id = $row['id'];
-$response = "Query executed successfully"; 
- $data = [
-     'data_id' => $data_id,
-     'response' => $response
-     ];
- 
-  }
-  else{
-   $data_id = "";    
-   $response = "Error executing query";
-  
-  $data = [
-     'data_id' => $data_id,
-     'response' => $response
-     ];    
-  }
-  return $data;  
-    
-}
-
 function log_admin_action(
     $conn,
     $staff_id,
@@ -935,100 +1369,106 @@ function log_admin_action(
         $DayDateTime
     );
 
-  return mysqli_stmt_execute($stmt); 
+ $status =  mysqli_stmt_execute($stmt); 
+  mysqli_stmt_close($stmt);
+return $status;
     
 }
 
-function backup_results($conn,$session,$term){
+function backup_results($conn, $session, $term){
 
-$subjectTable = form_table_name("subject_records_",$session);
-$resultTable = form_table_name("results_",$session);
+    $subjectTable = form_table_name("subject_records_", $session);
+    $resultTable  = form_table_name("results_", $session);
 
     $time = date("Y_m_d_H_i_s");
 
-    $sessionReplace = str_replace("/","",$session);
-    $termReplace = strtolower(str_replace(" ","",$term));
+    $sessionReplace = str_replace("/", "", $session);
+    $termReplace    = strtolower(str_replace(" ", "", $term));
 
-    // Save as JSON
     $filename = "results_backup_{$sessionReplace}_{$termReplace}_{$time}.json";
 
     $path = "backups";
     $filepath = $path . "/" . $filename;
 
     // Create backup folder if it doesn't exist
-    if(!is_dir($path)){
-        mkdir($path,0755,true);
+    if (!is_dir($path)) {
+        mkdir($path, 0755, true);
     }
 
-    // Tables you want to backup
     $tables = [
         $resultTable,
         $subjectTable
     ];
 
     $backupData = [];
+    $hasData = false;
 
-    foreach($tables as $table){
-    
-  $sql = "
-   SELECT * FROM `$table`
-    WHERE term = ?";
+    foreach ($tables as $table) {
 
-$stmt = mysqli_prepare($conn, $sql);
+        $sql = "SELECT * FROM `$table` WHERE term = ?";
 
-mysqli_stmt_bind_param($stmt,"s",$term);
+        $stmt = mysqli_prepare($conn, $sql);
 
-mysqli_stmt_execute($stmt);
-
-$result = mysqli_stmt_get_result($stmt);
- 
-  $rows = [];
- while($row = mysqli_fetch_assoc($result)){
-        
-    $rows[] = $row;
+        if (!$stmt) {
+            continue;
         }
 
-      // Store using table name as key
+        mysqli_stmt_bind_param($stmt, "s", $term);
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+
+        $rows = [];
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+
+        if (!empty($rows)) {
+            $hasData = true;
+        }
+
+        mysqli_free_result($result);
+        mysqli_stmt_close($stmt);
+
         $backupData[$table] = $rows;
     }
 
-    // No data found
-    if(empty($backupData)){
+    // Don't create an empty backup
+    if (!$hasData) {
         return false;
     }
 
-    // Convert array to formatted JSON
     $json = json_encode(
         $backupData,
         JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
     );
 
-  
-    // Save file
-if(file_put_contents($filepath,$json) !== false){
- 
-  // Protect backup folder
-    $htaccessFile = rtrim($path, "/") . "/.htaccess";
-
-    $content = "
-    # restrict direct access to backup folder
-    
-    Options -Indexes
-
-   Require all denied
-";
-  if(!file_exists($htaccessFile)){
-        file_put_contents($htaccessFile,$content);
+    if ($json === false) {
+        return false;
     }
-    
-    return $filename;  
- }
- else{
-  
-  return false;    
-  }
-}
 
+    if (file_put_contents($filepath, $json) === false) {
+        return false;
+    }
+
+    // Protect backup folder
+    $htaccessFile = $path . "/.htaccess";
+
+    if (!file_exists($htaccessFile)) {
+
+        $content = <<<HTACCESS
+# Restrict direct access to backup folder
+
+Options -Indexes
+Require all denied
+HTACCESS;
+
+        file_put_contents($htaccessFile, $content);
+    }
+
+    return $filename;
+}
 function restore_backup_results($conn,$backupfile){
   
  $data = json_decode(file_get_contents($backupfile), true);
@@ -1072,175 +1512,160 @@ foreach ($data as $table => $rows) {
 }
 
 function insert_user_data($data){
- 
- /*
- format to supply $data
- 
- $data = [
-    'conn' => $home_db,
-    'table' => 'Users',
-    'cols' => [
-        'User_id','Last_login','Name'
-        ],
-    'vals' => [
-        $user_id,$date,$name],
-    'params' => 'iss',
-    
-    ];
- 
- */
- 
- 
- $conn = $data['conn'];
- $table = $data['table'];
- $cols = $data['cols'];
- $vals = $data['vals'];
- $param = $data['params'];
- $params = str_split($param);
- 
- if(empty($conn)){
-  
-   $feedback = [
-     'status' => 'Failed',
-     'message' => 'Failed to insert data',
-     'error' => 'Database connections was not supplied',
-     ];       
-     
-     
- }
- else{
-     
-  if(empty($table)){
-      
-    $feedback = [
-     'status' => 'Failed',
-     'message' => 'Failed to insert data',
-     'error' => 'Database Table was not supplied',
-         ];     
-      
-  }
-  else{
-      
- if(is_array($cols)){
- if(count($cols) != count($vals)){
-     
- $feedback = [
-     'status' => 'Failed',
-     'message' => 'Failed to insert data',
-     'error' => 'The Number of supplied columns is not equal to the number of supplied  values',
-     
-     ];    
-     
- }
- elseif(count($vals) != count($params)){
-     
-  $feedback = [
-     'status' => 'Failed',
-     'message' => 'Failed to insert data',
-     'error' => 'The Number of supplied params is not equal to the number of supplied  values',
-     
-     ];        
-     
- }
- else{
-    // insert only the first column first
- $col1 = $cols[0];
- $val1 = $vals[0];
- $param1 = $params[0];
-  
- $sql = "INSERT INTO $table($col1) VALUES(?)"; 
- $stmt = mysqli_stmt_init($conn);
- if(!mysqli_stmt_prepare($stmt,$sql)){
-     
-   $feedback = [
-     'status' => 'Failed',
-     'message' => 'Failed to insert data',
-     'error' => mysqli_stmt_error($stmt)
-     
-     ];
-     
- }
- else{
-     
-     mysqli_stmt_bind_param($stmt,$param1,$val1);
-     mysqli_stmt_execute($stmt);
-     
-   //insert the remaining data as update  
-  $id_col = 'id';
-  $id_param = 'i';
-  $id = get_data_id($conn,$table);
-  $id_val = $id['data_id'];
-  $response = $id['response'];
-  
-  if(empty($id_val)){
-      
-   $feedback = [
-     'status' => 'Failed',
-     'message' => 'Failed to update data',
-     'error' => $response,
-     
-     ];            
-      
-  }
-  else{
-  
-  for($i = 1; $i < count($cols); $i++){
-      
-    $col = $cols[$i];
-    $col_val = $vals[$i];
-    $param = $params[$i].$id_param;
-     
-  update_user_data($conn,$table,$col,$id_col,$col_val,$id_val,$param);  
-  
-  }
-  
-   $feedback = [
-     'status' => 'success',
-     'message' => 'Data inserted successfully',
-     'error' => 'No errors',
-     'data_id' => $id_val,
-     ];       
-   
-   }
- }
-  
- }
- 
- }
- else{
-     
- $sql = "INSERT INTO $table($cols) VALUES(?)"; 
- $stmt = mysqli_stmt_init($conn);
- if(!mysqli_stmt_prepare($stmt,$sql)){
-     
-   $feedback = [
-     'status' => 'Failed',
-     'message' => 'Failed to insert data',
-     'error' => mysqli_stmt_error($stmt)
-     
-     ];
-     
- }
- else{
-     
-     mysqli_stmt_bind_param($stmt,$param,$vals);
-     mysqli_stmt_execute($stmt);
-     
-     
-     $feedback = [
-     'status' => 'success',
-     'message' => 'Data inserted successfully',
-     'error' => 'No errors',
-     
-     ];   
-  }
- }  
- 
-  }
- }
+    /*
+    Required format:
 
- return $feedback;
+    $data = [
+        'conn'   => $conn,
+        'table'  => 'users',
+        'cols'   => ['user_id','name','email'],
+        'vals'   => [$user_id,$name,$email],
+        'params' => 'iss'
+    ];
+    */
+
+    $conn   = $data['conn']   ?? null;
+    $table  = trim($data['table'] ?? '');
+    $cols   = $data['cols']   ?? [];
+    $vals   = $data['vals']   ?? [];
+    $params = trim($data['params'] ?? '');
+
+    // Database connection
+    if (!$conn) {
+        return [
+            'status'  => 'failed',
+            'message' => 'Failed to insert data',
+            'error'   => 'Database connection was not supplied'
+        ];
+    }
+
+    // Table name
+    if (empty($table)) {
+        return [
+            'status'  => 'failed',
+            'message' => 'Failed to insert data',
+            'error'   => 'Database table was not supplied'
+        ];
+    }
+
+    if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) {
+        return [
+            'status'  => 'failed',
+            'message' => 'Failed to insert data',
+            'error'   => 'Invalid table name'
+        ];
+    }
+
+    // Columns
+    if (!is_array($cols) || empty($cols)) {
+        return [
+            'status'  => 'failed',
+            'message' => 'Failed to insert data',
+            'error'   => 'Columns must be supplied as a non-empty array'
+        ];
+    }
+
+    // Values
+    if (!is_array($vals)) {
+        return [
+            'status'  => 'failed',
+            'message' => 'Failed to insert data',
+            'error'   => 'Values must be supplied as an array'
+        ];
+    }
+
+    if (count($cols) != count($vals)) {
+        return [
+            'status'  => 'failed',
+            'message' => 'Failed to insert data',
+            'error'   => 'The number of supplied columns is not equal to the number of supplied values'
+        ];
+    }
+
+    // Parameter validation
+    if (strlen($params) != count($vals)) {
+        return [
+            'status'  => 'failed',
+            'message' => 'Failed to insert data',
+            'error'   => 'The number of supplied parameter types is not equal to the number of supplied values'
+        ];
+    }
+
+    if (!preg_match('/^[idsb]+$/', $params)) {
+        return [
+            'status'  => 'failed',
+            'message' => 'Failed to insert data',
+            'error'   => 'Parameter types can only contain i, d, s and b'
+        ];
+    }
+
+    // Validate column names
+    foreach ($cols as $col) {
+
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $col)) {
+            return [
+                'status'  => 'failed',
+                'message' => 'Failed to insert data',
+                'error'   => "Invalid column name: $col"
+            ];
+        }
+    }
+
+    // Build SQL
+    $columnList  = "`" . implode("`,`", $cols) . "`";
+    $placeholders = implode(",", array_fill(0, count($cols), "?"));
+
+    $sql = "INSERT INTO `$table` ($columnList) VALUES ($placeholders)";
+
+    $stmt = mysqli_prepare($conn, $sql);
+
+    if (!$stmt) {
+        return [
+            'status'  => 'failed',
+            'message' => 'Failed to insert data',
+            'error'   => mysqli_error($conn)
+        ];
+    }
+
+    // Bind parameters
+    if (!mysqli_stmt_bind_param($stmt, $params, ...$vals)) {
+
+        $error = mysqli_stmt_error($stmt);
+        mysqli_stmt_close($stmt);
+
+        return [
+            'status'  => 'failed',
+            'message' => 'Failed to insert data',
+            'error'   => $error
+        ];
+    }
+
+    // Execute
+    if (!mysqli_stmt_execute($stmt)) {
+
+        $error = mysqli_stmt_error($stmt);
+        mysqli_stmt_close($stmt);
+
+        return [
+            'status'  => 'failed',
+            'message' => 'Failed to insert data',
+            'error'   => $error
+        ];
+    }
+
+    $feedback = [
+        'status'        => 'success',
+        'message'       => 'Data inserted successfully',
+        'error'         => 'No errors',
+        'data_id'       => mysqli_insert_id($conn),
+        'affected_rows' => mysqli_stmt_affected_rows($stmt)
+    ];
+
+    mysqli_stmt_close($stmt);
+
+    return $feedback;
 }
+
 
 function collect_user_data($conn,$table,$col,$data,$datatype){
 //uses 1 search fields, std_id
@@ -1250,7 +1675,8 @@ $sql = "SELECT * FROM $table WHERE $col=? limit 1";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)) {
      
-die("Error : ".mysqli_stmt_error($stmt));      
+// die("Error : ".mysqli_stmt_error($stmt));  //enable for testing  
+return []; 
   }
   else {
 
@@ -1258,10 +1684,16 @@ die("Error : ".mysqli_stmt_error($stmt));
  mysqli_stmt_execute($stmt);
  $result = mysqli_stmt_get_result($stmt);
  $user_data = mysqli_fetch_assoc($result);
- if($user_data){
- return $user_data;
+  
+   mysqli_free_result($result);// Free result first
+    mysqli_stmt_close($stmt);// close statement
+ 
+ if(!$user_data){
+  $user_data = [];
  }
-}
+ return $user_data; 
+ 
+ }
 }
 
 function collect_user_data2($conn,$table,$col1,$col2,$col1_value,$col2_value,$param){
@@ -1273,7 +1705,8 @@ $sql = "SELECT * FROM $table WHERE $col1=? AND $col2=? limit 1";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)) {
      
-die("Error : ".mysqli_stmt_error($stmt));      
+// die("Error : ".mysqli_stmt_error($stmt));  //enable for testing  
+return [];     
   }
   else {
 
@@ -1281,10 +1714,15 @@ die("Error : ".mysqli_stmt_error($stmt));
  mysqli_stmt_execute($stmt);
  $result = mysqli_stmt_get_result($stmt);
  $user_data = mysqli_fetch_assoc($result);
- if($user_data){
+ 
+  mysqli_free_result($result);// Free result first
+    mysqli_stmt_close($stmt);// close statement
+ if(!$user_data){
+  $user_data = [];
+ }
+ 
  return $user_data;
  }
-}
 }
 
 function collect_user_data3($conn,$table,$col1,$col2, $col3,$col1_value,$col2_value,$col3_value,$param){
@@ -1296,7 +1734,8 @@ $sql = "SELECT * FROM $table WHERE $col1=? AND $col2=? AND $col3=? limit 1";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)) {
      
-die("Error : ".mysqli_stmt_error($stmt));      
+// die("Error : ".mysqli_stmt_error($stmt));  //enable for testing  
+return [];     
   }
   else {
 
@@ -1304,10 +1743,15 @@ die("Error : ".mysqli_stmt_error($stmt));
  mysqli_stmt_execute($stmt);
  $result = mysqli_stmt_get_result($stmt);
  $user_data = mysqli_fetch_assoc($result);
- if($user_data){
+   mysqli_free_result($result);// Free result first
+    mysqli_stmt_close($stmt);// close statement
+ if(!$user_data){
+  $user_data = [];
+
+ }
+ 
  return $user_data;
  }
-}
 }
 
 function collect_user_data4($conn,$table,$col1,$col2, $col3,$col4, $col1_value,$col2_value,$col3_value,$col4_value,$param){
@@ -1319,7 +1763,8 @@ $sql = "SELECT * FROM $table WHERE $col1=? AND $col2=? AND $col3=? AND $col4=? l
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)) {
      
-die("Error : ".mysqli_stmt_error($stmt));      
+// die("Error : ".mysqli_stmt_error($stmt));  //enable for testing  
+return [];     
   }
   else {
 
@@ -1327,10 +1772,16 @@ die("Error : ".mysqli_stmt_error($stmt));
  mysqli_stmt_execute($stmt);
  $result = mysqli_stmt_get_result($stmt);
  $user_data = mysqli_fetch_assoc($result);
- if($user_data){
+    mysqli_free_result($result);// Free result first
+    mysqli_stmt_close($stmt);// close statement
+
+ if(!$user_data){
+  $user_data = [];
+
+ }
+ 
  return $user_data;
  }
-}
 }
 
 function check_staff_login($conn){
@@ -1432,17 +1883,19 @@ setcookie('staff_cookie','',time()-(100), '/');
 function count_user_data($conn,$table,$col1,$col1_value,$param){
  
  //1 search fields
-   $sql= "SELECT * FROM $table WHERE $col1=?";
+   $sql= "SELECT 1 FROM $table WHERE $col1=?";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)) {
       
-     die("Error :".mysqli_stmt_error($stmt));      
+   //  die("Error :".mysqli_stmt_error($stmt)); //enable for testing
+   return null;
       }
     else {
  mysqli_stmt_bind_param($stmt, $param,$col1_value);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_store_result($stmt);
    $result = mysqli_stmt_num_rows($stmt);
+   mysqli_stmt_close($stmt);
 
 return $result;
 
@@ -1452,11 +1905,12 @@ return $result;
 function count_user_data2($conn,$table,$col1,$col2,$col1_value,$col2_value,$param){
  
  //2 search fields
-   $sql= "SELECT * FROM $table WHERE $col1=? AND $col2=?";
+   $sql= "SELECT 1 FROM $table WHERE $col1=? AND $col2=?";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)) {
       
-     die("Error :".mysqli_stmt_error($stmt));      
+   //  die("Error :".mysqli_stmt_error($stmt)); //enable for testing
+   return null;
       }
     else {
  mysqli_stmt_bind_param($stmt, $param,$col1_value, $col2_value);
@@ -1472,37 +1926,42 @@ return $result;
 function count_user_data3($conn,$table,$col1,$col2,$col3,$col1_value,$col2_value,$col3_value,$param){
  
  //2 search fields
-   $sql= "SELECT * FROM $table WHERE $col1=? AND $col2=? AND $col3=?";
+   $sql= "SELECT 1 FROM $table WHERE $col1=? AND $col2=? AND $col3=?";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)) {
       
-     die("Error :".mysqli_stmt_error($stmt));      
+  //   die("Error :".mysqli_stmt_error($stmt)); //enable for testing
+  return null;
       }
     else {
  mysqli_stmt_bind_param($stmt, $param,$col1_value, $col2_value,$col3_value);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_store_result($stmt);
    $result = mysqli_stmt_num_rows($stmt);
+    mysqli_stmt_close($stmt);
 
 return $result;
 
   }   
 }
 function check_exist($conn,$table,$col,$data,$datatype){
-   $sql= "select * from $table where $col =? limit 1";
+   $sql= "select 1 from $table where $col =? limit 1";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)) {
       
-     die("Error :".mysqli_stmt_error($stmt));      
+   //  die("Error :".mysqli_stmt_error($stmt));  //enable for testing
+   return false;
       }
     else {
     mysqli_stmt_bind_param($stmt, $datatype,$data);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_store_result($stmt);
     $result = mysqli_stmt_num_rows($stmt);
+     mysqli_stmt_close($stmt);
+
     if($result > 0){
     return true;
-}
+  }
 else {
     return false;
    }
@@ -1511,20 +1970,23 @@ else {
 
 function check_exist2($conn, $table, $col1, $col2, $col1_value, $col2_value, $param){
 //2 search fields
-   $sql= "SELECT * FROM $table WHERE $col1=? AND $col2=? limit 1";
+   $sql= "SELECT 1 FROM $table WHERE $col1=? AND $col2=? limit 1";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)) {
       
-     die("Error :".mysqli_stmt_error($stmt));      
+   //  die("Error :".mysqli_stmt_error($stmt)); //enable for testing   
+   return false;
       }
     else {
  mysqli_stmt_bind_param($stmt, $param,$col1_value, $col2_value);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_store_result($stmt);
     $result = mysqli_stmt_num_rows($stmt);
+     mysqli_stmt_close($stmt);
+ 
     if($result > 0){
     return true;
-}
+  }
 else {
     return false;
    }
@@ -1533,20 +1995,23 @@ else {
 
 function check_exist3($conn, $table, $col1, $col2, $col3, $col1_value, $col2_value, $col3_value, $param){
 //3 search fields
-   $sql= "SELECT * FROM $table WHERE $col1=? AND $col2=? AND $col3=? limit 1";
+  $sql= "SELECT 1 FROM $table WHERE $col1=? AND $col2=? AND $col3=? limit 1";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)) {
       
-     die("Error :".mysqli_stmt_error($stmt));      
+  //  die("Error :".mysqli_stmt_error($stmt));   //enable for testing
+  return false;
       }
     else {
  mysqli_stmt_bind_param($stmt, $param,$col1_value, $col2_value, $col3_value);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_store_result($stmt);
     $result = mysqli_stmt_num_rows($stmt);
+     mysqli_stmt_close($stmt);
+ 
     if($result > 0){
     return true;
-}
+  }
 else {
     return false;
    }
@@ -1555,20 +2020,23 @@ else {
 
 function check_exist4($conn, $table, $col1, $col2, $col3, $col4, $col1_value, $col2_value, $col3_value, $col4_value, $param){
 //4 search fields
-   $sql= "SELECT * FROM $table WHERE $col1=? AND $col2=? AND $col3=? AND $col4=? limit 1";
+   $sql= "SELECT 1 FROM $table WHERE $col1=? AND $col2=? AND $col3=? AND $col4=? limit 1";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)) {
       
-     die("Error :".mysqli_stmt_error($stmt));      
+ //  die("Error :".mysqli_stmt_error($stmt)); //enable for testing
+ return false;
       }
     else {
  mysqli_stmt_bind_param($stmt, $param,$col1_value, $col2_value, $col3_value, $col4_value);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_store_result($stmt);
     $result = mysqli_stmt_num_rows($stmt);
+     mysqli_stmt_close($stmt);
+
     if($result > 0){
     return true;
-}
+ }
 else {
     return false;
    }
@@ -1581,18 +2049,15 @@ function delete_user_data($conn, $table, $id_col, $id_value, $param){
   $sql = "DELETE FROM $table WHERE $id_col =?";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)){
- die("Error: ".mysqli_stmt_error($stmt));
+// die("Error: ".mysqli_stmt_error($stmt)); //enable for testing
+return false;
  }
  else{
 mysqli_stmt_bind_param($stmt, $param, $id_value);
+$result = mysqli_stmt_execute($stmt); 
+mysqli_stmt_close($stmt);
 
-if(mysqli_stmt_execute($stmt)){
-
-return true;
-}
-else{
-    return false;
-}
+return $result;
  
  }  
     
@@ -1604,18 +2069,17 @@ function delete_user_data2($conn, $table, $col1, $col2, $col1_value, $col2_value
   $sql = "DELETE FROM $table WHERE $col1=? AND $col2=?";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)){
- die("Error: ".mysqli_stmt_error($stmt));
+// die("Error: ".mysqli_stmt_error($stmt)); //enable for testing
+return false;
  }
  else{
 mysqli_stmt_bind_param($stmt, $param, $col1_value,$col2_value);
 
-if(mysqli_stmt_execute($stmt)){
-    
-    return true;
-}
-else{
-    return false;
-  }
+$result = mysqli_stmt_execute($stmt); 
+mysqli_stmt_close($stmt);
+
+return $result;
+ 
  
  }  
     
@@ -1627,17 +2091,17 @@ function delete_user_data3($conn, $table, $col1, $col2, $col3, $col1_value, $col
   $sql = "DELETE FROM $table WHERE $col1=? AND $col2=? AND $col3=?";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)){
- die("Error: ".mysqli_stmt_error($stmt));
+ // die("Error: ".mysqli_stmt_error($stmt)); //enable for testing
+ return false;
  }
  else{
 mysqli_stmt_bind_param($stmt, $param, $col1_value,$col2_value,$col3_value);
 
-if(mysqli_stmt_execute($stmt)){
-    return true;
-}
- else{
-     return false;
- }
+$result = mysqli_stmt_execute($stmt); 
+mysqli_stmt_close($stmt);
+
+return $result;
+ 
  }  
     
 }
@@ -1649,21 +2113,16 @@ function delete_user_data4($conn, $table, $col1, $col2, $col3, $col4, $col1_valu
  $sql = "DELETE FROM $table WHERE $col1=? AND $col2=? AND $col3=? AND $col4=?";
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)){
- die("Error: ".mysqli_stmt_error($stmt));
+// die("Error: ".mysqli_stmt_error($stmt)); //enable for testing
+return false;
 
  }
  else{
 mysqli_stmt_bind_param($stmt, $param, $col1_value,$col2_value,$col3_value,$col4_value);
+$result = mysqli_stmt_execute($stmt); 
+mysqli_stmt_close($stmt);
 
-mysqli_stmt_execute($stmt);
-
-if (mysqli_stmt_affected_rows($stmt) > 0) {
-    return true; // rows deleted
-} 
-
-else {
-    return false; // no matching rows
-    }
+return $result;
   
  }  
     
@@ -1678,19 +2137,18 @@ function update_user_data($conn, $table, $upd_col, $id_col , $upd_value, $id_val
  $sql = "UPDATE $table SET $upd_col =? WHERE $id_col =?";
   $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)){
-die("Error: ".mysqli_stmt_error($stmt));  
+// die("Error: ".mysqli_stmt_error($stmt)); //enable for testing
+return false;
  }
  else{
 mysqli_stmt_bind_param($stmt, $param,
  $upd_value, $id_value);
 
-if(mysqli_stmt_execute($stmt)){
-    return true;
-}
+$result = mysqli_stmt_execute($stmt); 
+mysqli_stmt_close($stmt);
 
-else{
-    return false;
-  }
+return $result;
+ 
  }
 }
 
@@ -1700,20 +2158,17 @@ function update_user_data2($conn,$table,$upd_col,$col1,$col2,$upd_value,$col1_va
   $sql = "UPDATE $table SET $upd_col =? WHERE $col1 =? AND $col2 =?";
   $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)){
-die("Error: ".mysqli_stmt_error($stmt));  
+//die("Error: ".mysqli_stmt_error($stmt)); //enable for testing 
  }
  else{
 mysqli_stmt_bind_param($stmt, $param,
  $upd_value, $col1_value,$col2_value);
 
-if(mysqli_stmt_execute($stmt)){
-  
-  return true;  
-}
-else{
-    return false;
-    
-  }
+$result = mysqli_stmt_execute($stmt); 
+mysqli_stmt_close($stmt);
+
+return $result;
+ 
  }
 }
 
@@ -1723,18 +2178,17 @@ function update_user_data3($conn,$table,$upd_col,$col1,$col2,$col3,$upd_value,$c
   $sql = "UPDATE $table SET $upd_col =? WHERE $col1 =? AND $col2 =? AND $col3=?";
   $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)){
-die("Error: ".mysqli_stmt_error($stmt));  
+//die("Error: ".mysqli_stmt_error($stmt)); //enable for testing
+return false;
  }
  else{
 mysqli_stmt_bind_param($stmt, $param,
  $upd_value, $col1_value,$col2_value,$col3_value);
-if(mysqli_stmt_execute($stmt)){
-    
-    return true;
-} 
-  else{
-      return false;
-  }  
+$result = mysqli_stmt_execute($stmt); 
+mysqli_stmt_close($stmt);
+
+return $result;
+   
  }
 }
 
@@ -1744,18 +2198,17 @@ function update_user_data4($conn,$table,$upd_col,$col1,$col2,$col3,$col4,$upd_va
   $sql = "UPDATE $table SET $upd_col =? WHERE $col1 =? AND $col2 =? AND $col3=? AND $col4=?";
   $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt, $sql)){
-die("Error: ".mysqli_stmt_error($stmt));  
+//die("Error: ".mysqli_stmt_error($stmt)); //enable for testing
+return false;
  }
  else{
 mysqli_stmt_bind_param($stmt, $param,
  $upd_value, $col1_value,$col2_value,$col3_value,$col4_value);
-if(mysqli_stmt_execute($stmt)){
-    
-    return true;
-} 
-  else{
-      return false;
-  }  
+$result = mysqli_stmt_execute($stmt); 
+mysqli_stmt_close($stmt);
+
+return $result;
+   
  }
 }
 
@@ -1806,7 +2259,8 @@ if($num_row > 0){
        
    }
     
-  } 
+  }
+  mysqli_free_result($result);//free memory
 }
  return $data;
 }
@@ -1832,8 +2286,9 @@ if($order == "DESC" || $order == "ASC"){
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt,$sql)){
      
-  die("Sql Error: ".mysqli_stmt_error($stmt));   
+ // die("Sql Error: ".mysqli_stmt_error($stmt));   
   $data = [];
+  return [];
    
  }
  else{
@@ -1842,6 +2297,7 @@ if($order == "DESC" || $order == "ASC"){
  mysqli_stmt_execute($stmt);
      
  $result  = mysqli_stmt_get_result($stmt);
+ 
 $data = [];
  while($row = mysqli_fetch_assoc($result)){
  
@@ -1861,6 +2317,11 @@ $data = [];
    }
     
   } 
+  
+  
+// Fetch data...
+mysqli_free_result($result);
+mysqli_stmt_close($stmt);
 
 }
 
@@ -1885,8 +2346,9 @@ if($order == "DESC" || $order == "ASC"){
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt,$sql)){
      
-  die("Sql Error: ".mysqli_stmt_error($stmt));   
+ // die("Sql Error: ".mysqli_stmt_error($stmt));   
   $data = [];
+  return [];
    
  }
  else{
@@ -1914,6 +2376,12 @@ $data = [];
    }
     
   } 
+  
+  
+// Fetch data...
+
+mysqli_free_result($result);
+mysqli_stmt_close($stmt);
 
 }
 
@@ -1939,8 +2407,9 @@ if($order == "DESC" || $order == "ASC"){
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt,$sql)){
      
-  die("Sql Error: ".mysqli_stmt_error($stmt));   
+ // die("Sql Error: ".mysqli_stmt_error($stmt));   
   $data = [];
+  return [];
    
  }
  else{
@@ -1968,6 +2437,12 @@ $data = [];
    }
     
   } 
+  
+  
+// Fetch data...
+
+mysqli_free_result($result);
+mysqli_stmt_close($stmt);
 
 }
 
@@ -1995,8 +2470,9 @@ if($order == "DESC" || $order == "ASC"){
  $stmt = mysqli_stmt_init($conn);
  if(!mysqli_stmt_prepare($stmt,$sql)){
      
-  die("Sql Error: ".mysqli_stmt_error($stmt));   
+ // die("Sql Error: ".mysqli_stmt_error($stmt));   
   $data = [];
+  return [];
    
  }
  else{
@@ -2023,7 +2499,13 @@ $data = [];
        
    }
     
-  } 
+  }
+  
+  
+// Fetch data...
+
+mysqli_free_result($result);
+mysqli_stmt_close($stmt);
 
 }
 
@@ -2031,16 +2513,22 @@ $data = [];
 }
 
 function count_table_data($conn, $table){
-// This function collect all data in a table without condition and also checks if a table has any value at all or not
-$table = trim($table);
-$sql = "SELECT * FROM $table";
- 
- $result  = mysqli_query($conn, $sql);
- $num_rows = mysqli_num_rows($result);
 
-return $num_rows;
-    
+    $table = trim($table);
+
+    $sql = "SELECT COUNT(*) AS total FROM $table";
+    $result = mysqli_query($conn, $sql);
+
+    if (!$result) {
+        return 0;
+    }
+
+    $row = mysqli_fetch_assoc($result);
+    mysqli_free_result($result);
+
+    return (int)$row['total'];
 }
+
 function generate_id($len){
 
     $num = rand(1,9);
@@ -2055,12 +2543,22 @@ function generate_id($len){
     return $num;
 }
 
-function result_grades($total){
-  global $conn;
- $Inuse = collect_user_data($conn,"variables","type","grading_system_inuse","s");
-$InuseValue = $Inuse["value"];
+function result_grades($total,$gradingSystem=null){
+
+  if($gradingSystem){
+      
+ $InuseValue = $gradingSystem["grading_inuse"];
+$gradeData = $gradingSystem["grade_data"];   
+  }
+  else{
  
- $gradeData = collect_table_data($conn,"grading_system","upper_limit DESC");
+   global $conn;
+$Inuse = collect_user_data($conn,"variables","type","grading_system_inuse","s");
+$InuseValue = $Inuse["value"];
+ $gradeData = collect_table_data($conn,"grading_system","upper_limit DESC");    
+      
+  }
+
 
    foreach ($gradeData as $grades){
   $lowerLimit = $grades["lower_limit"];
@@ -2135,13 +2633,32 @@ function mailing_list($user_email,$mailing,$reasons){
  if($check_email == true){
   // email exist but might not be Subscribed, so we update it to Subscribe
   
-  update_user_data($conn,'mailing_list','mailing','email',$mailing,$user_email,'ss');  
   
-  update_user_data($conn,'mailing_list','reasons','email',$reasons,$user_email,'ss');  
+  $updateData = [
+      
+      "mailing" => $mailing,
+      "reasons" => $reasons,
+      ];
+  $conditions = [
+      "email" => $user_email,
+      
+      ];
   
-     
+ $update = new_update_user_data(
+    $conn,
+    'mailing_list',
+     $updateData,
+     $conditions,
+    'sss');
+    
+  if($update){
   $report = "email Subscribed successfully";   
-     
+  }
+  else{
+   $report = "Failed to subscribe email";   
+  }
+  
+      
  }
  else{
   // email does not exist, enter new record for Subscription 
@@ -2179,12 +2696,30 @@ $report = "The email $user_email exist on our mailing list but not subscribed";
  else{
   // email exist and subscribed, Unsubscribe enail
   
-  update_user_data($conn,'mailing_list','mailing','email',$mailing,$user_email,'ss');  
+   $updateData = [
+      
+      "mailing" => $mailing,
+      "reasons" => $reasons,
+      ];
+  $conditions = [
+      "email" => $user_email,
+      
+      ];
+  
+ $update = new_update_user_data(
+    $conn,
+    'mailing_list',
+     $updateData,
+     $conditions,
+    'sss');
+    
+  if($update){
+ $report = "The email $user_email has been unsubscribed successfully";    
+  }
+  else{
+  $report = "Failed to unsubscribe $user_email";   
+  } 
  
- update_user_data($conn,'mailing_list','reasons','email',$reasons,$user_email,'ss'); 
-     
-  $report = "The email $user_email has been unsubscribed successfully";       
-     
  }
   
  }   
@@ -2270,13 +2805,27 @@ $psw_hash = password_hash($psw, PASSWORD_DEFAULT);
 
 if($email_det["Status"] == "Pending"){
     
-  update_user_data($conn,$table,"Status","email","Active",$email,"ss");  
- 
-  update_user_data($conn,$table,"Reasons","email","Account verified",$email,"ss");  
-    
-  update_user_data($conn,$table,"Password","email",$psw_hash,$email,"ss");
+   $updateData = [
+      
+      "Status" => "Active",
+      "Reasons" => "Account verified",
+      "Password" => $psw_hash,
+      ];
+  $conditions = [
+      "email" => $email,
+      
+      ];
   
-  $response = [
+ $update = new_update_user_data(
+    $conn,
+    'mailing_list',
+     $updateData,
+     $conditions,
+    'ssss');
+    
+  if($update){
+ 
+   $response = [
       "status" => "success",
       "error" => "None",
       "message" => "Your email has been verified successfully ✓",
@@ -2285,6 +2834,21 @@ if($email_det["Status"] == "Pending"){
       "msg_report" => "New $signup Signup Verified successfully ✓",
      "report" => "success",
       ];   
+ 
+ 
+  }
+  else{
+    $response = [
+      "status" => "failed",
+      "error" => "SQL Error",
+    "message" => "Failed to verify email",
+      "user_name" => $name,
+      "user_psw" => "",
+      "msg_report" => "Failed to verify New $signup Signup",
+     "report" => "failed",
+      ];   
+ 
+  } 
     
 }
 else{
@@ -2682,45 +3246,43 @@ foreach ($tables as $table){
  return false; 
 }
     
-function check_exist_table($conn,$table){
- 
-  $sql = "SHOW TABLES";
- $table = trim($table);
-$result = mysqli_query($conn, $sql);
+function check_exist_table($conn, $table){
 
- $tables = mysqli_fetch_all($result);
- 
- if($tables){
-     
- $tableNames = array_column($tables, 0);
-  
- if(in_array($table, $tableNames)){
+    $table = mysqli_real_escape_string($conn, trim($table));
 
-  return true;   
-     
+    $sql = "SHOW TABLES LIKE '$table'";
+    $result = mysqli_query($conn, $sql);
+
+    if (!$result) {
+        return false;
     }
-  }
 
- 
- return false;  
+   $exists = mysqli_num_rows($result) > 0;
+
+    mysqli_free_result($result);
+
+    return $exists;
 }
-
 function collect_all_tables($conn){
-  
-  $tableNames = [];     
- $sql = "SHOW TABLES";
-$result = mysqli_query($conn, $sql);
- $tables = mysqli_fetch_all($result);
- 
- if($tables){
-     
- $tableNames = array_column($tables, 0);  
- 
- }
- 
- return $tableNames;
-}
 
+    $tableNames = [];
+
+    $sql = "SHOW TABLES";
+    $result = mysqli_query($conn, $sql);
+
+    if ($result) {
+
+        $tables = mysqli_fetch_all($result);
+
+        if ($tables) {
+            $tableNames = array_column($tables, 0);
+        }
+
+        mysqli_free_result($result);
+    }
+
+    return $tableNames;
+}
 function merge_into_array(
     $value = null,
     $array = null,
@@ -2785,4 +3347,16 @@ function merge_into_array(
     }
 
     return array_values($result);
+}
+
+
+function truncate_data_table($conn, $table){
+    // Validate table name
+    if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) {
+        return false;
+    }
+
+    $sql = "TRUNCATE TABLE `$table`";
+
+    return mysqli_query($conn, $sql) ? true : false;
 }

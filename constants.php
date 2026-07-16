@@ -24,6 +24,7 @@ $schoolName = "$site MARARABA";
 $authorized =[$dirgen,$manager,$asstmanager,$ictdir,$principal,$asstictdir,$exam_officer,$asst_exam_officer,$secretary,$accountant];
 $teacher = "Teacher";
 $appointers = [$dirgen,$principal,$manager,$ictdir,$asstictdir];
+$reserved = [$dirgen,$manager];
 
 $staffCats = collect_table_data($conn,"staffs","","staff_cat");
 
@@ -32,3 +33,4 @@ $dollar = "💲";
 $dollarsack ="💰";
 $passmark = 40;
 $BackupToken = $config["data"]["backupToken"];
+$developerToken = '$2y$12$GiU8yClvHeCraFkewxHrQ.8WSYciEdi.pXI3VCPgMX.94dUAXIr92';
