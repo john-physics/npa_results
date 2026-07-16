@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 21, 2026 at 10:04 AM
+-- Generation Time: Jul 16, 2026 at 03:19 PM
 -- Server version: 12.3.2-MariaDB
 -- PHP Version: 8.5.1
 
@@ -31,7 +31,7 @@ CREATE TABLE `admin_activity_logs` (
   `id` int(11) NOT NULL,
   `staff_id` int(11) NOT NULL,
   `staff_name` varchar(200) DEFAULT NULL,
-  `action_type` varchar(100) DEFAULT NULL,
+  `action_type` varchar(200) DEFAULT NULL,
   `action_reason` text DEFAULT NULL,
   `records_affected` int(11) DEFAULT 0,
   `session` varchar(50) DEFAULT NULL,
@@ -40,8 +40,10 @@ CREATE TABLE `admin_activity_logs` (
   `user_agent` text DEFAULT NULL,
   `session_id` varchar(255) DEFAULT NULL,
   `backup_file` varchar(1024) DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp()
+  `timestamp` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `class_set`
@@ -58,6 +60,23 @@ CREATE TABLE `class_set` (
   `date_created` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `grading_system`
+--
+
+CREATE TABLE `grading_system` (
+  `id` int(11) NOT NULL,
+  `score_range` varchar(100) DEFAULT NULL,
+  `grade_suffix` varchar(100) DEFAULT NULL,
+  `grade_nonsuffix` varchar(100) DEFAULT NULL,
+  `remark` varchar(100) DEFAULT NULL,
+  `lower_limit` int(11) DEFAULT NULL,
+  `upper_limit` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `mailing_list`
@@ -70,6 +89,7 @@ CREATE TABLE `mailing_list` (
   `reasons` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `mail_queue`
@@ -87,6 +107,8 @@ CREATE TABLE `mail_queue` (
   `sent_at` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+-- --------------------------------------------------------
+
 --
 -- Table structure for table `password_reset`
 --
@@ -101,6 +123,117 @@ CREATE TABLE `password_reset` (
   `timestamp` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `results_2024_2025`
+--
+
+CREATE TABLE `results_2024_2025` (
+  `id` int(11) NOT NULL,
+  `staff_id` int(11) DEFAULT NULL,
+  `std_id` int(11) DEFAULT NULL,
+  `std_cat` varchar(100) DEFAULT NULL,
+  `term` varchar(100) DEFAULT NULL,
+  `class` varchar(100) DEFAULT NULL,
+  `total_score` int(11) DEFAULT NULL,
+  `total_scorable` int(11) DEFAULT NULL,
+  `subject_num` varchar(100) DEFAULT NULL,
+  `overall_average` decimal(10,2) DEFAULT 0.00,
+  `overall_grade` varchar(100) DEFAULT NULL,
+  `general_remark` varchar(100) DEFAULT NULL,
+  `position_inclass` varchar(100) DEFAULT NULL,
+  `teacher_comment` text DEFAULT NULL,
+  `principal_comment` text DEFAULT NULL,
+  `activeness` int(11) DEFAULT NULL,
+  `attendance` int(11) DEFAULT NULL,
+  `punctuality` int(11) DEFAULT NULL,
+  `self_control` int(11) DEFAULT NULL,
+  `honesty` int(11) DEFAULT NULL,
+  `humility` int(11) DEFAULT NULL,
+  `leadership` int(11) DEFAULT NULL,
+  `hand_writing` int(11) DEFAULT NULL,
+  `fluency` int(11) DEFAULT NULL,
+  `musical_skills` int(11) DEFAULT NULL,
+  `sports` int(11) DEFAULT NULL,
+  `result_status` varchar(100) DEFAULT NULL,
+  `date_created` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `results_2025_2026`
+--
+
+CREATE TABLE `results_2025_2026` (
+  `id` int(11) NOT NULL,
+  `staff_id` int(11) DEFAULT NULL,
+  `std_id` int(11) DEFAULT NULL,
+  `std_cat` varchar(100) DEFAULT NULL,
+  `term` varchar(100) DEFAULT NULL,
+  `class` varchar(100) DEFAULT NULL,
+  `total_score` int(11) DEFAULT NULL,
+  `total_scorable` int(11) DEFAULT NULL,
+  `subject_num` varchar(100) DEFAULT NULL,
+  `overall_average` decimal(10,2) DEFAULT 0.00,
+  `overall_grade` varchar(100) DEFAULT NULL,
+  `general_remark` varchar(100) DEFAULT NULL,
+  `position_inclass` varchar(100) DEFAULT NULL,
+  `teacher_comment` text DEFAULT NULL,
+  `principal_comment` text DEFAULT NULL,
+  `activeness` int(11) DEFAULT NULL,
+  `attendance` int(11) DEFAULT NULL,
+  `punctuality` int(11) DEFAULT NULL,
+  `self_control` int(11) DEFAULT NULL,
+  `honesty` int(11) DEFAULT NULL,
+  `humility` int(11) DEFAULT NULL,
+  `leadership` int(11) DEFAULT NULL,
+  `hand_writing` int(11) DEFAULT NULL,
+  `fluency` int(11) DEFAULT NULL,
+  `musical_skills` int(11) DEFAULT NULL,
+  `sports` int(11) DEFAULT NULL,
+  `result_status` varchar(100) DEFAULT NULL,
+  `date_created` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `results_2026_2027`
+--
+
+CREATE TABLE `results_2026_2027` (
+  `id` int(11) NOT NULL,
+  `staff_id` int(11) DEFAULT NULL,
+  `std_id` int(11) DEFAULT NULL,
+  `std_cat` varchar(100) DEFAULT NULL,
+  `term` varchar(100) DEFAULT NULL,
+  `class` varchar(100) DEFAULT NULL,
+  `total_score` int(11) DEFAULT NULL,
+  `total_scorable` int(11) DEFAULT NULL,
+  `subject_num` varchar(100) DEFAULT NULL,
+  `overall_average` decimal(10,2) DEFAULT 0.00,
+  `overall_grade` varchar(100) DEFAULT NULL,
+  `position_inclass` varchar(100) DEFAULT NULL,
+  `teacher_comment` text DEFAULT NULL,
+  `principal_comment` text DEFAULT NULL,
+  `activeness` int(11) DEFAULT NULL,
+  `attendance` int(11) DEFAULT NULL,
+  `punctuality` int(11) DEFAULT NULL,
+  `self_control` int(11) DEFAULT NULL,
+  `honesty` int(11) DEFAULT NULL,
+  `humility` int(11) DEFAULT NULL,
+  `leadership` int(11) DEFAULT NULL,
+  `hand_writing` int(11) DEFAULT NULL,
+  `fluency` int(11) DEFAULT NULL,
+  `musical_skills` int(11) DEFAULT NULL,
+  `sports` int(11) DEFAULT NULL,
+  `result_status` varchar(100) DEFAULT NULL,
+  `date_created` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `staffs`
@@ -126,8 +259,11 @@ CREATE TABLE `staffs` (
   `timestamp` varchar(200) DEFAULT NULL,
   `lastlogin` varchar(200) DEFAULT NULL,
   `class_handling` varchar(100) DEFAULT NULL,
-  `subjects_handling` varchar(1024) DEFAULT NULL
+  `subjects_handling` varchar(1024) DEFAULT NULL,
+  `qualifications` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `students`
@@ -159,6 +295,112 @@ CREATE TABLE `students` (
   `removed_subjects` varchar(1024) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subject_records_2024_2025`
+--
+
+CREATE TABLE `subject_records_2024_2025` (
+  `id` int(11) NOT NULL,
+  `staff_id` int(11) DEFAULT NULL,
+  `std_id` int(11) DEFAULT NULL,
+  `term` varchar(100) DEFAULT NULL,
+  `class` varchar(100) DEFAULT NULL,
+  `class_cat` varchar(100) DEFAULT NULL,
+  `subject` varchar(100) DEFAULT NULL,
+  `ca1` int(11) DEFAULT NULL,
+  `ca2` int(11) DEFAULT NULL,
+  `ca3` int(11) DEFAULT NULL,
+  `ca4` int(11) DEFAULT NULL,
+  `exam` int(11) DEFAULT NULL,
+  `total` int(11) DEFAULT NULL,
+  `position` varchar(100) DEFAULT NULL,
+  `grade` varchar(100) DEFAULT NULL,
+  `remark` varchar(100) DEFAULT NULL,
+  `result_status` varchar(100) DEFAULT NULL,
+  `date_created` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subject_records_2025_2026`
+--
+
+CREATE TABLE `subject_records_2025_2026` (
+  `id` int(11) NOT NULL,
+  `staff_id` int(11) DEFAULT NULL,
+  `std_id` int(11) DEFAULT NULL,
+  `term` varchar(100) DEFAULT NULL,
+  `class` varchar(100) DEFAULT NULL,
+  `class_cat` varchar(100) DEFAULT NULL,
+  `subject` varchar(100) DEFAULT NULL,
+  `ca1` int(11) DEFAULT NULL,
+  `ca2` int(11) DEFAULT NULL,
+  `ca3` int(11) DEFAULT NULL,
+  `ca4` int(11) DEFAULT NULL,
+  `exam` int(11) DEFAULT NULL,
+  `total` int(11) DEFAULT NULL,
+  `position` varchar(100) DEFAULT NULL,
+  `grade` varchar(100) DEFAULT NULL,
+  `remark` varchar(100) DEFAULT NULL,
+  `result_status` varchar(100) DEFAULT NULL,
+  `date_created` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subject_records_2026_2027`
+--
+
+CREATE TABLE `subject_records_2026_2027` (
+  `id` int(11) NOT NULL,
+  `staff_id` int(11) DEFAULT NULL,
+  `std_id` int(11) DEFAULT NULL,
+  `term` varchar(100) DEFAULT NULL,
+  `class` varchar(100) DEFAULT NULL,
+  `class_cat` varchar(100) DEFAULT NULL,
+  `subject` varchar(100) DEFAULT NULL,
+  `ca1` int(11) DEFAULT NULL,
+  `ca2` int(11) DEFAULT NULL,
+  `ca3` int(11) DEFAULT NULL,
+  `ca4` int(11) DEFAULT NULL,
+  `exam` int(11) DEFAULT NULL,
+  `total` int(11) DEFAULT NULL,
+  `position` varchar(100) DEFAULT NULL,
+  `grade` varchar(100) DEFAULT NULL,
+  `remark` varchar(100) DEFAULT NULL,
+  `result_status` varchar(100) DEFAULT NULL,
+  `date_created` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subject_results`
+--
+
+CREATE TABLE `subject_results` (
+  `id` int(11) NOT NULL,
+  `record_id` int(11) DEFAULT NULL,
+  `serial` int(11) DEFAULT NULL,
+  `staff_id` int(11) DEFAULT NULL,
+  `class` varchar(100) DEFAULT NULL,
+  `subject` varchar(100) DEFAULT NULL,
+  `term` varchar(100) DEFAULT NULL,
+  `session` varchar(100) DEFAULT NULL,
+  `cas` varchar(200) DEFAULT NULL,
+  `exam` int(11) DEFAULT NULL,
+  `total` int(11) DEFAULT NULL,
+  `position` varchar(100) DEFAULT NULL,
+  `grade` varchar(100) DEFAULT NULL,
+  `remark` varchar(100) DEFAULT NULL,
+  `date_created` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `variables`
@@ -171,67 +413,6 @@ CREATE TABLE `variables` (
   `classification` varchar(1024) DEFAULT NULL,
   `assessment_pattern` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Dumping data for table `variables`
---
-
-INSERT INTO `variables` (`id`, `type`, `value`, `classification`, `assessment_pattern`) VALUES
-(2, 'Subject', 'Mathematics', 'General', NULL),
-(21, 'Current Session', '2024/2025', 'General', NULL),
-(22, 'Current Term', 'First Term', 'General', NULL),
-(26, 'Class', 'SS 3A', 'Science', '10:10:10'),
-(28, 'Subject', 'Chemistry', 'Science', '3:30'),
-(29, 'Subject', 'Economics', 'General', '3:30'),
-(36, 'Subject', 'English Language', 'General', NULL),
-(39, 'Class', 'SS 2A', 'Science', '10:10:10'),
-(42, 'Class', 'PRE-NURSERY 2A', 'Science', '3:30'),
-(43, 'Class', 'SS 1B', 'Art', '3:30'),
-(45, 'Class', 'JSS 1A', 'General', '3:30'),
-(46, 'Class', 'JSS 2A', 'General', '10:10:10:10'),
-(47, 'Class', 'SS 3B', 'Art', '3:30'),
-(50, 'Class', 'JSS 2', 'Science', '3:30'),
-(51, 'Class', 'PRE-SCHOOL 1', 'Science', '3:30'),
-(52, 'Class', 'PRE-SCHOOL 2', 'Science', '3:30'),
-(53, 'Class', 'PRE-SCHOOL 2A', 'Science', '3:30'),
-(54, 'Class', 'PRE-SCHOOL 2B', 'Science', '3:30'),
-(55, 'Class', 'JSS 3A', 'General', '10:10:10:10'),
-(58, 'Next Term Begins', '07/09/2026', 'General', NULL),
-(59, 'Subject', 'Agricultural Science', 'Science', NULL),
-(60, 'Subject', 'Biology', 'Science', NULL),
-(61, 'Subject', 'Business Studies', 'General', NULL),
-(62, 'Subject', 'Geography', 'Science', NULL),
-(63, 'Subject', 'Digital Technologies', 'General', NULL),
-(64, 'Subject', 'Marketing', 'Art', NULL),
-(66, 'Subject', 'Citizenship &amp; Cultural Heritage', 'General', NULL),
-(67, 'Result Luck', 'On', 'General', NULL),
-(68, 'Site Luck', 'Off', 'General', NULL),
-(69, 'Allow Result Deletion', 'Off', 'General', NULL),
-(70, 'site_lock', 'Off', 'General', NULL),
-(71, 'result_lock', 'On', 'General', NULL),
-(72, 'result_deletion', 'Off', 'General', NULL),
-(73, 'red_ink', 'On', 'General', NULL),
-(74, 'minimum_score', '20', 'General', NULL),
-(75, 'Class', 'SS 1A', 'Science', '10:10:10'),
-(76, 'Subject', 'Further Mathematics', 'Science', NULL),
-(77, 'Subject', 'Accounting', 'Art', NULL),
-(78, 'Subject', 'Literature In English', 'Art', NULL),
-(79, 'Subject', 'Civic Education', 'General', NULL),
-(80, 'show_position_inclass', 'On', 'General', NULL),
-(81, 'Subject', 'C.R.S', 'General', NULL),
-(82, 'Subject', 'Physical Health Education', 'General', NULL),
-(83, 'Subject', 'Government', 'Art', NULL),
-(84, 'Subject', 'Commerce', 'Art', NULL),
-(85, 'Subject', 'Crop Production & Horticulture', 'General', NULL),
-(86, 'Subject', 'Financial Accounting', 'Commercial', NULL),
-(87, 'Subject', 'P.H.E', 'General', NULL),
-(88, 'Subject', 'Physics', 'Science', NULL),
-(89, 'Subject', 'Right Speech', 'General', NULL),
-(90, 'Subject', 'C.C.A', 'General', NULL),
-(91, 'Subject', 'P.V.S', 'General', NULL),
-(92, 'Subject', 'Home Economics', 'General', NULL),
-(93, 'Subject', 'National Value', 'General', NULL),
-(94, 'Subject', 'Garment & Sewing', 'General', NULL);
 
 --
 -- Indexes for dumped tables
@@ -255,6 +436,12 @@ ALTER TABLE `class_set`
   ADD KEY `class` (`class`);
 
 --
+-- Indexes for table `grading_system`
+--
+ALTER TABLE `grading_system`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `mailing_list`
 --
 ALTER TABLE `mailing_list`
@@ -274,6 +461,36 @@ ALTER TABLE `password_reset`
   ADD KEY `user_id` (`user_id`,`user_email`);
 
 --
+-- Indexes for table `results_2024_2025`
+--
+ALTER TABLE `results_2024_2025`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `staff_id` (`staff_id`),
+  ADD KEY `std_id` (`std_id`),
+  ADD KEY `term` (`term`),
+  ADD KEY `class` (`class`);
+
+--
+-- Indexes for table `results_2025_2026`
+--
+ALTER TABLE `results_2025_2026`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `staff_id` (`staff_id`),
+  ADD KEY `std_id` (`std_id`),
+  ADD KEY `term` (`term`),
+  ADD KEY `class` (`class`);
+
+--
+-- Indexes for table `results_2026_2027`
+--
+ALTER TABLE `results_2026_2027`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `staff_id` (`staff_id`),
+  ADD KEY `std_id` (`std_id`),
+  ADD KEY `term` (`term`),
+  ADD KEY `class` (`class`);
+
+--
 -- Indexes for table `staffs`
 --
 ALTER TABLE `staffs`
@@ -284,6 +501,42 @@ ALTER TABLE `staffs`
 -- Indexes for table `students`
 --
 ALTER TABLE `students`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `subject_records_2024_2025`
+--
+ALTER TABLE `subject_records_2024_2025`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `staff_id` (`staff_id`),
+  ADD KEY `std_id` (`std_id`),
+  ADD KEY `term` (`term`),
+  ADD KEY `class` (`class`);
+
+--
+-- Indexes for table `subject_records_2025_2026`
+--
+ALTER TABLE `subject_records_2025_2026`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `staff_id` (`staff_id`),
+  ADD KEY `std_id` (`std_id`),
+  ADD KEY `term` (`term`),
+  ADD KEY `class` (`class`);
+
+--
+-- Indexes for table `subject_records_2026_2027`
+--
+ALTER TABLE `subject_records_2026_2027`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `staff_id` (`staff_id`),
+  ADD KEY `std_id` (`std_id`),
+  ADD KEY `term` (`term`),
+  ADD KEY `class` (`class`);
+
+--
+-- Indexes for table `subject_results`
+--
+ALTER TABLE `subject_results`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -301,49 +554,97 @@ ALTER TABLE `variables`
 -- AUTO_INCREMENT for table `admin_activity_logs`
 --
 ALTER TABLE `admin_activity_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `class_set`
 --
 ALTER TABLE `class_set`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `grading_system`
+--
+ALTER TABLE `grading_system`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `mailing_list`
 --
 ALTER TABLE `mailing_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `mail_queue`
 --
 ALTER TABLE `mail_queue`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `password_reset`
 --
 ALTER TABLE `password_reset`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `results_2024_2025`
+--
+ALTER TABLE `results_2024_2025`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `results_2025_2026`
+--
+ALTER TABLE `results_2025_2026`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `results_2026_2027`
+--
+ALTER TABLE `results_2026_2027`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `staffs`
 --
 ALTER TABLE `staffs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `subject_records_2024_2025`
+--
+ALTER TABLE `subject_records_2024_2025`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `subject_records_2025_2026`
+--
+ALTER TABLE `subject_records_2025_2026`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `subject_records_2026_2027`
+--
+ALTER TABLE `subject_records_2026_2027`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `subject_results`
+--
+ALTER TABLE `subject_results`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `variables`
 --
 ALTER TABLE `variables`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
