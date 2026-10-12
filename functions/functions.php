@@ -1287,36 +1287,26 @@ function generatePin($length = 8) {
 }
 
 function generate_psw($len = 10) {
-    if ($len < 1) {
-      $len = 10;
+
+    if ($len < 8) {
+        $len = 8;
     }
 
-    $special = '#@$&';
-    $safe_hex = '123456789abcdef'; // removed '0'
+   $bytes = (int) ceil($len / 2);
+   $hex  = bin2hex(random_bytes($bytes));
 
-    // Step 1: Generate base hex string
-    $bytes_needed = ceil($len / 2);
-    $base = bin2hex(random_bytes($bytes_needed));
+    // Split the hex in two: keep the first half lowercase, uppercase the second half
+    $half     = intdiv(strlen($hex), 2);
+    $password = substr($hex, 0, $half) . strtoupper(substr($hex, $half));
 
-    // Step 2: Remove all '0' characters
-    $base = str_replace('0', '', $base);
+    // Add two randomly selected special characters.
+    $specialChars = ['#', '$', '&', '@', '!'];
+    $password .= $specialChars[random_int(0, count($specialChars) - 1)];
+    $password .= $specialChars[random_int(0, count($specialChars) - 1)];
 
-    // Step 3: Ensure we still have enough length
-    while (strlen($base) < $len) {
-        $base .= $safe_hex[random_int(0, strlen($safe_hex) - 1)];
-    }
-
-    // Step 4: Trim to required length
-    $password = substr($base, 0, $len);
-
-    // Step 5: Insert exactly one special character
-    $pos = random_int(0, $len - 1);
-    $password[$pos] = $special[random_int(0, strlen($special) - 1)];
-
-    // Step 6: Shuffle
+    // Shuffle everything
     return str_shuffle($password);
 }
-
 function log_admin_action(
     $conn,
     $staff_id,

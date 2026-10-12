@@ -428,17 +428,8 @@ elseif ($btn === "generate-staff-psw") {
 
     try {
 
-   //Generate 10 hexadecimal characters.
-     $password = bin2hex(random_bytes(5));
 
-        // Add two randomly selected special characters.
-     $specialChars = ['#', '$', '&', '@'];
-    $password .= $specialChars[random_int(0, 3)];
-    $password .= $specialChars[random_int(0, 3)];
-
-    //Shuffle all 12 characters.
-     $password = str_shuffle($password);
-
+ $password = generate_psw();
    //Hash the password before storing it.
     $hashedPassword = password_hash(
             $password,

@@ -652,13 +652,7 @@ if(!$limit){
 
 
  $cat = "Teacher";//default staff_cat
- // $login_psw = generate_psw();
-
- $conv = convert_to_array($othernames);
- $psw_str = strtolower($conv[0]);
- $special = ['@','#','@','$','&'];
- $char = $special[rand(0,4)];
-$login_psw = $psw_str.$char.generate_id(4);
+ $login_psw = generate_psw();
  $psw_hash = password_hash($login_psw,PASSWORD_DEFAULT);
  $status = "Active";//
  $status_reason = "Auto Verification";
@@ -1517,7 +1511,9 @@ if($filename && $filename !== "extension_error"){
    //file was uploaded
    update_user_data($conn,"students","profile","std_id",$filename,$Id,"si");
  
-   // remove old prf from server 
+  
+   // do not remove old prf from server for now so  that old results can use old uniform i.e Grade 5 -> Jss1
+   /*  
 if (!empty($old_profile)) {
     $old_profile = basename($old_profile);
     $oldprfDir = $_SERVER["DOCUMENT_ROOT"] . '/images/students/' . $old_profile;
@@ -1526,6 +1522,7 @@ if (!empty($old_profile)) {
         unlink($oldprfDir);
     }
 }
+   */
    
       $upd++;
 $_SESSION["success_msg"] .="<br>• Profile updated successfully ✓";

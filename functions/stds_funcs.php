@@ -324,7 +324,7 @@ function upload_image_as_webp($fileArray, $targetFolder, $prefix, $uniqueId) {
         return "extension_error"; // Handle this in your main code
     }
 
-    $rename = $uniqueId . substr(time(), 6, 4);
+    $rename = $uniqueId . bin2hex(random_bytes(3));
     $finalFilename = $prefix . $rename . '.webp';
     
     $savePath = $_SERVER["DOCUMENT_ROOT"] . $targetFolder . $finalFilename;
