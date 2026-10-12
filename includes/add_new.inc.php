@@ -29,25 +29,56 @@ if(in_array($staff_cat, $authorized)){
     
  if(isset($_POST["submit-upd-session"])){
    
-  $session =  trim($_POST["session"]);
-  $term = trim(htmlspecialchars($_POST["term"],ENT_QUOTES,'UTF-8'));
-  $next_term_date = trim($_POST["next-term"]);
-  $next_term = "";
+$session = trim($_POST["session"] ?? "");
+$term = trim($_POST["term"] ?? "");
+$next_term_date = trim($_POST["next-term"] ?? "");
 
+$next_term = "";
 if (!empty($next_term_date)) {
-    $next_term= date("d/m/Y", strtotime($next_term_date));
-    
-$today = date("d-m-Y");
-$todaystrtime = strtotime($today);
-$next_termstrtime = strtotime($next_term_date);
+    $nextTermTimestamp = strtotime($next_term_date);
 
-if($next_termstrtime <= $todaystrtime){
-    
-   $_SESSION["error_msg"] = "Please choose a future date for when next term will begin";  
-    header("Location:$location");
-    die(); 
-    
-  }
+    if ($nextTermTimestamp === false) {
+        $_SESSION["error_msg"] = "Please choose a valid next-term date.";
+        header("Location: $location");
+        exit;
+    }
+
+    // Extract the years from the academic session.
+    if (preg_match('/^(\d{4})(?:\/(\d{4}))?$/', $session, $matches)) {
+
+        $firstYear = (int) $matches[1];
+        $secondYear = !empty($matches[2])
+            ? (int) $matches[2]
+            : $firstYear + 1;
+
+        // Ensure the session years are consecutive.
+        if ($secondYear !== $firstYear + 1) {
+       $_SESSION["error_msg"] = "Invalid academic session.";
+            header("Location: $location");
+            exit;
+        }
+
+        $nextTermYear = (int) date("Y", $nextTermTimestamp);
+
+        if (
+            $nextTermYear < $firstYear ||
+            $nextTermYear > $secondYear
+        ) {
+            $_SESSION["error_msg"] =
+                "Next-term date must fall within the academic session years.";
+
+            header("Location: $location");
+            exit;
+        }
+
+        $next_term = date("d/m/Y", $nextTermTimestamp);
+
+    } else {
+
+        $_SESSION["error_msg"] = "Invalid academic session.";
+        header("Location: $location");
+        exit;
+    }
 }
  
   $curSession = "Current Session";

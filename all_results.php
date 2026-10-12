@@ -227,11 +227,11 @@ echo '</div>
   $std_details = collect_user_data($conn,"students","std_id",$std_id,"i");
   $std_name = $std_details["surname"]." ".$std_details["othernames"];
   $std_pin = $std_details["std_pin"];
-  $profile = null_check($std_details["profile"],"null.jpg");
+  $profile = null_check($result["std_profile"],$std_details["profile"]);
   
     $profilePath = $root.'/images/students/'.$profile;
  
- if(!file_exists($profilePath)){
+ if(!is_file($profilePath)){
      
  $profile = "npa-logo.jpg";  
      

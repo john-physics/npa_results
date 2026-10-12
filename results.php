@@ -336,7 +336,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
  $status_reason = $std_details["status_reason"];
 
   $std_id = $std_details["std_id"];
-  $profile = null_check($std_details["profile"],"null.jpg");
+
   $std_cat = null_check($std_details["std_cat"],'N/A');
   $current_class = null_check($std_details["current_class"],"Unknown");  
   $group = $std_cat; 
@@ -356,8 +356,9 @@ $results = collect_user_data3($conn,$resultTable,"term","class","std_id",$term,$
 
 $cteach_id = $results["staff_id"];
 $std_cat  = $results["std_cat"];
+$profile = null_check($results["std_profile"],$std_details["profile"]);
 $total_score  = $results["total_score"];
-$total_scorable=$results["total_scorable"];
+$total_scorable = $results["total_scorable"];
 $subject_num = $results["subject_num"];
 $overall_average = $results["overall_average"];
 $overall_grade =$results["overall_grade"];

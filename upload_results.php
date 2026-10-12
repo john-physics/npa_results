@@ -211,9 +211,11 @@ else{
   
  $classSet = collect_table_data4($conn,$table,"staff_id","session","term","class",$staff_id,$session,$term,$viewClass,"isss","id DESC","*");
 
- }  
+ } 
 }
 
+ // fetch stds profiles once as an associate array of their id. 
+ $stdprofile = fetch_stds_profiles($conn,$session,$viewClass,$term);
 
 echo '<div class="total-found">
     <p>Showing '.$viewClass.' Results for '.$term_session.'</p>
@@ -239,21 +241,22 @@ echo '<div class="table-wrapper">
 
 if($classSet && is_array($classSet)){
  $sn = 0;
-foreach ($classSet as $set){
+foreach ($classSet as $set){ 
 
  $viewterm = $set["term"];
  $stds = $set["students"];
  $classStds =  convert_to_array($stds);
 
  if($classStds && is_array($classStds)){
-     
+  
+      
   foreach ($classStds as $std_id){
   //get std details 
   
    $std_details = collect_user_data($conn,"students","std_id",$std_id,"i");
   $std_name = $std_details["surname"]." ".$std_details["othernames"];
   $std_pin = $std_details["std_pin"];
-  $profile = null_check($std_details["profile"],"");
+  $profile = null_check($stdprofile[$std_id],$std_details["profile"]);
   $std_cat = null_check($std_details["std_cat"],'N/A');
   $std_class = $viewClass;  
   $group = $std_cat;  

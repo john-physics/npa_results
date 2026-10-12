@@ -23,11 +23,16 @@ echo '<style>
     
 }
 
+ .fa-key {
+    color: #0ea5e9;
+ }
+
+
 /* NAV BAR */
 #nav-section{
     background:#2d2d2d;
     position:relative;
-    z-index:100;
+    z-index:1000;
      position:relative;
     padding: 25px 0;
 }
@@ -165,40 +170,50 @@ echo '<nav id="nav-section" class="menu">
            </a></li>'; 
    
     $staff_cat = $_SESSION["staff_cat"];   
-    
+
    if(in_array($staff_cat, $authorized)){
        
      echo '
 <li>
   <a href="/users?manage_users">
-    <i class="fas fa-users"></i>
+    <i class="fa-solid fa-users"></i>
     Manage Users
   </a>
 </li>
 
 <li>
   <a href="/users?manage_class">
-    <i class="fas fa-school"></i>
+    <i class="fa-solid fa-school"></i>
     Manage Classes
   </a>
 </li>
 
 <li>
   <a href="/users?manage_subjects">
-    <i class="fas fa-book-open"></i>
+    <i class="fa-solid fa-book-open"></i>
     Manage Subjects
   </a>
-</li>
-
-';   
+</li>';   
        
   }  
-    
+   
+ if(in_array($staff_cat, $ictdepartment)){
+       
+ echo '
+<li>
+  <a href="/generate_staff_psw">
+    <i class="fa-solid fa-key"></i>
+    Generate Password
+  </a>
+</li>';
+
+  }
+   
   if(isset($_SESSION["dashboard"]) && $_SESSION["dashboard"] === true){
   
     echo '<li>
       <a href="#" id="logout-link">
-    <i class="fas fa-sign-out-alt"></i>
+    <i class="fa-solid fa-sign-out-alt"></i>
       Logout
        </a></li>';     
       

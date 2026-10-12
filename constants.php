@@ -24,6 +24,7 @@ $schoolName = "$site MARARABA";
 $authorized =[$dirgen,$manager,$asstmanager,$ictdir,$principal,$asstictdir,$exam_officer,$asst_exam_officer,$secretary,$accountant];
 $teacher = "Teacher";
 $appointers = $authorized; //alias 
+$ictdepartment = [$ictdir,$asstictdir];
 $reserved = [$dirgen,$manager,$principal]; // Daddy, mummy & principal
 $staffCats = collect_table_data($conn,"staffs","","staff_cat");
 

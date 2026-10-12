@@ -1,5 +1,140 @@
 <?php
 
+function fetch_stds_profiles($conn, $session, $viewClass, $term){
+
+    $table = form_table_name("results_", $session);
+
+    if ($term === "All") {
+
+        $sql = "SELECT r.std_id, r.std_profile
+                FROM `$table` r
+                WHERE r.class = ?
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM `$table` newer
+                    WHERE newer.class = r.class
+                    AND newer.std_id = r.std_id
+                    AND (
+                        CASE newer.term
+                            WHEN 'First Term' THEN 1
+                            WHEN 'Second Term' THEN 2
+                            WHEN 'Third Term' THEN 3
+                            ELSE 0
+                        END
+                        >
+                        CASE r.term
+                            WHEN 'First Term' THEN 1
+                            WHEN 'Second Term' THEN 2
+                            WHEN 'Third Term' THEN 3
+                            ELSE 0
+                        END
+                        OR (
+                            newer.term = r.term
+                            AND newer.id > r.id
+                        )
+                    )
+                )";
+
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return false;
+        }
+
+       $stmt->bind_param("s", $viewClass);
+
+    } else {
+
+        $sql = "SELECT r.std_id, r.std_profile
+                FROM `$table` r
+                WHERE r.class = ?
+                AND r.term = ?
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM `$table` newer
+                    WHERE newer.class = r.class
+                    AND newer.std_id = r.std_id
+                    AND newer.term = r.term
+                    AND newer.id > r.id
+                )";
+
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return false;
+        }
+
+        $stmt->bind_param("ss", $viewClass, $term);
+    }
+
+    if (!$stmt->execute()) {
+        $stmt->close();
+        return false;
+    }
+
+    $result = $stmt->get_result();
+    $profiles = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $profiles[$row["std_id"]] = $row["std_profile"];
+    }
+
+    $stmt->close();
+
+    return $profiles;
+}
+
+function get_std_profile($conn,$std_id){
+  
+  $std = collect_user_data($conn,"students","std_id",$std_id,"i");
+  $profile = $std["profile"];
+   
+   return $profile; 
+    
+}
+
+function staff_compiled_results($conn,$staff_id){
+    // Get all tables
+    $tables = [];
+
+    $result = $conn->query("SHOW TABLES");
+
+   while ($row = $result->fetch_array()) {
+        $tables[] = $row[0];
+    }
+
+    // Loop through only result tables
+    foreach ($tables as $table) {
+
+        if (
+            strpos($table, "results_") === 0 ||
+            strpos($table, "subject_records_") === 0
+        ) {
+
+          $sql = "SELECT 1 FROM `$table` WHERE staff_id = ? LIMIT 1";
+
+            $stmt = $conn->prepare($sql);
+
+            if (!$stmt) {
+                continue;
+            }
+
+        $stmt->bind_param("i", $staff_id);
+          $stmt->execute();
+          $stmt->store_result();
+
+            if ($stmt->num_rows > 0) {
+                $stmt->close();
+                return true;
+            }
+
+            $stmt->close();
+        }
+    }
+
+    return false;
+}
+
 function student_have_results($conn,$std_id){
     // Get all tables
     $tables = [];
@@ -1456,8 +1591,8 @@ function switch_gender($gender = null, $type = 'pronoun') {
 
     // Define gender-based comparison list
     $comparison = [
-        'pronoun'        => ['male' => 'He', 'female' => 'She'],
-        'object'         => ['male' => 'Him', 'female' => 'Her'],
+        'pronoun'  => ['male' => 'He', 'female' => 'She'],
+        'object'  => ['male' => 'Him', 'female' => 'Her'],
         'possessive_adj' => ['male' => 'His', 'female' => 'Her'],    // e.g., his book
         'possessive_pro' => ['male' => 'His', 'female' => 'Hers'],   // e.g., the book is his
         'reflexive'      => ['male' => 'Himself', 'female' => 'Herself'],

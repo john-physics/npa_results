@@ -6,7 +6,7 @@ if($_SERVER["REQUEST_METHOD"] =="POST"){
 
  $data = json_decode(file_get_contents('php://input'), true);
 
-  $btn = trim($data["submit_button_name"]);
+ $btn = trim($data["submit_button_name"]);
 
 if(isset($_SESSION["staff_id"])){
     
@@ -14,7 +14,7 @@ if(isset($_SESSION["staff_id"])){
  $userCat = $_SESSION["staff_cat"];
 
 $staff_det = get_user_name($userId); 
-$staff_name = $staff_det["fullname_title"];
+$staff_name= $staff_det["fullname_title"];
  
 }
 else{
@@ -329,9 +329,166 @@ exit();
 
  }
 
+elseif($btn === "get-staff-emails") {
+
+  if(!in_array($userCat, $ictdepartment, true)) {
+
+        $response = [
+            "status" => "failed",
+            "error" => "Authorization",
+            "message" => "Unauthorized user request !"
+        ];
+
+        echo json_encode($response);
+        exit();
+    }
+
+    $stmt = $conn->prepare(
+        "SELECT DISTINCT email
+         FROM staffs
+         WHERE email IS NOT NULL
+           AND TRIM(email) <> ''
+         ORDER BY email ASC"
+    );
+
+    if (!$stmt) {
+        echo json_encode([
+            "status" => "failed",
+            "error" => "Database",
+            "message" => "Unable to retrieve staff emails."
+        ]);
+        exit();
+    }
+
+    if (!$stmt->execute()) {
+        $stmt->close();
+
+        echo json_encode([
+            "status" => "failed",
+            "error" => "Database",
+            "message" => "Unable to retrieve staff emails."
+        ]);
+        exit();
+    }
+
+    $result = $stmt->get_result();
+
+    $staffEmails = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $staffEmails[] = $row["email"];
+    }
+
+    $result->free();
+    $stmt->close();
+
+    echo json_encode([
+        "status" => "success",
+        "staff_emails" => $staffEmails
+    ]);
+
+    exit();
+}
+
+elseif ($btn === "generate-staff-psw") {
+
+   if (!in_array($userCat, $ictdepartment, true)) {
+
+        echo json_encode([
+            "status" => "failed",
+            "error" => "Authorization",
+            "message" => "Unauthorized user request!"
+        ]);
+        exit();
+    }
+
+    $email = trim($data["email"] ?? "");
+
+    if (
+        $email === "" ||
+        !filter_var($email, FILTER_VALIDATE_EMAIL)
+    ) {
+        echo json_encode([
+            "status" => "failed",
+            "error" => "Validation",
+            "message" => "Please provide a valid staff email address."
+        ]);
+        exit();
+    }
+
+    if (!check_exist($conn, "staffs", "email", $email, "s")) {
+
+        echo json_encode([
+            "status" => "failed",
+            "error" => "NotFound",
+            "message" => "No staff account was found with the email you entered"
+        ]);
+        exit();
+    }
+
+    try {
+
+   //Generate 10 hexadecimal characters.
+     $password = bin2hex(random_bytes(5));
+
+        // Add two randomly selected special characters.
+     $specialChars = ['#', '$', '&', '@'];
+    $password .= $specialChars[random_int(0, 3)];
+    $password .= $specialChars[random_int(0, 3)];
+
+    //Shuffle all 12 characters.
+     $password = str_shuffle($password);
+
+   //Hash the password before storing it.
+    $hashedPassword = password_hash(
+            $password,
+            PASSWORD_DEFAULT
+        );
+
+      if ($hashedPassword === false) {
+            throw new RuntimeException("Password hashing failed.");
+        }
+
+  $updated = update_user_data(
+            $conn,
+            "staffs",
+            "login_psw",
+            "email",
+            $hashedPassword,
+            $email,
+            "ss"
+        );
+
+   if (!$updated) {
+      throw new RuntimeException("Password update failed.");
+        }
+
+        echo json_encode([
+            "status" => "success",
+            "password" => $password
+        ]);
+
+        exit();
+
+    } catch (Throwable $e) {
+
+        error_log(
+            "Staff password generation failed: " . $e->getMessage()
+        );
+
+        echo json_encode([
+            "status" => "failed",
+            "error" => "Server",
+            "message" => "Unable to generate the password. Please try again."
+        ]);
+
+        exit();
+    }
+}
+
 elseif($btn == "del-this-user"){
    
-$user = convert_to_array($data["user_id"]);
+$user= convert_to_array($data["user_id"]);
 $user_id = $user[0];
 $user_cat = $user[1];
 $user_type = trim($data["user_type"]);
@@ -365,7 +522,7 @@ exit();
    $response = [
      "status" => "failed",
      "error" => "Permission Denied",
-     "message" => "The selected $user_type cannot be removed from this site !",
+     "message" => "The selected $user_type cannot be removed at the moment. To remove any staff who is holding a special position, go to your Dashboard, click on Appointment and assign the role of the targeted staff to another staff and come back to try again."
       ];
 echo json_encode($response);
 exit();    
@@ -396,6 +553,8 @@ if($table == "staffs"){
  $classhandling = null_check($userdet["class_handling"],""); 
   $heshe = strtolower(null_check(switch_gender($userdet["gender"],"pronoun"),"he/she"));
   
+  $himher = strtolower(null_check(switch_gender($userdet["gender"],"object"),"him/her"));
+  
   if($classhandling){
   
     $response = [
@@ -407,6 +566,19 @@ echo json_encode($response);
 exit();       
       
   }
+  
+ // staffs who have computed results before should not be Removed
+   if(staff_compiled_results($conn,$user_id)){
+     
+    $response = [
+     "status" => "blocked",
+     "error" => "Permission Denied",
+     "message" => "The selected staff has already compiled results. Removing $himher will leave those results without a signatory. Consider marking $himher as Left instead."
+      ];
+echo json_encode($response);
+exit();    
+     
+ }
 }
 
 
@@ -472,6 +644,104 @@ exit();
 echo json_encode($response);
 exit();     
        
+       
+   }  
+     
+ }
+ else{
+     
+   $response = [
+     "status" => "failed",
+     "error" => "Permission Denied",
+     "message" => "Unauthorized user attempts !",
+      ];
+echo json_encode($response);
+exit();     
+     
+     
+ }
+}
+
+elseif($btn == "mark-user-left"){
+   
+$user =convert_to_array($data["user_id"]);
+$user_id = $user[0];
+$user_cat = $user[1];
+$user_type = trim($data["user_type"]);
+ 
+ if(!$user_id || !$user_cat || !$user_type){
+     
+  $response = [
+     "status" => "failed",
+     "error" => "Empty Input",
+     "message" => "user details not complete !",
+      ];
+echo json_encode($response);
+exit();   
+       
+ }
+
+elseif(!$authorized){
+ 
+  $response = [
+     "status" => "failed",
+     "error" => "Missing files",
+     "message" => "Sorry some important constant files are missing and hence your request cannot be executed !",
+      ];
+echo json_encode($response);
+exit();    
+    
+}
+ 
+ elseif(in_array($user_cat,$authorized)){
+     
+   $response = [
+     "status" => "failed",
+     "error" => "Permission Denied",
+     "message" => "The selected $user_type cannot be marked as Left at the moment. To mark as Left any staff who is holding a special position, go to your Dashboard, click on Appointment and assign the role of the targeted staff to another staff and come back to try again."
+      ];
+echo json_encode($response);
+exit();    
+     
+ }
+ elseif(in_array($userCat,$authorized)){
+  
+ $switch = switch_user($user_cat);
+ $conn = $switch["conn"];
+ $table = $switch["table"];
+ $idcol = $switch["id_col"];
+ $userdet = collect_user_data($conn,$table,$idcol,$user_id,"i");
+ 
+ 
+if(update_user_data($conn,$table,"status",$idcol,"Left",$user_id,"si")){
+ $action ="Mark $user_cat as Left";
+ $action_reason ="Not specified";
+ $records = 1;
+ $current = get_current_session();
+  $session = trim($current['session']);
+  $term = trim($current['term']);
+  $backup = $user_id;
+  
+ $logAction = log_admin_action($conn,$userId,$staff_name,$action,$action_reason, $records,$session,$term,$backup);
+  
+  $response = [
+     "status" => "success",
+     "error" => "none",
+     "message" => "$user_type marked as Left ✓",
+      ];
+echo json_encode($response);
+exit();     
+      
+  }   
+   else{
+      
+   $response = [
+     "status" => "failed",
+     "error" => "SQL Errors",
+     "message" => "Unable to remove user due to sql errors !",
+      ];
+echo json_encode($response);
+exit();     
        
    }  
      

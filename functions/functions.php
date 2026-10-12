@@ -1203,7 +1203,7 @@ if(!$number || $number > 6){
 
 function generate_sessions(){
     
- $iniYear = 2024;
+ $iniYear = 2023;
    $nextYear = $iniYear+1;
   $currentYear = date("Y");
    $diff = $currentYear - $iniYear;

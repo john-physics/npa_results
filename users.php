@@ -916,86 +916,33 @@ $dob = null_check($user["birth_date"],'Unknown');
  $autofocus = "";//reomove autofocus from search form
  
 
-  echo '<!-- Delete Confirmation Overlay -->
-<div class="notifyoverlay" id="deleteOverlay">
-  <div class="deletepopup">
-    <h2>Remove '.$user_type.'</h2>
-    <p>Are you sure you want to remove the selected '.$user_type.' from this site?</p>
-  <input type="hidden" id="del_notify_id">
-  
- <button class="submit-btn" id="confirmDelete">Yes, Remove</button>
-    <button class="close-btn" id="cancelDelete">Cancel</button>
-    
-  <small id="delError"></small>
-    <div id="spinner1"></div>
-    <small id="prep1">Removing User, Please wait ...</small>
-  </div>
-</div>';
 
-
-  echo '<!-- suspend Confirmation Overlay -->
-<div class="notifyoverlay" id="resendOverlay">
+echo '<!-- Action Confirmation Overlay -->
+<div class="notifyoverlay" id="actionOverlay">
   <div class="deletepopup">
-    <h2 id="resend-h2">Suspend '.$user_type.'</h2>
- <p id="resendstaffName"></p>
-  <input type="hidden" id="resend_notify_id">
-  <input type="text" id="suspend_reason" placeholder="Please enter a reason for this action" required>
-  
-<button class="submit-btn" id="confirmResend">Yes, Suspend</button>
-    <button class="close-btn" id="cancelResend">Cancel</button>
-    
-  <small id="resendError"></small>
-    <div id="spinner3"></div>
-    <small id="prep3">Suspending user, Please wait ...</small>
+    <h2 id="actionTitle"></h2>
+    <p id="actionText"></p>
+    <input type="text" id="actionReason" placeholder="Please enter a reason for this action" style="display:none">
+
+    <button class="submit-btn" id="actionConfirm"></button>
+    <button class="close-btn" id="actionCancel">Cancel</button>
+
+    <div id="actionSpinner"></div>
+    <small id="actionMsg"></small>
   </div>
 </div>
 
 <style>
-
-#suspend_reason{
- width:95%;
- padding: 8px; 
- border-radius:3px;
+#actionReason{
+  width:95%;
+  padding:8px;
+  border-radius:3px;
   outline:none;
   border:1px solid #ddd;
 }
-
-#suspend_reason:focus{
-  border-color:skyblue;  
-}
+#actionReason:focus{ border-color:skyblue; }
 </style>';
 
-
-  echo '<!-- unsuspend Confirmation Overlay -->
-<div class="notifyoverlay" id="manageOverlay">
-  <div class="deletepopup">
-    <h2 id="manage-h2">Remove Suspension</h2>
-   <p id="staff_name">Are you sure you want to unsuspend this '.$user_type.'?</p>
-  
-  <input type="hidden" id="man_notify_id">
-   <input type="text" id="unsuspend_reason" placeholder="Please enter a reason for this action" required>
- <button class="submit-btn" id="confirmManage">Yes, Unsuspend</button>
-    <button class="close-btn" id="cancelManage">Cancel</button>
-    
-  <small id="man-error"></small>
-  <div id="yes-no-btns"></div>
-    <div id="spinner2"></div>
-    <small id="prep2">Removing Suspension, Please wait ...</small>
-  </div>
-</div>
-<style>
-#unsuspend_reason{
- width:95%;
- padding: 8px; 
- border-radius:3px;
-  outline:none;
-  border:1px solid #ddd;
-}
-
-#unsuspend_reason:focus{
-  border-color:skyblue;  
-}
-</style>';
  
  
 }
@@ -1209,375 +1156,205 @@ return;
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+  const $ = id => document.getElementById(id);
 
-//DeleteOverlay to remove Admins
-  const DeleteOverlay = document.getElementById("deleteOverlay");
+  const overlay    = $("actionOverlay");
+  const titleEl    = $("actionTitle");
+  const textEl     = $("actionText");
+  const reasonEl   = $("actionReason");
+  const confirmBtn = $("actionConfirm");
+  const cancelBtn  = $("actionCancel");
+  const spinner    = $("actionSpinner");
+  const msgEl      = $("actionMsg");
 
-  // Delete form elements
-  const confirmDeleteBtn = document.getElementById("confirmDelete");
-  const cancelDeleteBtn = document.getElementById("cancelDelete");
-   const deleteNotifyId = document.getElementById("del_notify_id");
+  const getUserType = () => $("user_type").value;
 
-  const spinner1 = document.getElementById("spinner1");
-  const prep1 = document.getElementById("prep1");
-  const delError = document.getElementById("delError");
+  // One entry per action
+  const ACTIONS = {
+    remove: {
+      label: "Remove User",
+      title: t => `Remove ${t}`,
+      text: t => `Are you sure you want to remove the selected ${t} from this site?`,
+      confirm: "Yes, Remove",
+      busy: t => `Removing ${t}, Please wait ...`,
+      submit: "del-this-user",
+    },
+    left: {
+      label: "Mark as Left",
+      title: t => `Mark ${t} as Left`,
+     text: t => `Are you sure you want to mark the selected ${t} as Left?`,
+      confirm: "Yes",
+      busy: t => `Changing ${t} status to Left, Please wait ...`,
+      submit: "mark-user-left",
+    },
+    suspend: {
+      label: "Suspend User",
+      title: t => `Suspend ${t}`,
+      text: t => `Are you sure you want to suspend this ${t}?`,
+      confirm: "Yes, Suspend",
+      busy: t => `Suspending ${t}, Please wait ...`,
+      submit: "suspend-user",
+      reasonKey: "suspend_reason",
+    },
+    unsuspend: {
+      label: "Unsuspend User",
+      title: () => "Remove Suspension",
+      text: t => `Are you sure you want to unsuspend this ${t}?`,
+      confirm: "Yes, Unsuspend",
+      busy: () => "Removing Suspension, Please wait ...",
+      submit: "un-suspend-user",
+      reasonKey: "unsuspend_reason",
+    },
+  };
 
+  let current = null; // { action, userId }
 
-//ManageOverlay for staff roles
-const ManageOverlay = document.getElementById("manageOverlay");
+  function showMsg(text, color) {
+    msgEl.innerText = text;
+    msgEl.style.color = color || "";
+    msgEl.style.display = text ? "block" : "none";
+  }
 
-   const confirmanageBtn = document.getElementById("confirmManage");
-  const cancelmanageBtn = document.getElementById("cancelManage");
-   const manNotifyId = document.getElementById("man_notify_id");
-//const staffName = document.getElementById("staff_name");
+  function setBusy(busy) {
+    spinner.style.display = busy ? "flex" : "none";
+    confirmBtn.disabled = busy;
+  }
 
+  function openOverlay(actionName, userId) {
+    const cfg = ACTIONS[actionName];
+    const type = getUserType();
 
-  const spinner2 = document.getElementById("spinner2");
-  const prep2 = document.getElementById("prep2");
-  const manError = document.getElementById("man-error");
+    current = { action: actionName, userId };
+    titleEl.innerText = cfg.title(type);
+    textEl.innerText = cfg.text(type);
+    confirmBtn.innerText = cfg.confirm;
+    reasonEl.value = "";
+    reasonEl.style.display = cfg.reasonKey ? "block" : "none";
+    showMsg("");
+    setBusy(false);
+    overlay.style.display = "flex";
+  }
 
-//ResendOverlay to Admins
-  const ResendOverlay = document.getElementById("resendOverlay");
+  function closeOverlay() {
+    overlay.style.display = "none";
+    current = null;
+    reasonEl.value = "";
+    showMsg("");
+    setBusy(false);
+  }
 
-  // Delete form elements
-  const confirmResendBtn = document.getElementById("confirmResend");
-  const cancelResendBtn = document.getElementById("cancelResend");
-  const resendNotifyId = document.getElementById("resend_notify_id");
-const resendstaffName = document.getElementById("resendstaffName");
+  // ---------- Row menu ----------
+  document.addEventListener("click", e => {
+    document.querySelectorAll(".notify-actions").forEach(m => m.remove());
 
-  const spinner3 = document.getElementById("spinner3");
-  const prep3 = document.getElementById("prep3");
-  const resendError = document.getElementById("resendError");
-
-
-  // Handle ellipses button click
-  document.addEventListener("click", function(e) {
     const btn = e.target.closest(".elipses");
-    if (btn) {
-      e.preventDefault();
-     const notifyId = btn.getAttribute("user-id") || "";
-     const Cat = btn.getAttribute("user-cat") || "";
+    if (!btn) return;
+    e.preventDefault();
 
-  const acctStatus = btn.getAttribute("acct-status") || "";
-      
-      // Close other open menus
-     document.querySelectorAll(".notify-actions").forEach(menu => menu.remove());
+    const id     = btn.getAttribute("user-id") || "";
+    const cat    = btn.getAttribute("user-cat") || "";
+    const status = btn.getAttribute("acct-status") || "";
+    const userId = `${id}:${cat}`;
 
-      // Create new dropdown
     const menu = document.createElement("div");
-     menu.classList.add("notify-actions");
+    menu.classList.add("notify-actions");
 
-      // Delete button
-      const deleteBtn = document.createElement("button");
-     deleteBtn.innerText = "Remove User";
-    
-     const manRole = document.createElement("button");
-     manRole.innerText = "Unsuspend User";
-     
-   const Resend = document.createElement("button");
-     Resend.innerText = "Suspend User";
-     
-    const editBtn = document.createElement("button");
-     editBtn.innerText = "Edit Details";
-    
- editBtn.addEventListener("click",()=>{
-     
-   const userType = document.getElementById("user_type").value;
-  let editURL = "";
+    const add = (label, handler) => {
+      const b = document.createElement("button");
+      b.innerText = label;
+      b.addEventListener("click", () => { menu.remove(); handler(); });
+      menu.appendChild(b);
+    };
 
-  if(userType == "Staff"){
-   
-editURL = `/add_new?add_new_staff&action=edit-record&staff=${notifyId}&user_type=${userType}`;
-     
-  }
-  else{
-      
-editURL = `/add_new?add_new_stds&action=edit-record&std=${notifyId}&user_type=${userType}`; 
-      
-  }
-  
-    window.location.href = editURL; 
-  
-    return; 
-  
-     });
-   
-      deleteBtn.addEventListener("click", () => {
-        DeleteOverlay.style.display = "flex";
-    //  deleteNotifyId.value = notifyId; 
-       deleteNotifyId.value = `${notifyId}:${Cat}`;
-  
-        menu.remove();
-        
-      });
+    add(ACTIONS.remove.label, () => openOverlay("remove", userId));
 
-   manRole.addEventListener("click", () => {
-     ManageOverlay.style.display = "flex";
-  //  manNotifyId.value = notifyId;
-    manNotifyId.value = `${notifyId}:${Cat}`;
-  
-  
-        menu.remove();
-        
-      });
-
-   Resend.addEventListener("click", () => {
-     ResendOverlay.style.display = "flex";
-   //  resendNotifyId.value = notifyId;
-   resendNotifyId.value = `${notifyId}:${Cat}`;
-  
-   const userType = document.getElementById("user_type").value;
-   resendstaffName.innerText = `Are sure you want to Suspend this ${userType} ?`;
-      
-        menu.remove();
-        
-      });
-      
-     menu.appendChild(deleteBtn);
-    
-  if(acctStatus == "Active"){
- 
-    menu.appendChild(Resend);     
-  
-   }
-  else if(acctStatus == "Suspended"){
-   menu.appendChild(manRole);
-
-  }
-  
-   menu.appendChild(editBtn);
-   
-  document.body.appendChild(menu);
-const rect = btn.getBoundingClientRect();
-const offsetX = -25;
-const offsetY = -10;
-
-menu.style.display = "flex";
-menu.style.top = rect.bottom + window.scrollY + offsetY + "px";
-menu.style.left = rect.left + window.scrollX + offsetX + "px";
-  
-    } else {
-      // Close dropdown if clicked outside
-      document.querySelectorAll(".notify-actions").forEach(menu => menu.remove());
+    if (status === "Active") {
+      add(ACTIONS.suspend.label, () => openOverlay("suspend", userId));
+    } else if (status === "Suspended") {
+      add(ACTIONS.unsuspend.label, () => openOverlay("unsuspend", userId));
     }
-  });
 
+    if (status !== "Left") {
+      add(ACTIONS.left.label, () => openOverlay("left", userId));
+    }
 
-
-  // --- Cancel Delete ---
-  cancelDeleteBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    DeleteOverlay.style.display = "none";
-    deleteNotifyId.value = "";
-   
-  });
-  
-  // --- Cancel manage ---
-  cancelmanageBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    ManageOverlay.style.display = "none";
-    manNotifyId.value = "";
-  
-  }); 
-  
-    // --- Cancel Resend ---
-  cancelResendBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    ResendOverlay.style.display = "none";
-    resendNotifyId.value = "";
-   resendstaffName.innerText = "";
-   
-  }); 
-   
-  // --- Confirm Delete ---
-  confirmDeleteBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    const notifyId = deleteNotifyId.value;
-   const userType = document.getElementById("user_type").value;
-  
-    spinner1.style.display = "flex";
-    prep1.style.display = "block";
-    
-    fetch("/includes/users.inc", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        submit_button_name: "del-this-user",
-        user_id: notifyId,
-        user_type:userType,
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-
-      if (data.status === "success") {
-        showToast(data.message);
-    
-      prep1.innerText = "Refreshing the page...";
-    setTimeout(() =>{
-      
-       //reload the page  
-      window.location.href = "?new";
-
-  },2000);
-       
-      } else {
-     
-      spinner1.style.display = "none";
-      prep1.style.display = "none";
-     DeleteOverlay.style.display = "none";
-        showError(data.message, data.error);
-      }
-    })
-    .catch(err => {
-      spinner1.style.display = "none";
-      prep1.style.display = "none";
-     DeleteOverlay.style.display = "none";
-      showError(err, "Ajax Error");
+    add("Edit Details", () => {
+      const type = getUserType();
+      const param = type === "Staff" ? "add_new_staff&action=edit-record&staff" : "add_new_stds&action=edit-record&std";
+      window.location.href = `/add_new?${param}=${id}&user_type=${type}`;
     });
-  });
- 
 
-  
-   // --- Confirm resend ---
-  confirmResendBtn.addEventListener("click", (e) => {
+    document.body.appendChild(menu);
+    const rect = btn.getBoundingClientRect();
+    menu.style.display = "flex";
+    menu.style.top  = rect.bottom + window.scrollY - 10 + "px";
+    menu.style.left = rect.left + window.scrollX - 25 + "px";
+  });
+
+  // ---------- Overlay buttons ----------
+  cancelBtn.addEventListener("click", e => {
     e.preventDefault();
-    const userId = resendNotifyId.value;
-  const userType = document.getElementById("user_type").value;
-  const SuspendReason = document.getElementById("suspend_reason").value.trim();
- 
-  prep3.style.display = "none";
-  prep3.innerHTML = `Suspending ${user_type}, Please wait ...`;
-  prep3.style.color="rgb(50,200,50)";
-   
- 
- if(!SuspendReason){
-    prep3.style.display = "block";
-  prep3.innerHTML = "Please enter a reason for this action";
-  prep3.style.color="red";
-     
-  return;   
- }
- 
-    spinner3.style.display = "flex";
-    prep3.style.display = "block";
+    closeOverlay();
+  });
+
+  confirmBtn.addEventListener("click", e => {
+    e.preventDefault();
+    if (!current) return;
+
+    const cfg  = ACTIONS[current.action];
+    const type = getUserType();
+    const payload = {
+      submit_button_name: cfg.submit,
+      user_id: current.userId,
+      user_type: type,
+    };
+
+    if (cfg.reasonKey) {
+      const reason = reasonEl.value.trim();
+      if (!reason) {
+        showMsg("Please enter a reason for this action", "red");
+        return;
+      }
+      payload[cfg.reasonKey] = reason;
+    }
+
+   showMsg(cfg.busy(type), "rgb(50,200,50)");
+    setBusy(true);
 
     fetch("/includes/users.inc", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-       submit_button_name: "suspend-user",
-       user_id: userId,
-       user_type: userType,
-       suspend_reason:SuspendReason,
-      })
+      body: JSON.stringify(payload),
     })
-    .then(resp => resp.json())
-    .then(data => {
-
-      if (data.status === "success") {
-        showToast(data.message);
-       prep3.innerText = "Refreshing the page...";
- setTimeout(() =>{
-      
-       //reload the page  
-      window.location.href = "?new";
-
-  },2000);
-   
-   
-    }
-else {
-     
-      spinner3.style.display = "none";
-      prep3.style.display = "none";
-     ResendOverlay.style.display = "none";
-    showError(data.message, data.error);
-      }
-    })
-    .catch(err => {
-      spinner3.style.display = "none";
-      prep3.style.display = "none";
-     ResendOverlay.style.display = "none";
-      showError(err, "Ajax Error");
-    });
-  });
- 
-   
-     
-    
-  // --- Confirm manage ---
-  confirmanageBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    const staffId = manNotifyId.value;
-  const userType = document.getElementById("user_type").value;
-   
- const unSuspendReason = document.getElementById("unsuspend_reason").value.trim();
- 
-  prep2.style.display = "none";
-  prep2.innerHTML = "Removing Suspension, Please wait ...";
-  prep2.style.color="rgb(50,200,50)";
-   
- if(!unSuspendReason){
-    prep2.style.display = "block";
-  prep2.innerHTML = "Please enter a reason for this action";
-  prep2.style.color="red";
-     
-  return;   
- }
-     manError.innerText = "";
-    spinner2.style.display = "flex";
-    prep2.style.display = "block";
-
-      fetch("/includes/users.inc", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        submit_button_name: "un-suspend-user",
-        user_id: staffId,
-        user_type: userType,
-        unsuspend_reason: unSuspendReason,
-      })
-    })
-    .then(response => response.json())
-    .then(result => {
-
-      if (result.status === "success") {
-        showToast(result.message);
-    
-       prep2.innerText = "Refreshing the page...";
-     setTimeout(() =>{
-      
-       //reload the page  
-      window.location.href = "?new";
-
-  },2000);    
-    
-    
-      }
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          showToast(data.message);
+          showMsg("Refreshing the page...", "rgb(50,200,50)");
+          setTimeout(() => (window.location.href = "?new"), 2000);
+        } 
+        
+else if (data.status === "blocked" && current.action === "remove") {
+  
+  setBusy(false);
+  titleEl.innerText = `Cannot remove ${type}`;
+  textEl.innerText = data.message;
+  showMsg("");
+  confirmBtn.innerText = "Mark as Left instead";
+  current.action = "left";   // next click submits "mark-user-left"
+   } 
      else {
-     
-     spinner2.style.display = "none";
-     prep2.style.display = "none";
-     showError(result.message, result.error);
-  }
-    })
-    .catch(error => {
-      spinner2.style.display = "none";
-      prep2.style.display = "none";
-     ManageOverlay.style.display = "none";
-      showError(error, "Ajax Error");
-  
-    });
-  }); 
-  
-  
-
-
+          closeOverlay();
+          showError(data.message, data.error);
+        }
+      })
+      .catch(err => {
+        closeOverlay();
+        showError(err, "Ajax Error");
+      });
+  });
 });
-
 </script>
-
 <script>
  
  function showClass(){

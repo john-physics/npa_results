@@ -406,6 +406,7 @@ left:25px;
 .fa-wand-magic-sparkles{
     color: #0d6efd;
 }
+
    .dashb-conts #badge{
    
    display:inline-block;

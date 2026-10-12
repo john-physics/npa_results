@@ -220,13 +220,16 @@ if($total > 100){
   
   //new records      
   $status = "Unpublished";
-    $std_cat = $classCat;
+  $std_cat = $classCat;
+    //get std current profile  
+ $profile = get_std_profile($conn,$std_id);
+ 
      $data = [
     "conn" => $conn,
     "table" => $resultTableName,
-    "cols" => ["staff_id","std_id","std_cat","term","class","result_status","date_created"],
-     "vals" => [$uploader,$std_id,$std_cat,$term,$class,$status,$DayDateTime],
-     "params" =>"iisssss"
+    "cols" => ["staff_id","std_id","std_cat","std_profile","term","class","result_status","date_created"],
+     "vals" => [$uploader,$std_id,$std_cat,$profile,$term,$class,$status,$DayDateTime],
+     "params" =>"iissssss"
      ]; 
    
   $insert = insert_user_data($data);
