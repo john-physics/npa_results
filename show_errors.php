@@ -7,6 +7,6 @@ if(!is_dir('logs')){
 
 ini_set('log_errors', 1);
 ini_set('error_log', 'logs/errors.log'); // Adjust path if needed
-ini_set('display_errors', 1); //show all errors in browser especially on live server to help track quickly. 
+ini_set('display_errors', 0); //show all errors in browser especially on live server to help track quickly. 
 error_reporting(E_ALL);// Turn on error reporting Report all types of errors
 

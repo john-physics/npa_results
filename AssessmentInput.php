@@ -9,6 +9,7 @@ class AssessmentInput {
     private $std_id;
     private $staff_id;
     private $uploader;
+    private $totalScores;
 
 
     public function __construct($constructor){
@@ -94,6 +95,14 @@ $results = collect_user_data4($this->conn,$recordsTable,"std_id","term","class",
     $maxca = array_sum($ca_list);
     $maxexam = 100 - $maxca;
    
+   $gradeInuse = "A-F";
+   $Inuse = collect_user_data($this->conn,"variables","type","grading_system_inuse","s");
+   $InuseValue = $Inuse["value"];
+ if($InuseValue == "grade_suffix"){
+  $gradeInuse = "A1-F9";
+ }
+
+   
 echo '<table class="result-table">
   <tr>
     <th>S/N</th>
@@ -105,7 +114,7 @@ echo '<table class="result-table">
 
         echo "<th>CA{$num}<br><small>({$mark})</small></th>";
     }
-
+   
     echo "<th>Exam<br>
     <small>({$maxexam})</small></th>";
     echo '<th>Total<br>
@@ -113,9 +122,9 @@ echo '<table class="result-table">
    <th style="font-size:10px;">Position
     <small style="font-size:8px;">In Subject</small></th>
     <th>Grade<br>
-    <small>(A-F)</small></th></tr>';
+    <small style="font-size:10.5px;">('.$gradeInuse.')</small></th></tr>';
     $sn=0;
-    
+   $totalca =0; $totalexam =0;
   foreach($subjects as $subject){
 
    $result = $this->getResults($subject['id']);
@@ -127,13 +136,13 @@ echo '<table class="result-table">
        type="hidden"
         name="subject_id[]"
        value="'.$subject['id'].'">';
-
+  
        foreach($ca_list as $index => $mark){
 
             $field = 'ca'.($index + 1);
 
             $value = null_check($result[$field],"");
-
+            $totalca+= (int)$value;
             echo '
             <td>
                 <input
@@ -150,7 +159,7 @@ echo '<table class="result-table">
       $total = null_check($result["total"],'Auto');
        $grade = null_check($result["grade"],'Auto');
        $pos = null_check($result["position"],'Auto');
-    
+    $totalexam+= (int)$exam;
         echo '
         <td>
             <input
@@ -191,5 +200,15 @@ echo '<table class="result-table">
     }
 
     echo '</table>';
+    
+   $this->totalScores = $totalca + $totalexam;
  }
+ 
+ public function totalScores(){
+     
+  return $this->totalScores;   
+     
+ }
+ 
+ 
 }

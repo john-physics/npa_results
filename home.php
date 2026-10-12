@@ -7,8 +7,6 @@ require 'login_popup.php';
 new_popup();
 require 'menu.php';
 
-// goameh@gmail.com : godwin$2845
-
 // <!-- Message send report -->
  if(isset($_GET["msg_report"])){
  
@@ -26,6 +24,19 @@ require './custom_alert.php';
 
 
 echo '<style>
+
+  body {
+  
+    /* Prevent Highlighting text on the Dashboard */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
 
  .slideshow-container {
       width: 95%;
@@ -214,7 +225,7 @@ echo '<style>
     } 
   
 
-.intro{
+.dashb-wrapper{
   position:relative;
  top:10px;
  height:auto;
@@ -369,7 +380,7 @@ left:25px;
    
  }
  
- .fa-images{
+ .fa-images,.fa-chart-line{
      
   color: #0ea5e9;   /* Sky Blue */   
  }
@@ -532,29 +543,28 @@ echo '<section id="dashb-section" class="section">
  
   <h2>Result Dashboard</h2>';
   
- //Client_Jobs dashboard
+ //staff dashboard
  $name = $user["fullname_title"]??'Anonymous';
  $usercat= $user["user_cat"]??'Anonymous';
- $ImpAuthorized = implode(":",$authorized);
+ $ImpAuthorized =implode(":",$authorized);
 
 echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
 <input type="hidden" id="staff_cat" value="'.$usercat.'">';
 
+  echo '<div class="dashb-wrapper"> 
+<span id="owner"> '.$name.' • '.$usercat.' • | Manage Result Dashboard</span>
+ <div class="dashb" id="dashb">';
 
  if(in_array($usercat, $authorized)){
   
-  echo '<div class="intro"> 
-<span id="owner"> '.$name.' • '.$usercat.' • | Manage Result Dashboard</span>';
-   
- echo '<div class="dashb" id="dashb">
- <div class="dashb-conts" data-page="add_new?add_new_staff">
+ echo '<div class="dashb-conts" data-page="add_new?add_new_staff">
  <span><i class="fa-solid fa-user-plus"></i></span>
 <span id="text">Add Staff</span>
  </div>
  
- <div class="dashb-conts" data-page="add_new?add_new_stds">
-  <span><i class="fa-solid fa-user-graduate "></i></span>
-  <span id="text">Add Students</span>
+ <div class="dashb-conts" data-page="view_staff">
+ <span><i class="fa-solid fa-users"></i></span>
+<span id="text">View Staff</span>
  </div>
  
   <div class="dashb-conts" data-page="add_new?add_new_class">
@@ -572,19 +582,11 @@ echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
   <span id="text">Update Current Session</span>
  </div>
 
- <div class="dashb-conts" data-page="upload_results">
-  <span><i class="fa-solid fa-upload "></i></span>
-  <span id="text">View Uploaded Results</span>
+ <div class="dashb-conts" data-page="upload_results?show_all_results">
+  <span><i class="fa-solid fa-certificate"></i></span>
+  <span id="text">View All Results</span>
  </div>
 
-  <div class="dashb-conts" data-page="results?view_results">
-  <span><i class="fa-solid fa-chart-bar "></i></span>
-  <span id="text">Check Results</span>
- </div>';
- 
- if(in_array($usercat, $appointers)){
-     
-  echo '
  <div class="dashb-conts" data-page="add_new?new_appoint_ment">
  <span><i class="fa-solid fa-calendar-check "></i></span>
   <span id="text">Appointment</span>
@@ -594,72 +596,33 @@ echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
  <span><i class="fa-solid fa-chalkboard-teacher"></i></span>
   <span id="text">Assign Class Teachers</span>
  </div>
- 
- <div class="dashb-conts" data-page="view_staff">
-  <span><i class="fa-solid fa-users "></i></span>
-  <span id="text">Staff List</span>
- </div> 
-  
+
   <div class="dashb-conts" data-page="settings">
   <span><i class="fa-solid fa-gear"></i></span>
-  <span id="text">Settings</span>
- </div>';
+  <span id="text">General Settings</span>
+ </div>
  
- if(in_array($usercat,$reserved) || password_verify($fullname,$developerToken)){
-     
-  echo '<div class="dashb-conts" data-page="backup?backup_access">
+  <div class="dashb-conts" data-page="backup?backup_access">
     <span><i class="fa-solid fa-database"></i></span>
     <span id="text">Database Backup</span>
 </div>
+
  <div class="dashb-conts" data-page="optimize_images">
   <span><i class="fa-solid fa-wand-magic-sparkles"></i></span>
  <span id="text">Optimize Images</span>
- </div>';
+ </div>
     
-   }
- }
-  
-  echo '
-
- <div class="dashb-conts" data-page="add_new?add_stds_photo">
-  <span><i class="fa-solid fa-images "></i></span>
- <span id="text">Add Students Photo</span>
- </div>
-
- <div class="dashb-conts" data-page="view_students?view_class">
-  <span><i class="fa-solid fa-user "></i></span>
- <span id="text">View Students Details</span>
- </div>
- 
   <div class="dashb-conts" data-page="background-remover">
   <span><i class="fa-solid fa-signature "></i></span>
  <span id="text">Signature Cleaner</span>
- </div>
-
- <div class="dashb-conts" data-page="subject_records">
-  <span><i class="fa-solid fa-file-lines "></i></span>
-  <span id="text">Subject Records</span>
- </div>
-
-<div class="dashb-conts" data-page="profile">
-  <span><i class="fa-solid fa-user-shield "></i></span>
-  <span id="text">Staff Profile</span>
- </div>
-
-</div>
-  </div>';
+ </div>';
        
  }
  
- else{
-//teachers here.      
-     
-    echo '<div class="intro"> 
-<span id="owner"> '.$name.' • '.$usercat.' • | Manage Your Students\' Results</span>';
+
+// All staff can access this      
    
- echo '<div class="dashb" id="dashb">
- 
-  <div class="dashb-conts" data-page="add_new?add_new_stds">
+ echo '<div class="dashb-conts" data-page="add_new?add_new_stds">
   <span><i class="fa-solid fa-user-graduate "></i></span>
   <span id="text">Add Students</span>
  </div>
@@ -700,9 +663,9 @@ echo '<input type="hidden" id="authorized" value="'.$ImpAuthorized.'">
    <span id="text">Staff Profile</span>
   </div>
 
+   </div> 
  </div>';   
      
- }
  
    $current = get_current_session();
    $termSession = trim($current['term']." ".$current['session']);
@@ -1079,3 +1042,9 @@ logoutBtn.addEventListener("click", (e) => {
 });
 
 </script>
+
+
+<!--
+<script src="/scripts/js-diagnose.js"></script>
+
+-->

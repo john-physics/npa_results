@@ -9,7 +9,7 @@ if(!$location){
 
 
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+if($_SERVER["REQUEST_METHOD"] === "POST"){
   $root = $_SERVER["DOCUMENT_ROOT"];
  require $root.'/page_init.php';
   require $root.'/functions/optimizer_functions.php';
@@ -30,7 +30,8 @@ else{
 $user = get_user_name($staff_id);
 $fullname =  ucwords($user["fullname"]);
 
- if(in_array($staff_cat,$reserved) || password_verify($fullname,$developerToken)){
+ if(in_array($staff_cat,$authorized)){
+     
 if(isset($_POST["submit_optimize_images"])){
  
  $transparency = trim($_POST["transparency"]);
@@ -67,15 +68,25 @@ if ($batch_size < 1) {
 
 }
 
-if ($image_size < 1) {
 
-    $_SESSION["error_msg"] = "Maximum image size must be greater than zero.";
+if ($batch_size > 50) {
+
+    $_SESSION["error_msg"] = "Batch size must not exceed 50.";
+  header("Location:$location");
+    die(); 
+
+}
+
+
+if ($image_size < 10) {
+
+    $_SESSION["error_msg"] = "Maximum image size must be greater than 10KB";
    header("Location:$location");
     die(); 
 
 }
 
-if ($image_width < 1 || $image_height < 1) {
+if ($image_width < 10 || $image_height < 10) {
 
     $_SESSION["error_msg"] = "Please enter valid maximum image dimensions.";
    header("Location:$location");
@@ -83,9 +94,9 @@ if ($image_width < 1 || $image_height < 1) {
 
 }
 
-if ($quality < 1 || $quality > 100) {
+if ($quality < 50 || $quality > 100) {
 
-    $_SESSION["error_msg"] = "WebP quality must be between 1 and 100.";
+    $_SESSION["error_msg"] = "WebP quality must be between 50 and 100.";
    header("Location:$location");
     die(); 
 

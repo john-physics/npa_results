@@ -48,8 +48,8 @@ define(
     | JSON_INVALID_UTF8_SUBSTITUTE
 );
 
-$dirname = "/home/newphase/domains";
-$dirname = "/storage/emulated/0";
+# $dirname = "/home/newphase/domains";
+$dirname = dirname($_SERVER["DOCUMENT_ROOT"]);
 $configfile = $dirname . '/config/npa.config.ini';
 
 if(file_exists($configfile)){
@@ -79,7 +79,7 @@ catch(mysqli_sql_exception $error){
     FILE_APPEND
 );
  
- exit();
+ exit("Database connction error, please check the error log path for more details");
  
     }   
 }
@@ -93,7 +93,7 @@ else{
     FILE_APPEND
 );
 
-exit();
+ exit("Database connction error, please check the error log path for more details");
   
  }
 }
@@ -107,6 +107,6 @@ else{
     FILE_APPEND
 );
  
- exit();
+  exit($error);
   
 }

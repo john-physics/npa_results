@@ -43,6 +43,9 @@ $logger = new Logger($conn,"");
 $logger->error($e->getMessage());
  
 // echo $e->getMessage();
+ 
+ header("Location: /home?msg_report=Request failed&report=failed");
+ 
  exit();
   
 }

@@ -681,6 +681,10 @@ $Input = new AssessmentInput($constructor);
 $uploads = $result_status["total_uploads"];
 $class_size = $result_status["class_size"];
 
+ $saveUpdate = "Save";
+ if($Input->totalScores() > 0){
+  $saveUpdate = "Update";    
+ }
 
  echo '<span id="subjectCounter">
         Total uploads: '.$uploads.' out of '.$class_size.'
@@ -690,7 +694,7 @@ $class_size = $result_status["class_size"];
     <div class="action-buttons">
      <button type="submit" name="submit-ass-records" id="update-btn" class="update-btn"  title="Click here to save/update the entered records">
        <i id="upd-btn" class="fa-solid fa-rotate"></i>
-       Update
+       '.$saveUpdate.'
 </button>
 
     </form>
@@ -746,7 +750,7 @@ const Resultform = document.getElementById("resultForm");
 resultForm.addEventListener("submit",(e)=>{
     
   updBtn.classList.add("spin"); 
-    
+  
 });
 
 

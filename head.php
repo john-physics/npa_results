@@ -12,8 +12,21 @@ function head($meta,$title,$dashb='portal'){
 <meta name ="description" content="'.$meta.'">
 <meta name ="keywords" content="NewPhase, Academy,Result,'.$dashb.',Check result,ABC">
 <meta name="author" content="John Ella">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#E4CAD5">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="NPA Results">
+<link rel="apple-touch-icon" href="/images/pwa-192.png">
+
 <title>'.$title.'</title>
+
 <link rel="canonical" href="'. htmlspecialchars($canonical).'">
 <link rel="stylesheet" href="/css/new_styles.css">
 <link rel="stylesheet" href="/css/styles.css">
@@ -29,7 +42,10 @@ function head($meta,$title,$dashb='portal'){
     
  }
 body{
-   
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+
    font-family: "Poppins",sans-serif;
 }
 
@@ -628,10 +644,300 @@ header .container::before{
     }
 }
 
+/* ================================
+   PWA INSTALL CARD
+================================ */
+
+#pwa-install-card{
+    display:none;
+
+    position:fixed;
+    left:50%;
+    bottom:20px;
+
+    transform:translateX(-50%);
+
+    width:calc(100% - 30px);
+    max-width:420px;
+
+    background:#fff;
+
+    color:#333;
+
+    padding:18px;
+
+    border-radius:16px;
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.25);
+
+    z-index:99999;
+
+    box-sizing:border-box;
+
+    animation:pwaInstallSlideUp .4s ease;
+}
+
+#pwa-install-card h3{
+    margin:0 0 6px 0;
+
+    font-size:18px;
+
+    color:#8a1f45;
+}
+
+#pwa-install-card p{
+    margin:0 0 15px 0;
+
+    font-size:13px;
+
+    line-height:1.5;
+
+    color:#666;
+}
+
+.pwa-install-actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.pwa-install-btn{
+    border:0;
+
+    padding:9px 18px;
+
+    border-radius:8px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    cursor:pointer;
+}
+
+#pwa-install-button{
+    background:#8a1f45;
+    color:#fff;
+}
+
+#pwa-cancel-button{
+    background:#eee;
+    color:#555;
+}
+
+#pwa-install-button:hover{
+    opacity:.9;
+}
+
+#pwa-cancel-button:hover{
+    background:#ddd;
+}
+
+@keyframes pwaInstallSlideUp{
+
+    from{
+        opacity:0;
+        transform:
+            translate(-50%,20px);
+    }
+
+    to{
+        opacity:1;
+        transform:
+            translate(-50%,0);
+    }
+
+}
+
 </style>
+  
+ <script>
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", function () {
+
+        navigator.serviceWorker.register("/sw.js")
+            .then(function (registration) {
+
+                console.log(
+                    "NPA Results Service Worker registered:",
+                    registration.scope
+                );
+           
+            })
+            .catch(function (error) {
+
+                console.error(
+                    "NPA Results Service Worker registration failed:",
+                    error
+                );
+
+            });
+
+    });
+
+}
+
+
+let deferredInstallPrompt = null;
+
+/*
+ * Browser says the application is ready to be installed.
+ */
+window.addEventListener("beforeinstallprompt", function(event) {
+
+    event.preventDefault();
+
+    deferredInstallPrompt = event;
+
+    const card =
+        document.getElementById("pwa-install-card");
+
+    if (card) {
+        card.style.display = "block";
+    }
+
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const installButton =
+        document.getElementById("pwa-install-button");
+
+    const cancelButton =
+        document.getElementById("pwa-cancel-button");
+
+
+    /*
+     * Install button
+     */
+    if (installButton) {
+
+        installButton.addEventListener(
+            "click",
+            async function() {
+
+                if (!deferredInstallPrompt) {
+                    return;
+                }
+
+                deferredInstallPrompt.prompt();
+
+                const { outcome } =
+                    await deferredInstallPrompt.userChoice;
+
+                console.log(
+                    "PWA installation result:",
+                    outcome
+                );
+
+                deferredInstallPrompt = null;
+
+                const card =
+                    document.getElementById(
+                        "pwa-install-card"
+                    );
+
+                if (card) {
+                    card.style.display = "none";
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+     * Cancel button
+     */
+    if (cancelButton) {
+
+        cancelButton.addEventListener(
+            "click",
+            function() {
+
+                const card =
+                    document.getElementById(
+                        "pwa-install-card"
+                    );
+
+                if (card) {
+                    card.style.display = "none";
+                }
+
+                deferredInstallPrompt = null;
+
+            }
+        );
+
+    }
+
+});
+
+
+/*
+ * Application successfully installed.
+ */
+window.addEventListener("appinstalled", function() {
+
+    console.log("NPA Results was installed.");
+
+    deferredInstallPrompt = null;
+
+    const card =
+        document.getElementById(
+            "pwa-install-card"
+        );
+
+    if (card) {
+        card.style.display = "none";
+    }
+
+});
+
+
+</script>
+
+
+
     
 </head>
 <body>
+
+<div id="pwa-install-card">
+
+    <h3>Install NPA Results</h3>
+    <p>
+        Install the app for quicker access from your home screen.
+    </p>
+
+    <div class="pwa-install-actions">
+
+        <button
+            type="button"
+            id="pwa-cancel-button"
+            class="pwa-install-btn">
+            Cancel
+        </button>
+
+        <button
+            type="button"
+            id="pwa-install-button"
+            class="pwa-install-btn">
+            Install App
+        </button>
+
+    </div>
+
+</div>
 
 
  <!-- Header Section -->
@@ -669,6 +975,7 @@ if($dashb == "profile" && isset($_SESSION["staff_id"])){
  }
  else{ $_SESSION["dashboard"] = false; }
  
-    
+
+ 
 }
 

@@ -16,10 +16,7 @@ if(isset($_SESSION["staff_id"])){
 $CurrentSession = $current['session'];
 $currentTerm = $current["term"];
 
-$staff_det = get_user_name($userId); 
-$staff_name= $staff_det["fullname_title"];
-$fullname=ucwords($staff_det["fullname"]);
-  
+ 
 }
 else{
     
@@ -1070,7 +1067,7 @@ exit();
  if($setting == "delete_result"){
  $setting = "result_deletion";
  
- if(!in_array($userCat,$reserved) &&  !password_verify($fullname,$developerToken)){
+ if(!in_array($userCat,$reserved)){
      
      $response = [
      "status" => "failed",
@@ -1085,7 +1082,7 @@ exit();
  
 
  if($setting == "result_lock"){
- if(!in_array($userCat,$reserved) &&  !password_verify($fullname,$developerToken)){
+ if(!in_array($userCat,$reserved)){
    
      $response = [
      "status" => "failed",

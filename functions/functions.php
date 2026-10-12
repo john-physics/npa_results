@@ -783,7 +783,7 @@ From add class, create another dynamic input that can switch suggested class cat
         ];
     }
     
-    mysqli_stmt_free_result($result1);
+    mysqli_free_result($result1);
     mysqli_stmt_close($stmt1);
 
 
@@ -841,7 +841,7 @@ From add class, create another dynamic input that can switch suggested class cat
                     "name" => $row["surname"]." ".$row["othernames"]
                 ];
             }
-       mysqli_stmt_free_result($result2);
+       mysqli_free_result($result2);
         mysqli_stmt_close($stmt2);
         }
     }

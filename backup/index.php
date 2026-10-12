@@ -1,7 +1,9 @@
 <?php
-
+ 
 $root = $_SERVER["DOCUMENT_ROOT"];
+ # require $root."/show_errors.php";
  require $root."/page_init.php";
+
 require_once $root."/backup/config.php";
 
 if(!check_staff_login($conn)){
@@ -12,10 +14,8 @@ exit();
 
  $staff_id = $_SESSION["staff_id"];
  $staff_cat = $_SESSION["staff_cat"];
- $user = get_user_name($staff_id);
-$fullname =  ucwords($user["fullname"]);
-
- if(!in_array($staff_cat,$reserved) &&  !password_verify($fullname,$developerToken)){
+ 
+ if(!in_array($staff_cat,$authorized)){
      
  header("Location:/home");
 exit();
@@ -562,7 +562,7 @@ Invalid Backup Signature.
 }
 
 elseif(isset($_GET["backup_access"])){
-    
+ 
  echo '<div class="back_container">
 <h2>Database Backup Utility</h2>
  <form method="post" id="regForm">

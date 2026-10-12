@@ -255,10 +255,8 @@ body{
 
  $staff_id = $_SESSION["staff_id"];
  $staff_cat = $_SESSION["staff_cat"];
- $user = get_user_name($staff_id);
-$fullname =  ucwords($user["fullname"]);
 
- if(in_array($staff_cat,$reserved) || password_verify($fullname,$developerToken)){
+ if(in_array($staff_cat,$authorized)){
 
 
 $directory =""; $batch_size="";
@@ -319,7 +317,7 @@ if(isset($_SESSION["submit_attempt"])){
 
         <label>
            Batch size:
-           <small id="min-score">Maximum of 20</small>
+           <small id="min-score">Maximum of 50</small>
         </label>
 
         <input 
@@ -328,7 +326,7 @@ if(isset($_SESSION["submit_attempt"])){
             name="batch_size"
             placeholder="Enter batch size"
             min="1"
-            max="20"
+            max="50"
             value ="'.$batch_size.'"
             required
         >
@@ -440,8 +438,7 @@ optForm.addEventListener("submit",(e)=>{
   prep1.style.display="block";
   prep1.innerHTML = `Optimizing Images in ${Directory} folder please wait..`;
   
-  
-  e.preventDefault();
+// e.preventDefault();
   
   
 });

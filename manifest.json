@@ -1,0 +1,25 @@
+{
+  "name": "NewPhase Academy",
+  "short_name": "NPA Results",
+  "description": "NewPhase Academy Result Portal",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color":"#5b1028",
+  "theme_color": "#E4CAD5",
+  "icons": [
+    {
+      "src": "/images/pwa-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/pwa-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

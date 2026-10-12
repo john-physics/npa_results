@@ -1207,7 +1207,7 @@ if($filename && $filename !== "extension_error"){
  }
  else{
 
- $_SESSION["error_msg"] = "profile not uploaded: file as type not allowed"; 
+ $_SESSION["error_msg"] = "profile not uploaded: file type not allowed"; 
      
  }
 }

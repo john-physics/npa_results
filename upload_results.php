@@ -253,7 +253,7 @@ foreach ($classSet as $set){
    $std_details = collect_user_data($conn,"students","std_id",$std_id,"i");
   $std_name = $std_details["surname"]." ".$std_details["othernames"];
   $std_pin = $std_details["std_pin"];
-  $profile = null_check($std_details["profile"],"null.jpg");
+  $profile = null_check($std_details["profile"],"");
   $std_cat = null_check($std_details["std_cat"],'N/A');
   $std_class = $viewClass;  
   $group = $std_cat;  
@@ -261,7 +261,8 @@ foreach ($classSet as $set){
    
  $profilePath = $root.'/images/students/'.$profile;
  
- if(!file_exists($profilePath)){
+ 
+ if(!is_file($profilePath)){
      
  $profile = "npa-logo.jpg";  
      

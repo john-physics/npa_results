@@ -248,11 +248,9 @@ body{
 
  $staff_id = $_SESSION["staff_id"];
  $staff_cat = $_SESSION["staff_cat"];
- $user = get_user_name($staff_id);
-$fullname =  ucwords($user["fullname"]);
+ 
 
-
- if(in_array($staff_cat, $appointers)){
+ if(in_array($staff_cat, $authorized)){
  
  $setting1 = collect_user_data($conn,"variables","type","site_lock","s");
  $site_lock = strtoupper(null_check($setting1["value"],"OFF"));
@@ -337,7 +335,7 @@ if($showpos =="ON"){
 
     </div>';
     
- if(in_array($staff_cat,$reserved) || password_verify($fullname,$developerToken)){
+ if(in_array($staff_cat,$reserved)){
   
   echo ' <!-- Result Lock -->
 
