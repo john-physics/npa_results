@@ -584,6 +584,26 @@ function get_pending_mails($conn, $status,$limit){
     return $data ?: false;
 }
 
+function allow_result_preview($conn){
+ 
+ $preview = collect_user_data($conn,"variables","type","result_preview","s");  
+  $previewValue = strtolower($preview["value"]);
+
+  if($previewValue == "on" || $previewValue == "enabled"){
+  
+  /* allow preview. This settings will allow parents/guardians or the students to view students' results when it is not yet published  
+  */ 
+   return true;   
+  } 
+  
+ else{
+  //prevent preview 
+   return false;  
+     
+ } 
+}
+
+
 function allow_result_deletion(){
   global $conn; 
  

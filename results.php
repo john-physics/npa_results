@@ -392,6 +392,8 @@ $positionText = "";
 
 if(strtolower($result_status) !== "published" && $viewer !== "staff"){
     
+ if(!allow_result_preview($conn)){
+ 
   echo '<section class="section">
   <h2>'.$std_name.'</h2>
  <div id="resultDisplay" class="result-feedback">
@@ -407,7 +409,8 @@ if(strtolower($result_status) !== "published" && $viewer !== "staff"){
  
  
  Addfooter($site); 
- die();  
+ die();      
+ }
 }
 
 
@@ -589,12 +592,13 @@ echo '<div class="result-container" id="result-container">
           $sn = 0;
    foreach($subjectRecords as $records){
           $sn++;
-       $subject = get_subject_name($records["subject"]);   
-       $exam = $records["exam"];
-       $total = $records["total"];
-       $pos = $records["position"];
-       $grade = $records["grade"];
-       $remark = $records["remark"];
+  $subject = get_subject_name($records["subject"]);   
+  $exam = null_check($records["exam"],"");
+  $total=null_check($records["total"],"");
+     
+  $pos = $records["position"];
+  $grade = $records["grade"];
+  $remark = $records["remark"];
      
           echo '<tr>
              <td>'.$sn.'</td>
@@ -603,9 +607,22 @@ echo '<div class="result-container" id="result-container">
        foreach ($caPattern as $index => $maxca){
       
          $cacol = "ca".($index+1);
-       $cascore = $records[$cacol];
+       $cascore = null_check($records[$cacol],"");
         echo '<td>'.$cascore.'</td>';
        }
+       
+     if(!$exam && !$total_score){
+      //hide obvious display until exam or total score is available 
+      $total = "";    
+      $grade = "";
+      $remark = "";
+      $pos = "";
+      $overall_grade = "";
+      $passedFailed = ""; 
+       
+       
+      } 
+       
        
        echo '<td>'.$exam.'</td>
      <td>'.$total.'</td>

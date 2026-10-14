@@ -1051,7 +1051,7 @@ exit();
      
  }
  else{
- //site_lock 
+ //result_preview
  //result_lock 
  //result_deletion 
  //red_ink 

@@ -192,9 +192,9 @@ if($total > 100){
   $data = [
     "conn" => $conn,
     "table" => $subjectTableName,
-    "cols" => ["staff_id","std_id","term", "class","class_cat","subject","ca1","ca2", "ca3","ca4","exam","total","position","grade","result_status","date_created"],
-     "vals" => [$uploader,$std_id,$term,$class,$classCat,$subject_id,$ca1,$ca2,$ca3,$ca4,$exam,$total,$pos,$grade,$status,$DayDateTime],
-     "params" =>"iissssiiiiiissss"
+    "cols" => ["staff_id","std_id","term", "class","class_cat","subject","ca1","ca2", "ca3","ca4","exam","total","position","grade","remark","result_status","date_created"],
+     "vals" => [$uploader,$std_id,$term,$class,$classCat,$subject_id,$ca1,$ca2,$ca3,$ca4,$exam,$total,$pos,$grade,$remark,$status,$DayDateTime],
+     "params" =>"iissssiiiiiisssss"
      ]; 
    
   $insert = insert_user_data($data);

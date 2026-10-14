@@ -1,6 +1,6 @@
 <?php
 
-if($_SERVER["REQUEST_METHOD"]=="POST"){
+if($_SERVER["REQUEST_METHOD"] !== "POST"){
  
   $root = $_SERVER["DOCUMENT_ROOT"];
  require $root.'/page_init.php';
@@ -8,12 +8,15 @@ require $root.'/send_email.php';
  
  $data = json_decode(file_get_contents('php://input'), true);
 
- $btn = trim(htmlspecialchars($data["submit_button_name"],ENT_QUOTES,'UTF-8'));
- $email = trim(htmlspecialchars($data["user_email"],ENT_QUOTES,'UTF-8'));
- $user = trim(htmlspecialchars($data["user_cat"],ENT_QUOTES,'UTF-8'));
-
-
-
+ $btn = trim($data["submit_button_name"]);
+ $email = trim($data["user_email"]);
+ $user = trim($data["user_cat"]);
+  
+  $email = "ellaj4212@gmail.com";
+  $user = "staff";
+  $btn = "forgot_psw_submitEmail";
+ 
+  
   if($user == "staff"){
      
   $table = "staffs"; 
@@ -123,7 +126,7 @@ if($token){
   $_SESSION["user_cat"] = $userCat;
   $_SESSION["reset_id"] = $user_id;
    
- //  $_SESSION["token"] = $token;
+   $_SESSION["token"] = $token;
      
     $response = [
      "status" => "success",

@@ -15,7 +15,7 @@ function head($meta,$title,$dashb='portal'){
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="manifest" href="/manifest.json">
+<link rel="manifest" href="/npa-manifest.json">
 <meta name="theme-color" content="#E4CAD5">
 
 <meta name="mobile-web-app-capable" content="yes">
@@ -762,7 +762,7 @@ if ("serviceWorker" in navigator) {
 
     window.addEventListener("load", function () {
 
-        navigator.serviceWorker.register("/sw.js")
+        navigator.serviceWorker.register("/npa-sw.js")
             .then(function (registration) {
 
                 console.log(

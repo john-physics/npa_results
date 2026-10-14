@@ -252,8 +252,8 @@ body{
 
  if(in_array($staff_cat, $authorized)){
  
- $setting1 = collect_user_data($conn,"variables","type","site_lock","s");
- $site_lock = strtoupper(null_check($setting1["value"],"OFF"));
+ $setting1 = collect_user_data($conn,"variables","type","result_preview","s");
+ $result_preview = strtoupper(null_check($setting1["value"],"OFF"));
  
  $setting2 = collect_user_data($conn,"variables","type","result_lock","s");
  $result_lock = strtoupper(null_check($setting2["value"],"ON"));
@@ -272,8 +272,8 @@ body{
  
  $minscore =  null_check($setting6["value"],"0");
  
- $site_lock_color ="";
- $site_lock_checked ="";
+ $result_preview_color ="";
+ $result_preview_checked ="";
  $result_lock_color ="";
  $result_lock_checked="";
  $delete_result_color="";
@@ -283,9 +283,9 @@ body{
  $showpos_color="";
  $showpos_checked="";
  
-if($site_lock =="ON"){
-    $site_lock_color = "green";
-    $site_lock_checked = "checked";
+if($result_preview =="ON"){
+    $result_preview_color = "green";
+    $result_preview_checked = "checked";
 }
 
 if($result_lock =="ON"){
@@ -309,44 +309,16 @@ if($showpos =="ON"){
 }
 
  echo '<div class="dashboard">
-
-    <h2>Central Control Dashboard</h2>
-
-    <!-- Site Lock -->
-
-    <div class="setting-box">
-
-        <div class="setting-title">
-            Site Lock
-        </div>
-
-        <div class="toggle-container">
-
-            <span class="status-text '.$site_lock_color.'" id="site_lock_text">
-                '.$site_lock.'
-            </span>
-
-            <label class="switch">
-                <input type="checkbox" id="site_lock" '.$site_lock_checked.'>
-               <span class="slider"></span>
-            </label>
-
-        </div>
-
-    </div>';
+    <h2>Central Control Dashboard</h2>';
     
  if(in_array($staff_cat,$reserved)){
   
   echo ' <!-- Result Lock -->
-
     <div class="setting-box">
-
         <div class="setting-title">
             Result Lock
         </div>
-
         <div class="toggle-container">
-
             <span class="status-text '.$result_lock_color.'" id="result_lock_text">
                 '.$result_lock.'
             </span>
@@ -357,7 +329,6 @@ if($showpos =="ON"){
             </label>
 
         </div>
-
     </div>
 
     <!-- Allow Result Deletion -->
@@ -393,6 +364,29 @@ if($showpos =="ON"){
  <span id="delete_result"></span> ';
     
 }
+
+     echo '<!-- Result Preview -->
+    <div class="setting-box">
+
+        <div class="setting-title">
+          Allow Result Preview
+        </div>
+
+        <div class="toggle-container">
+
+            <span class="status-text '.$result_preview_color.'" id="result_preview_text">
+                '.$result_preview.'
+            </span>
+
+            <label class="switch">
+                <input type="checkbox" id="result_preview" '.$result_preview_checked.'>
+               <span class="slider"></span>
+            </label>
+
+        </div>
+
+    </div>';
+
    echo '<!-- Show Failure Red Ink -->
 
     <div class="setting-box">
@@ -438,7 +432,6 @@ if($showpos =="ON"){
         </div>
 
     </div>
-
 
 
     <!-- Minimum Exam Score -->
@@ -490,8 +483,8 @@ Addfooter($site);
 
 const toggles = [
     {
-        checkbox:"site_lock",
-        text:"site_lock_text"
+        checkbox:"result_preview",
+        text:"result_preview_text"
     },
     {
         checkbox:"result_lock",

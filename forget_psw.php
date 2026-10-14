@@ -224,8 +224,8 @@ if(isset($_GET["token_sent"])){
  $msg = $_GET["msg_report"]; 
  $token_report = $_SESSION["token_report"];
    
-// $token = $_SESSION["token"];
- // echo $token;
+ $token = $_SESSION["token"];
+  echo $token;
  
  if($token_report == "sent"){
      
@@ -535,7 +535,7 @@ loginForm.addEventListener("submit", (e) => {
    .catch((error) => {
                 // Hide the spinner and display error message
                 loadingSpinner.style.display = "none";
-                emailError.innerText = error;
+                emailError.innerText = "Internal server error, please consult the ICT unit";
      });
  });  
 }
