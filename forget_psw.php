@@ -1,11 +1,6 @@
 <?php
 require './page_init.php';
-
-$location = $_SERVER["HTTP_REFERER"];
-
-if(!$location){
-    $location ="/home";
-}
+$location = "/home";
 
 if(isset($_GET["user_cat"])){
  
@@ -224,8 +219,8 @@ if(isset($_GET["token_sent"])){
  $msg = $_GET["msg_report"]; 
  $token_report = $_SESSION["token_report"];
    
- $token = $_SESSION["token"];
-  echo $token;
+ // $token = $_SESSION["token"];
+  // echo $token;
  
  if($token_report == "sent"){
      
@@ -462,14 +457,7 @@ showPsw.addEventListener("click", () => {
 
 function closebtn() {
  
- var ref = document.referrer;  
-
-if(!ref){
-    
- ref = "index.php";   
-    
-}
-window.location = ref;
+window.location.href = "/home";
 
  }
 

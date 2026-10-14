@@ -1,6 +1,6 @@
 <?php
 
-if($_SERVER["REQUEST_METHOD"] !== "POST"){
+if($_SERVER["REQUEST_METHOD"] === "POST"){
  
   $root = $_SERVER["DOCUMENT_ROOT"];
  require $root.'/page_init.php';
@@ -12,10 +12,6 @@ require $root.'/send_email.php';
  $email = trim($data["user_email"]);
  $user = trim($data["user_cat"]);
   
-  $email = "ellaj4212@gmail.com";
-  $user = "staff";
-  $btn = "forgot_psw_submitEmail";
- 
   
   if($user == "staff"){
      
@@ -126,7 +122,7 @@ if($token){
   $_SESSION["user_cat"] = $userCat;
   $_SESSION["reset_id"] = $user_id;
    
-   $_SESSION["token"] = $token;
+  // $_SESSION["token"] = $token;
      
     $response = [
      "status" => "success",

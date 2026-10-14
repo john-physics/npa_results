@@ -4,7 +4,7 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP; 
 use PHPMailer\PHPMailer\POP3; 
 // Include library PHPMailer 
- require $_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php';
+ require 'vendor/autoload.php';
 
 
 function sendPswToken($config,$email,$name,$token,$valid,$site,$rurl){
