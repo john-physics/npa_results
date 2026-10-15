@@ -1,0 +1,424 @@
+{
+  "company": "Newphase Academy",
+  "audience": "Students, parents and guardians, and staff",
+  "terms": {
+    "title": "Terms of Service",
+    "summary": "The rules for using the Newphase Academy (NPA) Results portal. They apply to every student, parent, guardian and staff member who signs in.",
+    "version": "1.0",
+    "effectiveDate": "2026-10-15",
+    "lastUpdated": "2026-10-15",
+    "sections": [
+      {
+        "id": "scope",
+        "title": "Who these terms apply to",
+        "paragraphs": [
+          "These terms apply to everyone who uses the NPA Results portal, including the website and the installed app. They sit alongside the School Rules & Regulations. If the two conflict, the School Rules & Regulations apply.",
+          "By signing in or using the portal, you confirm that you have read these terms and agree to follow them. If a student is under 18, a parent or guardian should read these terms with them."
+        ]
+      },
+      {
+        "id": "account",
+        "title": "Your portal account",
+        "paragraphs": ["Your login details are personal to you. You are responsible for everything done with them."],
+        "items": [
+          "Do not share your password, PIN or access code with anyone, including classmates.",
+          "Parents and guardians may view only the results of their own child or ward.",
+          "Sign out when you use a shared or public device.",
+          "Tell the school straight away if you think someone else has used your account."
+        ]
+      },
+      {
+        "id": "results",
+        "title": "About your results",
+        "paragraphs": [
+          "Results are published on the portal after the school has checked and approved them. The school's official records are the final record of a student's performance.",
+          "Results may be delayed or withheld where school policy allows, for example while a query, fee matter or disciplinary matter is being resolved."
+        ],
+        "note": "A result shown on a phone or saved for offline use may be out of date. Connect to the internet to see the latest version."
+      },
+      {
+        "id": "corrections",
+        "title": "Result queries and corrections",
+        "paragraphs": [
+          "If you think a score, grade or comment is wrong, contact the school office through the Support tab. Please give the student's name, class, term and subject.",
+          "Only the school can change a result. Do not try to change, hide or copy results in any other way."
+        ]
+      },
+      {
+        "id": "acceptable-use",
+        "title": "Acceptable use",
+        "paragraphs": ["You may use the portal only to view and manage school results and related information. You must not:"],
+        "items": [
+          "Try to open another student's results or another person's account.",
+          "Edit, forge or falsely present any result, report card or certificate.",
+          "Use bots, scripts or tools to collect data from the portal.",
+          "Try to bypass or test the portal's security.",
+          "Upload harmful files, or use the portal to harass or mislead anyone.",
+          "Use the portal to break any law."
+        ]
+      },
+      {
+        "id": "availability",
+        "title": "Availability of the portal",
+        "paragraphs": [
+          "We work to keep the portal available, but we cannot promise it will always run without interruption. It may be unavailable during maintenance, updates or when your network is poor.",
+          "We may change, pause or remove features at any time."
+        ]
+      },
+      {
+        "id": "content",
+        "title": "Ownership of content",
+        "paragraphs": [
+          "The portal, its design and its content belong to Newphase Academy. You may view and print your own results for personal and school use. You should not copy or share the portal itself for any other purpose."
+        ]
+      },
+      {
+        "id": "suspension",
+        "title": "Suspension and removal of access",
+        "paragraphs": [
+          "The school may restrict, suspend or remove access at any time if it believes these terms have been broken, an account may be at risk, or the person no longer needs access.",
+          "A student's access may end after they leave the school, subject to the school's record-keeping rules."
+        ]
+      },
+      {
+        "id": "liability",
+        "title": "Responsibility and liability",
+        "paragraphs": [
+          "If these terms are broken, the school may take action under its School Rules & Regulations, and where the law allows, report the matter to the authorities.",
+          "To the extent the law allows, the school is not responsible for loss caused by things outside its control, such as network failures or someone else using your login or PIN because you shared it. Nothing here limits any liability that cannot be limited by law."
+        ]
+      },
+      {
+        "id": "updates",
+        "title": "Changes to these terms",
+        "paragraphs": [
+          "We may update these terms from time to time. The version number and last updated date at the top of this page always show the current version. Continuing to use the portal after a change means you accept the new terms."
+        ]
+      },
+      {
+        "id": "law",
+        "title": "Governing law and contact",
+        "paragraphs": [
+          "These terms are governed by the laws of the Federal Republic of Nigeria. Questions about these terms can be sent to the school office through the Support tab."
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "summary": "How Newphase Academy collects, uses and protects personal information in the NPA Results portal.",
+    "version": "1.0",
+    "effectiveDate": "2026-10-15",
+    "lastUpdated": "2026-10-15",
+    "sections": [
+      {
+        "id": "covers",
+        "title": "What this policy covers",
+        "paragraphs": [
+          "This policy explains what Newphase Academy does with personal information in the NPA Results portal. The school is the controller of this information.",
+          "Most information in the portal is about students, who are often under 18. We treat it with extra care."
+        ]
+      },
+      {
+        "id": "collect",
+        "title": "Information we collect",
+        "paragraphs": ["Depending on who you are, we collect:"],
+        "items": [
+          "Student details: name, admission or registration number, class, date of birth, state of origin, local government, residential address and photo",
+          "Academic records: scores, grades, positions, teacher and principal comments, attendance and report cards.",
+          "Parent or guardian details: name, phone number and email address.",
+          "Account and sign-in data: login times, device type, browser and IP address.",
+          "Support records: messages you send to the school about the portal or a result."
+        ]
+      },
+      {
+        "id": "use",
+        "title": "How we use it",
+        "items": [
+          "To create accounts and show each person only what they should see.",
+          "To publish results, report cards and academic progress.",
+          "To contact parents and guardians about their child's results and school matters.",
+          "To keep the portal secure and prevent misuse.",
+          "To respond to queries and improve the portal.",
+          "To meet legal, education-authority and record-keeping requirements."
+        ],
+        "note": "We do not sell personal information, and we do not use it for advertising."
+      },
+      {
+        "id": "basis",
+        "title": "Why we are allowed to use it",
+        "paragraphs": [
+          "Where the law requires a reason, we rely on: running the school and its services; meeting our legal and regulatory duties; our legitimate interest in keeping records accurate and the portal secure; and, where needed, the consent of a parent or guardian. Where we rely on consent, it can be withdrawn at any time."
+        ]
+      },
+      {
+        "id": "children",
+        "title": "Children's information",
+        "paragraphs": [
+          "Students under 18 cannot give consent on their own. Parents and guardians act for their children and may ask to see or correct their child's information.",
+          "We show a student's results only to that student, their parent or guardian, and the staff who need them for their work."
+        ]
+      },
+      {
+        "id": "sharing",
+        "title": "Who we share it with",
+        "paragraphs": ["We share information only when needed, with:"],
+        "items": [
+          "School staff who need it for teaching, administration and results.",
+          "Service providers that host and support the portal, under contracts that limit how they can use it.",
+          "Education authorities, examination bodies, courts and other regulators, where the law requires or permits it.",
+          "Another school, when a parent or guardian asks us to transfer a student's records."
+        ]
+      },
+      {
+        "id": "retention",
+        "title": "How long we keep it",
+        "paragraphs": [
+          "Academic records are kept for as long as the school needs them for transcripts, certificates and verification, which can be long after a student leaves. Account and sign-in data are kept only as long as needed for security and support, then deleted or anonymised."
+        ]
+      },
+      {
+        "id": "security",
+        "title": "How we protect it",
+        "paragraphs": [
+          "We protect information with access controls, encrypted connections and limited staff access. No system is perfectly secure, so we also ask you to keep your login details and PIN private and follow the account rules in the Terms of Service."
+        ]
+      },
+      {
+        "id": "storage",
+        "title": "Cookies and device storage",
+        "paragraphs": [
+          "The portal uses cookies and local storage that are needed to keep you signed in and protect your session. If you install the app on your phone, it also saves some pages on your device so they open faster and work with a weak connection. We do not use advertising or third-party tracking cookies."
+        ]
+      },
+      {
+        "id": "rights",
+        "title": "Your rights",
+        "paragraphs": [
+          "Under Nigerian data protection law, you may have the right to access your information, correct it, ask for it to be deleted, restrict or object to its use, and receive a copy of it. Some rights are limited where we must keep records by law.",
+          "To use a right, contact the school office through the Support tab. If you are unhappy with our response, you can complain to the Nigeria Data Protection Commission."
+        ]
+      },
+      {
+        "id": "changes",
+        "title": "Changes to this policy",
+        "paragraphs": [
+          "When we change this policy, we update the version number and the last updated date at the top of this page. For major changes, we will also tell users on the portal."
+        ]
+      },
+      {
+        "id": "contact",
+        "title": "Contact us",
+        "paragraphs": [
+          "Privacy questions can be sent to the school office through the Support tab."
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "title": "School Rules & Regulations",
+    "summary": "The standards of behaviour and responsibility we expect from every student at Newphase Academy.",
+    "version": "1.0",
+    "effectiveDate": "2026-10-15",
+    "lastUpdated": "2026-10-15",
+    "sections": [
+      {
+        "id": "general",
+        "title": "General principles",
+        "paragraphs": [
+          "Every student is expected to respect themselves, their teachers, their classmates and the school. These rules apply in school, on school trips, at school events and when wearing the school uniform."
+        ],
+        "note": "If anything on this page conflicts with the official school handbook, the handbook applies."
+      },
+      {
+        "id": "attendance",
+        "title": "Attendance and punctuality",
+        "items": [
+          "Be in school and in class before the start of lessons.",
+          "A parent or guardian must tell the school in advance, or on the same day, if a student will be absent.",
+          "Students may not leave the school grounds during school hours without permission.",
+          "Missed work must be made up as directed by the teacher."
+        ]
+      },
+      {
+        "id": "uniform",
+        "title": "Uniform and appearance",
+        "items": [
+          "Wear the full school uniform neatly and correctly, as set out by the school.",
+          "Keep hair, nails and general appearance neat and within school guidelines.",
+          "Do not wear jewellery, make-up or accessories the school has not allowed."
+        ]
+      },
+      {
+        "id": "conduct",
+        "title": "Conduct and respect",
+        "items": [
+          "Be polite and respectful to staff, students and visitors.",
+          "Follow reasonable instructions from teachers and school staff.",
+          "Keep classrooms, corridors and compound clean and orderly.",
+          "Be honest. Lying, cheating, noise making and stealing are serious offences."
+        ]
+      },
+      {
+        "id": "bullying",
+        "title": "Bullying, fighting and harassment",
+        "paragraphs": [
+          "Bullying, fighting, threats, harassment and discrimination of any kind are not tolerated, whether in person or online."
+        ],
+        "items": [
+          "Report any bullying or unsafe behaviour to a teacher, HODs, or the school Principal.",
+          "Reports are taken seriously and handled with care."
+        ]
+      },
+      {
+        "id": "devices",
+        "title": "Phones and electronic devices",
+        "items": [
+          "Phones and personal devices may be brought to school only where the school allows it, and must not be used during lessons unless a teacher says so.",
+          "Do not take photos or videos of other people without permission.",
+          "The school is not responsible for lost or damaged personal devices."
+        ]
+      },
+      {
+        "id": "academic",
+        "title": "Academic honesty and examinations",
+        "items": [
+          "Do your own work. Copying, or letting others copy, is not allowed.",
+          "Examination malpractice, including cheating, carrying unauthorised materials and impersonation, is a serious offence and may lead to cancelled results and further discipline.",
+          "Do not try to alter results, scores or report cards in any way."
+        ]
+      },
+      {
+        "id": "safety",
+        "title": "Health, safety and prohibited items",
+        "items": [
+          "Follow all safety instructions, especially in laboratories, workshops and sports areas.",
+          "Weapons, drugs, alcohol, tobacco and any dangerous or illegal item are strictly forbidden.",
+          "Tell your class teacher at once if you are unwell, injured or see something unsafe."
+        ]
+      },
+      {
+        "id": "property",
+        "title": "School and personal property",
+        "items": [
+          "Take care of school books, furniture, equipment and buildings.",
+          "Students or parents may be asked to pay for deliberate damage.",
+          "Label your belongings and do not take things that are not yours."
+        ]
+      },
+      {
+        "id": "visitors",
+        "title": "Visitors and pick-up",
+        "paragraphs": [
+          "Visitors must report to the school office first. Students may only be collected by a parent, guardian or a person the family has authorised in advance."
+        ]
+      },
+      {
+        "id": "discipline",
+        "title": "Discipline",
+        "paragraphs": [
+          "When a rule is broken, the school will respond fairly and in proportion. Depending on how serious the matter is, this may include a warning, a talk with parents or guardians, loss of privileges, suspension, or in the most serious cases, withdrawal from the school.",
+          "Students and parents will be given a chance to explain their side before a serious decision is made."
+        ]
+      },
+      {
+        "id": "changes",
+        "title": "Changes to these rules",
+        "paragraphs": [
+          "The school may update these rules from time to time. The version number and last updated date at the top of this page always show the current version."
+        ]
+      }
+    ]
+  },
+  "support": {
+    "title": "Support",
+    "summary": "Get help with the NPA Results portal, a result query or an account problem.",
+    "version": "1.0",
+    "lastUpdated": "2026-10-15",
+    "security": {
+      "title": "Report a security concern",
+      "paragraphs": [
+        "If you think someone else has used your account or seen a result they should not, contact us right away and change your password if you can."
+      ],
+      "contact": {
+        "label": "School office",
+        "value": "newphaseacademy247@gmail.com",
+        "href": "mailto:newphaseacademy247@gmail.com",
+        "hours": "Mon to Fri, 8:00 to 16:00"
+      }
+    },
+    "contacts": [
+      {
+        "label": "School office",
+        "description": "General questions, admissions and school information.",
+        "value": "newphaseacademy247@gmail.com",
+        "href": "mailto:newphaseacademy247@gmail.com",
+        "hours": "Mon to Fri, 8:00 to 16:00"
+      },
+      {
+        "label": "Results and academics",
+        "description": "Missing, delayed or incorrect results and report cards.",
+        "value": "results@newphaseacademyresults.com.ng",
+        "href": "mailto:results@newphaseacademyresults.com.ng",
+        "hours": "Mon to Fri, 8:00 to 16:00"
+      },
+      {
+        "label": "Portal support",
+        "description": "Sign-in problems, app installation and technical issues.",
+        "value": "support@newphaseacademyresults.com.ng",
+        "href": "mailto:support@newphaseacademyresults.com.ng",
+        "hours": "Mon to Fri, 8:00 to 16:00"
+      },
+      {
+        "label": "Call us",
+        "description": "You may call or send a WhatsApp message to the following number:",
+        "value": "+2348064009286",
+        "href": "https://wa.me/2348064009286",
+        "hours": "Mon to Fri, 8:00 to 16:00"
+      }
+    ],
+    "priorities": [
+      {
+        "level": "Urgent",
+        "example": "Someone else is using your account, a result is showing for the wrong student",
+        "response": "Within 2 hours"
+      },
+      {
+        "level": "High",
+        "example": "Cannot sign in during result release, a result is missing",
+        "response": "Within 1 working day"
+      },
+      {
+        "level": "Normal",
+        "example": "How-to questions, display issues, result queries",
+        "response": "Within 2 working days"
+      }
+    ],
+    "faqs": [
+      {
+        "q": "I forgot my password. What do I do?",
+        "a": "Use the reset option on the login popup. If it does not work, contact Portal support. We will confirm who you are before we reset anything."
+      },
+      {
+        "q": "I cannot see my child's result. Why?",
+        "a": "The result may not be published yet, or may be on hold. Check again later, then contact Results and academics with your child's name, class and term."
+      },
+      {
+        "q": "I think a score on the result is wrong. What should I do?",
+        "a": "Contact Results and academics with the student's name, class, term, subject and what you think is wrong. Only the school can correct a result."
+      },
+      {
+        "q": "Can I save or print a result?",
+        "a": "Yes. You may print or save your own result for personal and school use. Please do not share it in a way that exposes another student's information."
+      },
+      {
+        "q": "How do I install the app on my phone?",
+        "a": "Open the portal in your phone's browser (use chrome browser), the Install button will popup. if it doesn't popup, click on the menu icon at the top right corner of the browser, choose Add to Home Screen and follow the prompts"
+      },
+      {
+        "q": "How do I ask what information the school holds about my child?",
+        "a": "Contact the School office. See Your rights in the Privacy Policy."
+      }
+    ]
+  }
+}

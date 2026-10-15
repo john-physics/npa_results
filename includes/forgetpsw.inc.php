@@ -114,7 +114,7 @@ if($token){
  
  $send = sendPswToken($config,$email,$name,$token,$valid,$site,$rurl);  
  
- if($send["status"] =="success"){
+ if($send["status"] !=="success"){
   
   $_SESSION["token_report"] = "sent";
   $_SESSION["token_valid"] = $valid;

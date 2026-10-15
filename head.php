@@ -3,8 +3,7 @@
 function head($meta,$title,$dashb='portal'){
 
  global $siteName,$conn;
- $canonical = "https://" . $_SERVER['HTTP_HOST'] . strtok($_SERVER['REQUEST_URI'], '?');
-
+ 
  echo '<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +26,7 @@ function head($meta,$title,$dashb='portal'){
 
 <title>'.$title.'</title>
 
-<link rel="canonical" href="'. htmlspecialchars($canonical).'">
+<link rel="canonical" href="/home">
 <link rel="stylesheet" href="/css/new_styles.css">
 <link rel="stylesheet" href="/css/styles.css">
  <link rel="stylesheet" href="/css/form_styles.css">

@@ -27,6 +27,10 @@ echo '<style>
     color: #0ea5e9;
  }
 
+ .fa-scale-balanced { 
+ color: #1b74d8; 
+    
+}
 
 /* NAV BAR */
 #nav-section{
@@ -88,12 +92,24 @@ echo '<style>
 /* CLOSE BUTTON */
 #nav-links .close-btn{
     display:flex;
-    justify-content:flex-end;
+    justify-content:center;
     padding:0 20px 15px;
    background:none;
    position:absolute;
-   top: 20px;
+   top: 10px;
    right:10px;
+   width: 40px;
+   height: 30px;
+   z-index:100;
+   text-align:center;
+   cursor:pointer;
+}
+
+#nav-links .close-btn:hover{
+    
+    background:#1e1e1e;
+    padding-left:5px;
+    
 }
 
 #nav-links .close-btn i{
@@ -147,7 +163,7 @@ echo '<nav id="nav-section" class="menu">
           
           <!-- CLOSE ICON -->
    <div class="close-btn" title="Close Menu">
-      <i class="fas fa-times"></i>
+      <i class="fa-solid fa-times"></i>
         </div> 
      
       <li>
@@ -159,7 +175,14 @@ echo '<nav id="nav-section" class="menu">
          <a href="/results">
          <i class="fa-solid fa-certificate" aria-hidden="true" title="click here to Check results"></i>   
        Check Result
-           </a></li>';
+           </a></li>
+      <li>
+         <a href="/npa-legal">
+         <i class="fa-solid fa-scale-balanced" aria-hidden="true" title="NPA Legal and Policies"></i>   
+       Legal & Policies
+           </a></li>   
+           
+           ';
       
   if(isset($_SESSION["staff_cat"]) && $_SESSION["staff_id"]){
  

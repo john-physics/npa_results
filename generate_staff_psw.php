@@ -73,7 +73,7 @@ require 'menu.php';
     border: 1px solid var(--border);
     border-radius: 18px;
     box-shadow: 0 8px 28px rgba(40, 20, 30, 0.05);
-    width: 95%;
+    width: 90%;
     max-width: 600;
     margin: auto;
 }
@@ -101,14 +101,14 @@ require 'menu.php';
     border: 1px solid #ccebd9;
 }
 
-label {
+.gen_psw label {
     display: block;
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 9px;
 }
 
-input {
+.gen_psw input {
     width: 100%;
     min-height: 48px;
     padding: 12px 14px;
@@ -119,22 +119,22 @@ input {
     background: white;
 }
 
-input:focus {
+.gen_psw input:focus {
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(138, 31, 69, .09);
 }
 
-button {
+.gen_psw button {
     font-family: inherit;
     cursor: pointer;
     transition: transform .15s, opacity .15s, background .2s;
 }
 
-button:active {
+.gen_psw button:active {
     transform: scale(.98);
 }
 
-button:disabled {
+.gen_psw button:disabled {
     opacity: .6;
     cursor: not-allowed;
 }
@@ -248,7 +248,7 @@ button:disabled {
     user-select: text;
 }
 
-.close-btn {
+.gen_psw .close-btn {
     width: 100%;
     min-height: 47px;
     background: var(--primary);
@@ -348,6 +348,8 @@ button:disabled {
 </head>
 
 <body>
+    
+<section class="gen_psw">
 
 <div class="container">
 
@@ -365,7 +367,7 @@ button:disabled {
         <div id="notice" class="notice" role="alert"
              aria-live="polite"></div>
 
-        <form id="passwordForm">
+        <form id="passwordForm" class="passwordForm">
 
             <label for="staffEmail">Staff Email Address</label>
 
@@ -454,6 +456,7 @@ button:disabled {
     </div>
 </div>
 
+</section>
 
 <? Addfooter($site);  ?>
 
@@ -578,7 +581,8 @@ document.getElementById("closePasswordModal")
     .addEventListener("click", function () {
         closeModal(passwordModal);
         generatedPassword.textContent = "";
-        emailInput.focus();
+        emailInput.value = "";
+      
     });
 
 /*

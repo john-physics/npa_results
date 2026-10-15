@@ -191,8 +191,8 @@ input {
      .new_success, .new_errors{
      position:relative;
      top:30px;
-     left:5%;
      width:85%; 
+     max-width:600;
      }
      .resend_token{
          position:relative;
