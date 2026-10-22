@@ -344,7 +344,7 @@
         "label": "School office",
         "value": "newphaseacademy247@gmail.com",
         "href": "mailto:newphaseacademy247@gmail.com",
-        "hours": "Mon to Fri, 8:00 to 16:00"
+         "hours": "Mon to Fri, 8:00 AM to 3:00 PM"
       }
     },
     "contacts": [
@@ -353,28 +353,28 @@
         "description": "General questions, admissions and school information.",
         "value": "newphaseacademy247@gmail.com",
         "href": "mailto:newphaseacademy247@gmail.com",
-        "hours": "Mon to Fri, 8:00 to 16:00"
+        "hours": "Mon to Fri, 8:00 AM to 3:00 PM"
       },
       {
         "label": "Results and academics",
         "description": "Missing, delayed or incorrect results and report cards.",
         "value": "results@newphaseacademyresults.com.ng",
         "href": "mailto:results@newphaseacademyresults.com.ng",
-        "hours": "Mon to Fri, 8:00 to 16:00"
+        "hours": "Mon to Fri, 8:00 AM to 3:00 PM"
       },
       {
         "label": "Portal support",
         "description": "Sign-in problems, app installation and technical issues.",
         "value": "support@newphaseacademyresults.com.ng",
         "href": "mailto:support@newphaseacademyresults.com.ng",
-        "hours": "Mon to Fri, 8:00 to 16:00"
+         "hours": "Mon to Fri, 8:00 AM to 3:00 PM"
       },
       {
         "label": "Call us",
         "description": "You may call or send a WhatsApp message to the following number:",
         "value": "+2348064009286",
         "href": "https://wa.me/2348064009286",
-        "hours": "Mon to Fri, 8:00 to 16:00"
+       "hours": "Mon to Fri, 8:00 AM to 3:00 PM"
       }
     ],
     "priorities": [

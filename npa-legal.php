@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name ="description" content="'.$meta.'">
-<meta name ="keywords" content="NewPhase, Academy,legal,terms,policies,ABC">
+<meta name ="description" content="NPA legal and Policy">
+<meta name ="keywords" content="NewPhase, Academy,legal,terms,policy,rules,ABC">
 <meta name="author" content="John Ella">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,9 +18,9 @@
 <meta name="apple-mobile-web-app-title" content="NPA Results">
 <link rel="apple-touch-icon" href="/images/pwa-192.png">
 
-<title>NPA Legal</title>
+<title>NPA Legal and Policy</title>
 
-<link rel="canonical" href="/npa-legal">
+<link rel="canonical" href="https://newphaseacademyresults.com.ng/npa-legal">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700;800;900&display=swap" rel="stylesheet">

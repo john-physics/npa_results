@@ -84,7 +84,8 @@ if (!empty($next_term_date)) {
   $curSession = "Current Session";
   $curTerm = "Current Term";
   $NextTerm = "Next Term Begins";
-
+  $termSession = $term." ".$session;
+  
 require 'create_tables.php';
 
 $resultTable = create_result_table($conn, $resultTableDetails);
@@ -147,9 +148,9 @@ $tbmsg = "Database tables were also created successfully";
   }
  }
  
- if(check_exist($conn,"variables","type",$NextTerm,"s")){
+ if(check_exist2($conn,"variables","type","classification",$NextTerm,$termSession,"ss")){
      
-  $upd3 = update_user_data($conn,"variables","value","type",$next_term,$NextTerm,"ss");  
+  $upd3 = update_user_data2($conn,"variables","value","type","classification",$next_term,$NextTerm,$termSession,"sss");  
      
  }
  else{
@@ -158,7 +159,7 @@ $tbmsg = "Database tables were also created successfully";
      "conn" => $conn,
      "table" => "variables",
      "cols" => ['type','value','classification'],
-     "vals" => [$NextTerm,$next_term,"General"],
+     "vals" => [$NextTerm,$next_term,$termSession],
      "params" => "sss"
      
      ];

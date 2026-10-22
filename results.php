@@ -1,7 +1,7 @@
 <?php
  require 'page_init.php';
  
- head('Check Result',"$site | Check Result",""); //add header 
+ head('Check Result',"$site | Check Result","Results"); //add header 
 require 'menu.php';
 
 // <!-- Message send report -->
@@ -349,7 +349,7 @@ $totalStds = count(convert_to_array($class_set["students"]));
 
 $classDet = collect_user_data2($conn,"variables","type","value","Class",$class,"ss");
 $caPattern = convert_to_array($classDet["assessment_pattern"]);
-$nextTerm = collect_user_data($conn,"variables","type","Next Term Begins","s");
+$nextTerm = collect_user_data2($conn,"variables","type","classification","Next Term Begins",$term_session,"ss");
 
 $nextTermDate = $nextTerm["value"];
 $results = collect_user_data3($conn,$resultTable,"term","class","std_id",$term,$class,$std_id,"sss");
@@ -1134,7 +1134,9 @@ formData.append("submit_button_name", "check_pin");
  spinner.style.display ="none";
  prep1.style.display ="none";
   
-  showError(error,"Ajax Error");
+ // showError(error,"Ajax Error");
+ showToast("Network Error, Please try again");
+  
     return;  //stop submission
    }  
  });

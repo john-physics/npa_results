@@ -390,6 +390,7 @@ if(!in_array($std_id, $students) && !in_array($staff_cat, $authorized)){
  $profile = null_check($std_det["profile"],'null.jpg');
  $std_pin = $std_det["std_pin"]; 
  $profilePath = $root."/images/students/".$profile;
+ $termSession = $term." ".$session;
  
  if(!file_exists($profilePath)){
      
@@ -401,7 +402,7 @@ if(!in_array($std_id, $students) && !in_array($staff_cat, $authorized)){
  $pp_det = collect_user_data($conn,"staffs","staff_cat","Principal","s");
  $pp_name = normalize_user_name($pp_det["title"]." ".$pp_det["surname"]." ".$pp_det["othernames"],'ucwords');
  
-  $nextTerm  = collect_user_data($conn,"variables","type","Next Term Begins","s");
+   $nextTerm  = collect_user_data2($conn,"variables","type","classification","Next Term Begins",$termSession,"ss");
  $nextTermBegins = $nextTerm["value"];
 
 
@@ -410,7 +411,6 @@ $std_results = collect_user_data3($conn,$resultTable,"std_id","term","class",$st
  
  $pp_cmt = null_check($std_results["principal_comment"],"Satisfactory");
  $ct_cmt = $std_results["teacher_comment"];
- //$std_cat = $std_results["std_cat"];
  $activeness = $std_results["activeness"];
 $attendance = $std_results["attendance"];
 $punctuality = $std_results["punctuality"];
@@ -422,7 +422,7 @@ $hand_writing=$std_results["hand_writing"];
 $fluency = $std_results["fluency"];
 $musical_skills = $std_results["musical_skills"];
 $sports = $std_results["sports"];
- $std_cat = $std_results["std_cat"]??$std_det["std_cat"];
+ $std_cat = null_check($std_results["std_cat"],$std_det["std_cat"]);
 
  $cteach = collect_user_data($conn,"staffs","class_handling",$std_class,"s");
 

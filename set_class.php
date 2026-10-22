@@ -582,7 +582,7 @@ document.getElementById("studentNextBtn")
         btn.disabled = false;
 
         showMessage(
-            "studentMessage",error,
+            "studentMessage","Network Error, please check your internet connection and try again.",
             "error"
         );
 

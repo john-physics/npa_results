@@ -23,7 +23,6 @@ const STATIC_ASSETS = [
  */
 const CACHEABLE_PATHS = [
     '/css/',
-    '/js/',
     '/scripts/',
     '/fonts/',
     '/images/'
@@ -34,9 +33,8 @@ const CACHEABLE_PATHS = [
  */
 const NEVER_CACHE_PATHS = [
     '/api/',
-    '/uploads/',
-    '/images/uploads/',
-  // '/images/students/'
+    '/data/',
+  '/images/staff/'
 ];
 
 const STATIC_TYPES = ['style', 'script', 'image', 'font'];

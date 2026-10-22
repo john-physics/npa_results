@@ -3,6 +3,11 @@
 function head($meta,$title,$dashb='portal'){
 
  global $siteName,$conn;
+ $canonical="https://newphaseacademyresults.com.ng/home";
+ if($dashb === "Results"){
+ $canonical = "https://newphaseacademyresults.com.ng/results";
+ }
+ 
  
  echo '<!DOCTYPE html>
 <html lang="en">
@@ -26,7 +31,7 @@ function head($meta,$title,$dashb='portal'){
 
 <title>'.$title.'</title>
 
-<link rel="canonical" href="/home">
+<link rel="canonical" href="'.$canonical.'">
 <link rel="stylesheet" href="/css/new_styles.css">
 <link rel="stylesheet" href="/css/styles.css">
  <link rel="stylesheet" href="/css/form_styles.css">
