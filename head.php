@@ -292,67 +292,6 @@ body{
             opacity: 1;
             transition: opacity 2s ease-out;
         }
- #start_btn {
-     display: block;
-     width: 60%;
-     text-align: center;
-     text-decoration:none;
-     background: rgb(200,100,100);
-     color: white;
-     border-radius: 10px;
-     padding: 10px;
- }
- #survey_progress{
-     position: relative;
-     bottom: 20px; 
- }
- #skip_btn {
- position: relative;  bottom: 20px; left: 75%; 
- text-decoration: none;
-     
-   /* background: #0077cc;   */
-    /*  background:#BF1439; */
-   /*  background: #BF1439; */
-
- }
-
- 
-/ *
- header{
-   position: relative;  
-     color:#fff;
-     text-align: center;
-     height: 270px;
-     background: #CF3F57; 
-  
- }
- 
-  header .profile-pic {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    border: 2px dashed  rgb(250,100,250);
-    margin-bottom: 5px;
-     background:#ff8;
-     position:relative;
-    
-}
- header h1{
-     position: relative;
-     top:-30px;
-     font-size: 27px;
-     padding: 5px;
- }
- header p{
-     position: relative;
-     top: -45px;
-     font-size: 18px;
-     font-style: italic;
-     
- }
-
-
-*/
 
 .new_success{
  top:10px;
@@ -497,7 +436,9 @@ header h1{
     font-size:1.5rem;
     font-weight:800;
     letter-spacing:1px;
+    padding: 3px; 
 }
+
 
 /* Subtitle */
 header p{

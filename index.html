@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name ="description" content="NewPhase Academy Result Portal">
+<meta name ="keywords" content="NewPhase, Academy,Result,Home page,Check result,ABC">
+<meta name="author" content="John Ella">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="manifest" href="/npa-manifest.json">
+<meta name="theme-color" content="#E4CAD5">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="NPA Results">
+<link rel="apple-touch-icon" href="/images/pwa-192.png">
+
+<title>NEWPHASE ACADEMY | RESULT PORTAL</title>
+
+<link rel="canonical" href="https://newphaseacademyresults.com.ng">
+<link rel="stylesheet" href="/css/new_styles.css">
+<link rel="stylesheet" href="/css/styles.css">
+ <link rel="stylesheet" href="/css/form_styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+  
+  html,body{
+ scroll-behavior:smooth;   
+    
+ }
+body{
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+
+   font-family: "Poppins",sans-serif;
+}
+
+.section h2{
+  
+  color: rgb(50,200,150); 
+  text-decoration:none;    
+    
+}
+ hr{
+       
+    border: 1px solid hsl(60,50%,50%);   
+       
+   }
+   
+    .section #day{
+    position:absolute:
+    top:100px;
+     display:block;
+     text-align:center;
+     font-size:12px;
+     color: rgb(50,200,150); 
+   margin-bottom:10px;
+ }
+  
+   .section #warning{
+ display:flex;
+  justify-content:center;
+ align-items:center;
+     color:hsl(0,40%,60%);
+     font-size:30px;
+     margin-bottom:10px;
+   
+ } 
+ .section #no-data{
+ font-size:12px;   
+   position:relative;
+   top:-5px;
+   color:rgb(150,200,250);
+}
+  .bounce {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+
+.nav-bar{
+    position:absolute;
+    right:0;
+
+    display: inline-flex;
+    flex-direction:row; 
+    justify-content:center;
+    align-items:center;
+    width:80%;
+    gap: 10%;
+  font-size:19px;
+  overflow-x:scroll;
+  -ms-overflow-style: none;/* IE & Edge */
+  scrollbar-width: none;  /* Firefox */
+ 
+ }
+
+.nav-bar span{
+    cursor:pointer;
+    transition:0.3s ease;
+    
+}
+
+.nav-bar a{
+    text-decoration:none;
+}
+    
+
+.nav-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-bar #kuchy-logo{
+  position:relative;  
+  top: 5px;
+  width: 22px;
+  height:22px;
+  border-radius:50%;
+    
+}
+
+
+.nav-bar #notify-badge {
+  position: absolute;
+  top: 0;
+  left:16%;
+  background: #dc3545; /* red */
+  color: white;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 1px 5px;
+  border-radius: 50%;
+} 
+  
+.nav-bar #client-badge {
+  position: absolute;
+  top: 0;
+  left: 33%;
+  background: #dc3545; /* red */
+  color: white;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 1px 5px;
+  border-radius: 50%;
+} 
+  
+  .nav-bar #fees-badge {
+  position: absolute;
+  top: 0;
+  left: 49.5%;
+  background: #dc3545; /* red */
+  color: white;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 1px 5px;
+  border-radius: 50%;
+} 
+  
+  
+  .nav-bar #star-badge {
+  position: absolute;
+  top: 0;
+  left: 66%;
+  background: #dc3545; /* red */
+  color: white;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 1px 5px;
+  border-radius: 50%;
+} 
+   
+ 
+ .nav-bar #kuchy-badge {
+  position: absolute;
+  top: 0;
+  left: 84%;
+  background: rgb(10,250,50); /* red */
+  color: white;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 1px 5px;
+  border-radius: 50%;
+} 
+  
+
+#nav-links li {
+    text-align: left;
+    
+}
+ #nav-links a{
+ font-size:18px;
+ 
+ }
+   li i{
+    font-size:18px;
+    width:1.5rem;
+    text-align:center;
+    opacity:.95;
+    color:#fff;
+    margin-right:10px;
+  }
+ 
+  .fa-whatsapp{ color:#25D366; } 
+  .fa-certificate{ color:gold; }
+  .fa-home{ color:#0d6efd;}
+  .fa-user-shield{ color:#6f42c1;}
+  .fa-globe{ color:#0dcaf0;}
+  .fa-gear{ color:#198754;}
+  .fa-file-arrow-up { color: #20c997};
+  .fa-clapperboard { color: #dc3545; } 
+  .fa-book { color: #6610f2; }  
+  .fa-cash-register { color: #fd7e14; } 
+  .fa-donate { color: #ffc107; }  
+  .fa-lock { color: #6c757d; }  
+  .fa-info-circle { color: #17a2b8; }
+  .fa-certificate { color: #ffc107; }  
+  .fa-code { color: #ddd; }  
+  .fa-sign-in-alt { color: #0d6efd; } 
+  .fa-sign-out-alt { color: #dc3545; }
+  .fa-user-graduate { color: #20c997; } 
+  .fa-gavel { color: #fd7e14; } 
+  .fa-shield-halved { color: #6c757d; } 
+  .fa-envelope{ color:#20c997;}
+  .fa-bell{ color:#ffc107;} /*yellow bell*/
+   .fa-briefcase{ color:#20c997;} 
+  .fa-sack-dollar { color: #ffc107; }  
+  .fa-star{ color:#ffc107;}
+  #fa-donate{ color:#fd7e14; }
+   .fa-money-check{ color:#0fa;  }
+
+#about p {
+   text-align: justify; 
+    
+}
+
+.new_success{
+ top:10px;
+ text-align: justify; 
+ padding:10px;
+ font-size:12px;
+ border: 1px solid #fff;
+ border-radius:10px;
+ background:#007BFF;
+ color:white;
+ display:block;
+ left:10%;
+ width:100%;
+
+}
+.new_errors{
+ top:10px;
+ text-align: justify; 
+ padding:10px;
+ font-size:12px;
+ border: 1px solid #fff;
+ border-radius:10px;
+ background:red;
+ color:white;
+ display:block;
+ left:10%;
+ width:100%;
+
+}
+  .link_btn {
+    text-decoration:none;
+    color:white;
+    padding:3px;
+    border-radius:2px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:bold;
+    display:block;
+        width:60px;
+        text-align:center;
+    }
+      #remove_link_btn{
+    
+    background:rgba(250,50,50,0.5);
+    
+    }
+     #view_link_btn{
+    
+    background:rgba(10,100,250,0.5);
+    
+    } 
+      #dwn_link_btn{
+    
+    background:rgba(150,100,150,0.5);
+    
+    } 
+      #grade_link_btn{
+    
+    background:rgba(10,200,150,0.5);
+    
+    } 
+    
+    .contact-form #label{
+        position:relative;
+        top:10px;
+        font-style:italic;
+    }
+
+header{
+    position:relative;
+    height:230px;
+    overflow:hidden;
+
+    background:
+    radial-gradient(circle at center 85px,
+        rgba(255,255,255,.25) 0%,
+        rgba(255,255,255,.12) 18%,
+        transparent 45%),
+
+    linear-gradient(
+        135deg,
+        #74003b 0%,
+        #a50055 40%,
+        #d11a67 100%
+    );
+
+    color:#fff;
+    margin-bottom:0.5px; 
+  
+}
+
+/* Dark vignette effect */
+header::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+    radial-gradient(circle at top left,
+        rgba(0,0,0,.35),
+        transparent 45%),
+
+    radial-gradient(circle at top right,
+        rgba(0,0,0,.35),
+        transparent 45%);
+}
+
+/* Center everything */
+header .container{
+    position:relative;
+    z-index:2;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    height:100%;
+}
+
+/* Logo */
+.profile-pic{
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    object-fit:cover;
+
+    border:5px solid rgba(255,255,255,.2);
+
+    box-shadow:
+        0 0 25px rgba(255,255,255,.3),
+        0 0 70px rgba(255,255,255,.15);
+    position :relative;
+    top:30px;
+}
+
+/* School name */
+header h1{
+    position:relative;
+    top:10px;
+    margin: 0;
+    font-size:1.5rem;
+    font-weight:800;
+    letter-spacing:1px;
+    padding: 3px; 
+}
+/* Subtitle */
+header p{
+    margin-top:20px;
+
+    font-size:1.5rem;
+    font-style:italic;
+    font-weight:300;
+    opacity:.95;
+    position:relative;
+    top:-20px;
+    margin-bottom: 15px; 
+}
+
+
+header .container::before{
+    content:"";
+    position:absolute;
+
+    width:220px;
+    height:220px;
+
+    border-radius:50%;
+
+    top:20px;
+
+    background:rgba(255,255,255,.12);
+    filter:blur(20px);
+
+    z-index:-1;
+}
+
+.profile-pic{
+    box-shadow:
+        0 0 10px rgba(255,255,255,.2),
+        0 0 25px rgba(255,0,128,.4),
+        0 0 50px rgba(170,0,255,.35),
+        0 0 80px rgba(255,0,180,.25);
+        border:4px solid rgba(255,180,220,.25);
+        
+         
+    transition: all .3s ease;
+}
+
+
+header{
+    background:
+    linear-gradient(
+        135deg,
+        #5b1028 0%,
+        #8a1f45 45%,
+        #b33a5b 100%
+    );
+}
+
+.profile-pic{
+    box-shadow:
+        0 0 15px rgba(255,255,255,.2),
+        0 0 40px rgba(255,80,120,.45),
+        0 0 80px rgba(180,40,140,.35),
+        0 0 120px rgba(255,120,80,.25);
+        
+        
+    box-shadow:
+        0 0 10px rgba(255,255,255,.2),
+        0 0 25px rgba(255,0,128,.4),
+        0 0 50px rgba(170,0,255,.35),
+        0 0 80px rgba(255,0,180,.25);
+        border:4px solid rgba(255,180,220,.25);
+          
+        
+}
+
+
+header .container::before{
+    content:"";
+    position:absolute;
+
+    width:420px;
+    height:420px;
+
+    top:-60px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(
+        circle,
+        rgba(255,255,255,.22) 0%,
+        rgba(255,180,220,.12) 35%,
+        rgba(255,120,180,.06) 55%,
+        transparent 75%
+    );
+
+    z-index:-1;
+}
+
+
+
+.logo-wrapper{
+    
+    margin-bottom:0px;
+}
+
+
+
+.logo-wrapper::before{
+    content:"";
+    position:absolute;
+    inset:-4px;
+
+    border-radius:50%;
+
+    background:
+    conic-gradient(
+        from 0deg,
+        transparent,
+        rgba(255,255,255,.8),
+        rgba(255,120,180,.8),
+        rgba(180,40,140,.8),
+        transparent
+    );
+
+  /*  animation:spin 8s linear infinite; 
+  */
+}
+
+.logo-wrapper::after{
+    content:"";
+    position:absolute;
+    inset:4px;
+
+    border-radius:50%;
+
+    background:inherit;
+    z-index:1;
+}
+
+
+@keyframes spin{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* ================================
+   PWA INSTALL CARD
+================================ */
+
+#pwa-install-card{
+    display:none;
+
+    position:fixed;
+    left:50%;
+    bottom:20px;
+
+    transform:translateX(-50%);
+
+    width:calc(100% - 30px);
+    max-width:420px;
+
+    background:#fff;
+
+    color:#333;
+
+    padding:18px;
+
+    border-radius:16px;
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.25);
+
+    z-index:99999;
+
+    box-sizing:border-box;
+
+    animation:pwaInstallSlideUp .4s ease;
+}
+
+#pwa-install-card h3{
+    margin:0 0 6px 0;
+
+    font-size:18px;
+
+    color:#8a1f45;
+}
+
+#pwa-install-card p{
+    margin:0 0 15px 0;
+
+    font-size:13px;
+
+    line-height:1.5;
+
+    color:#666;
+}
+
+.pwa-install-actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.pwa-install-btn{
+    border:0;
+
+    padding:9px 18px;
+
+    border-radius:8px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    cursor:pointer;
+}
+
+#pwa-install-button{
+    background:#8a1f45;
+    color:#fff;
+}
+
+#pwa-cancel-button{
+    background:#eee;
+    color:#555;
+}
+
+#pwa-install-button:hover{
+    opacity:.9;
+}
+
+#pwa-cancel-button:hover{
+    background:#ddd;
+}
+
+@keyframes pwaInstallSlideUp{
+
+    from{
+        opacity:0;
+        transform:
+            translate(-50%,20px);
+    }
+
+    to{
+        opacity:1;
+        transform:
+            translate(-50%,0);
+    }
+
+}
+
+
+
+ .slideshow-container {
+      width: 95%;
+      height: 50px;
+      position: relative;
+      top: 20px;
+      left: 0;
+      background-color: #1a1a1a;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      border-bottom: 2px solid #ff4500;
+      border-radius:5px;
+    }
+
+    .slide-text {
+      color: #ff4500;
+      font-size: 18px;
+      font-weight: bold;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: slide-left 30s linear infinite;
+    }
+
+    @keyframes slide-left {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+ 
+
+
+.quotes-section {
+   position:relative;
+   top:-10px;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.quote-card {
+    position: relative
+    background: #fff;
+    margin: 30px auto;
+    max-width: 400px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+    opacity: 0;
+    transform: translateY(80px);
+    transition: all 0.8s ease;
+}
+
+.quote-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+
+.quote-card {
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.quote-card p {
+    padding: 18px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    background:rgba(100,200,50,0.5);
+    z-index:2;
+}
+
+.poem p{
+     font-size:10.5px;
+    padding:10px;
+    text-align:center;
+    overflow:auto;
+   -ms-overflow-style: none; 
+  scrollbar-width: none;     
+}
+
+ .quote-card a{
+ 
+ text-decoration:none;
+ color:rgb(150,100,150);
+ z-index:5;
+ cursor:pointer;
+ 
+ }
+
+.quote-card a:hover{
+    
+    color:#3A5FCD;
+    text-decoration:underline;
+}
+
+/* Active state */
+.quote-card.quote-show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.quote-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+}
+
+.quote-card:hover {
+    transform: translateY(-5px);
+}
+
+.slide-img {
+    opacity: 0;
+    transform: translateX(-100px);
+    transition: all 0.8s ease;
+}
+
+/* When in view */
+.slide-img.img-show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* When leaving view */
+.slide-img.img-hide {
+    opacity: 0;
+    transform: translateX(-100px);
+}
+
+
+ .table_btn{
+    position:relative;
+    top:5px;
+    display:flex;
+    flex-direction:horizontal;
+    gap:10px;
+
+    }
+    
+    .table_btn a{
+    text-decoration:none;
+    color:white;
+    padding:8px;
+    border-radius:4px;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:bold;
+    display:block;
+        width:60%;
+        text-align:center;
+    }
+  
+   .table_btn #share_cert{
+        
+     background:rgba(250,50,50,0.5);
+      
+    }
+     .table_btn #remove_ass{
+    
+    background:rgba(250,50,50,0.5);
+    
+    }
+     .table_btn #view_ass{
+    
+    background:rgba(10,100,250,0.5);
+    
+    } 
+     .table_btn #dwn_ass{
+    
+    background:rgba(150,100,150,0.5);
+    
+    } 
+     .table_btn #grade_ass{
+    
+    background:rgba(10,200,150,0.5);
+    
+    } 
+  
+
+.dashb-wrapper{
+  position:relative;
+ top:10px;
+ height:auto;
+  border-radius:10px;
+  box-shadow:1px 1px 2px rgba(10,0,0,0.2);
+  background:#fff;
+  margin-bottom:30px;
+}
+.kuchylogo{
+  width:100%;  
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding: 2px 10px;
+}
+
+.kuchylogo img{
+  width:100%;
+  height:350px;  
+  border-radius:10px;
+   box-shadow: 1px 1px 2px rgba(10,1,0,0.1); 
+}
+.coming-soon{
+ display:block;
+    position:relative;
+    top:5px;
+    margin-left:5%;
+    
+}
+.coming-soon h6{
+
+position:absolute;
+left:25px;
+ top: 2px; 
+ font-style:italic;
+ font-size:12px;
+ color:rgb(200,100,250);
+}
+
+
+  @media screen and (min-width:800px){
+ 
+  .kuchylogo img{
+  width:80%;
+  height:700px; 
+  
+}  
+
+ .coming-soon{
+ 
+ margin-left:12%;
+  }
+  
+   table_btn{
+  gap:5px;
+ }
+.table_btn a{
+  width:25%;  
+  margin:auto;
+   
+ } 
+ 
+ .popup-content {
+    width: 400px;
+     
+}
+
+.quote-card{
+
+   max-width: 700px;
+  }
+  
+  .quote-card img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+ }
+}
+
+
+.fa-users{
+    color:#3498db;
+}
+
+.fa-school{
+    color:#27ae60;
+}
+
+.fa-book-open{
+    color:#e67e22;
+}
+
+.fa-times{
+    color:#ff4d4d;
+}
+
+.fa-chart-column{
+   color: #0ea5e9;   /* Sky Blue */    
+    
+}
+
+ .fa-key {
+    color: #0ea5e9;
+ }
+
+ .fa-scale-balanced { 
+ color: #1b74d8; 
+    
+}
+
+/* NAV BAR */
+#nav-section{
+    background:#2d2d2d;
+    position:relative;
+    z-index:1000;
+     position:relative;
+    padding: 25px 0;
+}
+
+
+/* MENU BUTTON */
+#menu-toggle{
+    background:none;
+    border:none;
+    color:#00c8ff;
+    font-size:1.2rem;
+    padding:0;
+    cursor:pointer;
+    font-weight:500;
+    position: absolute;  
+  left:2%;
+}
+
+/* SIDE MENU */
+#nav-links{
+    position:absolute;
+    top:100%; 
+    left:0;
+    width:80%;
+    max-width:400px;
+    height:auto;
+    display: flex;
+    background:#111;
+    border-radius:0 0 15px 0;
+    gap: 0;
+    padding :0;
+ 
+    list-style:none;
+    /* hidden by default */
+    transform:translateX(-110%);
+    opacity:0;
+    visibility:hidden;
+
+    transition:
+    transform 0.5s ease,
+    opacity 0.5s ease,visibility 0.5s ease;
+    box-shadow:0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* ACTIVE STATE */
+#nav-links.show{
+    transform:translateX(0);
+    opacity:1;
+    visibility:visible;
+}
+ 
+
+/* CLOSE BUTTON */
+#nav-links .close-btn{
+    display:flex;
+    justify-content:center;
+    padding:0 20px 15px;
+   background:none;
+   position:absolute;
+   top: 10px;
+   right:10px;
+   width: 40px;
+   height: 30px;
+   z-index:100;
+   text-align:center;
+   cursor:pointer;
+}
+
+#nav-links .close-btn:hover{
+    
+    background:#1e1e1e;
+    padding-left:5px;
+    
+}
+
+#nav-links .close-btn i{
+    color:#ff4d4d;
+    font-size:1.5rem;
+    cursor:pointer;
+}
+
+/* MENU ITEMS */
+#nav-links li{
+    width:100%;
+    margin-left:15px;
+}
+
+#nav-links li a{
+    display:flex;
+    align-items:center;
+    gap: 2px;
+    color:#fff;
+    text-decoration:none;
+    padding: 5px;
+    font-size:1rem;
+    font-weight:600;
+    transition:0.3s ease;
+}
+
+/* ICONS */
+#nav-links li a i{
+    width:25px;
+    text-align:center;
+    font-size:1.2rem;
+}
+
+/* HOVER EFFECT */
+#nav-links li a:hover{
+    background:#1e1e1e;
+    padding-left:28px;
+}
+
+.logout-popup {
+   display: flex;
+  opacity: 0;
+   visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease;   
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    
+}
+
+
+.popup {
+   display: flex; 
+  
+  opacity: 0;
+   visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.popup.active,
+.logout-popup.active {
+    opacity: 1;
+    visibility: visible;
+    z-index:5;
+}
+
+
+.popup-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+}
+
+
+.popup.active .popup-content,
+.logout-popup.active .popup-content {
+    transform: scale(1);
+}
+
+
+#close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #555;
+}
+
+#close-bt {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #555;
+}
+
+
+/* Form styling */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-container i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #888;
+}
+
+.password-container i:hover {
+    color: #333;
+}
+
+.remember-me input{
+  position:absolute; right:35%;
+   margin-bottom:10px; 
+    margin-right: 2px;
+}
+
+.remember-me label{
+  position:relative; right:18%;
+    margin-bottom:26px;
+}
+#mybtn,#logbtn {
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#mybtn:hover {
+    background-color: #0056b3;
+}
+
+.forgot-password {
+    display: block;
+    margin-top: 10px;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+} 
+/* Error styling */
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Loading spinner overlay */
+.spinner-overlay {
+    display: none; /* Initially hidden */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.spinner {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #007BFF;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+</style>
+  
+ <script>
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", function () {
+
+        navigator.serviceWorker.register("/npa-sw.js")
+            .then(function (registration) {
+
+                console.log(
+                    "NPA Results Service Worker registered:",
+                    registration.scope
+                );
+           
+            })
+            .catch(function (error) {
+
+                console.error(
+                    "NPA Results Service Worker registration failed:",
+                    error
+                );
+
+            });
+
+    });
+
+}
+
+
+let deferredInstallPrompt = null;
+
+/*
+ * Browser says the application is ready to be installed.
+ */
+window.addEventListener("beforeinstallprompt", function(event) {
+
+    event.preventDefault();
+
+    deferredInstallPrompt = event;
+
+    const card =
+        document.getElementById("pwa-install-card");
+
+    if (card) {
+        card.style.display = "block";
+    }
+
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const installButton =
+        document.getElementById("pwa-install-button");
+
+    const cancelButton =
+        document.getElementById("pwa-cancel-button");
+
+
+    /*
+     * Install button
+     */
+    if (installButton) {
+
+        installButton.addEventListener(
+            "click",
+            async function() {
+
+                if (!deferredInstallPrompt) {
+                    return;
+                }
+
+                deferredInstallPrompt.prompt();
+
+                const { outcome } =
+                    await deferredInstallPrompt.userChoice;
+
+                console.log(
+                    "PWA installation result:",
+                    outcome
+                );
+
+                deferredInstallPrompt = null;
+
+                const card =
+                    document.getElementById(
+                        "pwa-install-card"
+                    );
+
+                if (card) {
+                    card.style.display = "none";
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+     * Cancel button
+     */
+    if (cancelButton) {
+
+        cancelButton.addEventListener(
+            "click",
+            function() {
+
+                const card =
+                    document.getElementById(
+                        "pwa-install-card"
+                    );
+
+                if (card) {
+                    card.style.display = "none";
+                }
+
+                deferredInstallPrompt = null;
+
+            }
+        );
+
+    }
+
+});
+
+
+/*
+ * Application successfully installed.
+ */
+window.addEventListener("appinstalled", function() {
+
+    console.log("NPA Results was installed.");
+
+    deferredInstallPrompt = null;
+
+    const card =
+        document.getElementById(
+            "pwa-install-card"
+        );
+
+    if (card) {
+        card.style.display = "none";
+    }
+
+});
+
+
+</script>
+    
+</head>
+<body>
+
+<div id="pwa-install-card">
+
+    <h3>Install NPA Results</h3>
+    <p>
+        Install the app for quicker access from your home screen.
+    </p>
+
+    <div class="pwa-install-actions">
+
+        <button
+            type="button"
+            id="pwa-cancel-button"
+            class="pwa-install-btn">
+            Cancel
+        </button>
+
+        <button
+            type="button"
+            id="pwa-install-button"
+            class="pwa-install-btn">
+            Install App
+        </button>
+
+    </div>
+
+</div>
+
+
+ <!-- Header Section -->
+ <header class="head-section">
+ <div class="container">';
+
+  <div class="logo-wrapper">
+ <a href="/images/npa-logo.jpg"><img src="/images/npa-logo.jpg" alt="Logo" class="profile-pic" id="profile-pic"></a></div>
+            <h1>NEWPHASE ACADEMY</h1>
+            <p>Result Portal</p>
+        </div>
+    </header> 
+    
+ <nav id="nav-section" class="menu">
+    <div class="nav-container">
+        <button id="menu-toggle">☰ Menu</button>
+     
+     
+    <ul id="nav-links">
+          
+          <!-- CLOSE ICON -->
+   <div class="close-btn" title="Close Menu">
+      <i class="fa-solid fa-times"></i>
+        </div> 
+     
+      <li>
+         <a href="/home">
+         <i class="fa-solid fa-home" aria-hidden="true" title="Back to Home page"></i>   
+       Home Page
+           </a></li>
+             <li>
+         <a href="/results">
+         <i class="fa-solid fa-certificate" aria-hidden="true" title="click here to Check results"></i>   
+       Check Result
+           </a></li>
+      <li>
+         <a href="/npa-legal">
+         <i class="fa-solid fa-scale-balanced" aria-hidden="true" title="NPA Legal and Policies"></i>   
+       Legal & Policies
+           </a></li>   
+           </ul>
+    </div>
+</nav>
+ 
+ 
+ 
+ <center>
+<div class="slideshow-container">
+    <div class="slide-text">
+  Welcome to NewPhase Academy result portal, scroll down and click on <b>Check Your Result</b>, Select exam year, term and your class, then enter your pin and click on <b>View Results</b>. If you are a staff click on <b>Staff Login</b>, Enter your email and password then click on <b>Login</b>. You will be redirected to the appropriate result compilation site after successful login.
+    </div>
+  </div></center>
+ 
+<section class ="section" id="about">
+ <h2 id="welcome">Welcome to Our Result Portal</h2>
+ 
+<div class="kuchylogo">
+  <img id="kuchypay-logo-box" src="/images/result-sample2.png" alt="result-sample" class="slide-img">
+  </div>
+ 
+ <div class="coming-soon" id="coming-soon">
+  <i class="fa-solid fa-briefcase bounce"></i>
+  <h6>Compute and view results with ease !</h6>
+  
+   </div><br> 
+  </div>
+
+
+ <div class="table_btn" id="table_btn">
+  <a id="dwn_ass" href="#" title="Login to result computing system">Staff Login</a>
+  <a id="share_cert" href="/results" target="_blank" title="Click here to check your result now">Check Your Result</a>
+ 
+ </div>  
+    </section>
+ 
+<section class="quotes-section">
+
+  <div class="quote-card">
+    <img src="images/quotes/img3.jpg" alt="">
+    <p>Your effort matters more than your score.</p>
+  </div>
+
+  <div class="quote-card">
+    <img src="images/quotes/img1b.jpg" alt="">
+    <p>Exams test knowledge, not your worth.</p>
+  </div>
+
+  <div class="quote-card">
+    <img src="images/quotes/img4.jpg" alt="">
+<p>Stay calm. You did your best.<br>
+  <a href="/results" target="_blank" title="Click here to check your result now">Check Your Result Now</a>
+</p>
+
+  </div>
+
+  <div class="quote-card">
+    <img src="images/quotes/img5.jpg" alt="">
+    <p>Progress is better than perfection.</p>
+  </div>
+  
+   <div class="quote-card">
+    <img src="images/quotes/img7.jpg" alt="">
+    <p>Your success is our priority.<br>
+     <a href="/results" target="_blank" title="Click here to check your result now">Check Your Result Now</a></p>
+  </div> 
+  
+     <div class="quote-card">
+    <img src="images/quotes/learning.jpg" alt="">
+    <p>Education is not the filling of a pail but the lighting of a fire. Learning Never Ends<br>
+</p>
+  </div> 
+  
+  <div class="quote-card">
+    <img src="images/quotes/education.jpg" alt="">
+    <p>Education is the ultimate key, keep Learning, keep Growing.<br>
+</p>
+  </div> 
+    
+    <div class="quote-card poem">
+    <img src="images/quotes/ethel-poem.jpg" alt="">
+  
+    <pre>
+ <p>
+𝗧𝗛𝗔𝗧 𝗥𝗢𝗨𝗚𝗛 𝗙𝗜𝗥𝗦𝗧 𝗗𝗥𝗔𝗙𝗧
+
+The paper stared, white and empty,  
+My mind a room with lights turned off.  
+Questions danced in strange languages,  
+Every answer I studied… gone, lost.  
+
+I flipped the page, heart sinking slow,  
+Like watching hope pack up and leave.  
+The clock ticked loud, too loud, too fast,  
+While my pen just sat there and grieved.  
+
+“Read the question twice,” they always say,  
+I read it five — still made no sense.  
+Formulas slipped like water through my hands,  
+Confidence walked out, no defense.  
+
+I wrote something. Anything. Please.  
+Margins full of nervous art.  
+Drew a face where the graph should be,  
+Because my brain fell apart.  
+
+Bell rang. Pen down. Silence heavy.  
+Walked out with shoulders made of stone.  
+Friends said “How was it?” I just smiled,  
+Said “We move,” and walked alone.  
+
+But here’s the thing about failure:  
+It’s not the end, just a bent page.  
+Even red ink can teach you something,  
+Even falling can set the stage.  
+
+Exams can test what’s in your head,  
+But they don\'t grade how much you fought.
+And concepts fail sometimes... it\'s human,
+what matters are the efforts put into thriving to succeed.
+
+So i\'ll cry today, and try tomorrow.
+One bad test won\'t write my story.
+Failure\'s only 𝐀 𝐑𝐎𝐔𝐆𝐇 𝐅𝐈𝐑𝐒𝐓 𝐃𝐑𝐀𝐅𝐓.
+
+
+ʙʏ: 𝐄𝐓𝐇𝐄𝐋𝐁𝐄𝐑𝐓
+     
+</p></pre>
+  </div> 
+  
+  
+     <div class="quote-card poem">
+    <img src="images/quotes/lopez-poem.png" alt="">
+  
+    <pre>
+ <p>
+<b>BEFORE THE BELL</b>
+
+The hours bent beneath my will
+My diligence, a quiet skill
+While others fret about their fate
+I trace my path, immaculate
+
+I knew the answers before the page
+Before the clock could cage the day
+Each sleepless night, a quiet forge
+Shaping my mind, the brain, the gorge
+
+I write, not frantic, but precise
+Each word a chess move
+My confidence cold as ice
+The exam rages, and I follow it\'s groove 
+
+Confidence, not arrogance, my cloak
+A subtle smile, no need to gloat
+The toil, the struggle, nights unspent
+All fuel the fire, the quiet ascent
+
+But then the bell tolls, a sudden swell
+And even I feel that fleeting spell
+I breathe, accustomed to the strain
+Let the moment pass, retain my reign
+
+A humble nod? Perhaps I feign
+Yet brilliance whispers through my vein
+I pass, I know, I reign discreet
+A scholar’s triumph, precise, complete.
+
+By: <b>LOPEZ</b>
+   
+</p></pre>
+
+  </div>
+  
+  
+ <div class="quote-card">
+  <img src="images/result-sample3.png" alt="">
+    <p>Your results are ready.<br>
+     <a href="/results" target="_blank" title="Click here to check your result now">Click here to view them Now</a></p>
+  </div> 
+
+</section>
+
+
+<div id="login-popup" class="popup">
+        <div class="popup-content">
+            <span id="close-btn">&times;</span>
+            <h2>Staff Login</h2>
+            <form id="login-form" method="post">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your Email" required>
+                <small id="email-error" class="error"></small>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                        <i id="toggle-password" class="fas fa-eye"></i>
+                    </div>
+                <small id="password-error" class="error"></small> 
+                </div>
+                <div class="remember-me">
+                    <input type="checkbox" id="remember-me" checked>
+                    <label id="rme" for="remember-me">Remember Me</label>
+                </div>
+                <button type="submit" id="mybtn" value="npa_staff_login">Login</button>
+               <a href="/forget_psw?user_cat=staff" class="forgot-password" target="_blank" title="Change your password if you forgot it">Forgot Password?</a>
+            </form>
+            <!-- Loading Spinner -->
+       <div id="loading-spinner" class="spinner-overlay">
+            <div class="spinner"></div>
+        </div> 
+        </div>
+    </div>
+
+
+
+
+<footer class="footer" id="footer">
+     <p>NEWPHASE ACADEMY &copy; 2026. All Rights Reserved.</p>
+    </footer>
+
+
+
+<script>
+const images = document.querySelectorAll(".slide-img");
+
+const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const el = entry.target;
+
+        if (entry.intersectionRatio >= 0.5) {
+            el.classList.add("img-show");
+            el.classList.remove("img-hide");
+        } else if (entry.intersectionRatio < 0.2) {
+            el.classList.remove("img-show");
+            el.classList.add("img-hide");
+        }
+    });
+}, {
+    threshold: [0.2, 0.5]
+});
+
+images.forEach(img => imageObserver.observe(img));
+</script>
+
+
+<script>
+const cards = document.querySelectorAll(".quote-card");
+
+const quoteObserver = new IntersectionObserver((ente) => {
+    ente.forEach(ent => {
+        const ell = ent.target;
+
+        if (ent.intersectionRatio >= 0.5) {
+            ell.classList.add("quote-show");
+        } else if (ent.intersectionRatio < 0.2) {
+            ell.classList.remove("quote-show");
+        }
+    });
+}, {
+    threshold: [0.2, 0.5]
+});
+
+cards.forEach(card => quoteObserver.observe(card));
+</script>
+
+<script>
+    // ELEMENTS
+    const menuToggle = document.getElementById("menu-toggle");
+    const navLinks = document.getElementById("nav-links");
+    const navItems = navLinks.querySelectorAll("a");
+    const closeBtn = document.querySelector(".close-btn");
+
+    // OPEN / CLOSE MENU
+    menuToggle.addEventListener("click", (event) => {
+        navLinks.classList.toggle("show");
+        event.stopPropagation();
+    });
+
+    // CLOSE WITH X BUTTON
+    closeBtn.addEventListener("click", () => {
+        navLinks.classList.remove("show");
+    });
+
+    // CLOSE WHEN A LINK IS CLICKED
+    navItems.forEach((item) => {
+        item.addEventListener("click", () => {
+            navLinks.classList.remove("show");
+        });
+    });
+
+    // CLOSE WHEN CLICKING OUTSIDE
+    document.addEventListener("click", (event) => {
+
+        const clickedInsideMenu = navLinks.contains(event.target);
+        const clickedMenuButton = menuToggle.contains(event.target);
+
+        if (!clickedInsideMenu && !clickedMenuButton) {
+            navLinks.classList.remove("show");
+        }
+
+    });
+    
+    
+ document.addEventListener("DOMContentLoaded",(e)=>{
+    
+ // Popup show and hide functionality
+const loginLink = document.getElementById("dwn_ass");
+const loginPopup = document.getElementById("login-popup");
+
+const closeBtn = document.getElementById("close-btn");
+
+loginLink.addEventListener("click", (e) => {
+
+ e.preventDefault();  
+   
+    loginPopup.classList.add("active");
+    
+ document.querySelector(".section").style.display="none";   
+ document.querySelector(".quotes-section").style.display="none"; 
+document.querySelector(".slideshow-container").style.display="none"; 
+document.querySelector(".footer").style.display="none"; 
+document.getElementById("nav-section").style.display="none";
+ 
+     
+});
+
+closeBtn.addEventListener("click", () => {
+    loginPopup.classList.remove("active");
+    
+ document.querySelector(".section").style.display="block";   
+ document.querySelector(".quotes-section").style.display="block"; 
+document.querySelector(".slideshow-container").style.display="flex"; 
+document.querySelector(".footer").style.display="block"; 
+document.getElementById("nav-section").style.display="block";
+ 
+    
+});
+
+  window.addEventListener("click", (e) => {
+    if (e.target === loginPopup) {
+     loginPopup.classList.remove("active");
+       document.querySelector(".section").style.display="block";   
+ document.querySelector(".quotes-section").style.display="block"; 
+document.querySelector(".slideshow-container").style.display="flex"; 
+document.querySelector(".footer").style.display="block";
+document.getElementById("nav-section").style.display="block";
+ 
+    }
+}); 
+
+
+// Toggle show/hide password
+const togglePassword = document.getElementById("toggle-password");
+const passwordField = document.getElementById("password");
+
+togglePassword.addEventListener("click", () => {
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        togglePassword.classList.remove("fa-eye");
+        togglePassword.classList.add("fa-eye-slash");
+    } else {
+        passwordField.type = "password";
+        togglePassword.classList.remove("fa-eye-slash");
+        togglePassword.classList.add("fa-eye");
+    }
+});
+
+// Attach event listener once page loads
+document.getElementById("login-form").addEventListener("submit", submit_login_form);
+
+function submit_login_form(e) {
+
+    e.preventDefault();
+
+    const loginForm = document.getElementById("login-form");
+    const loadingSpinner = document.getElementById("loading-spinner");
+
+    const emailField = document.getElementById("email").value.trim();
+    const passwordField = document.getElementById("password").value.trim();
+    const remember = document.getElementById("remember-me").checked;
+
+    const btn_name = document.getElementById("mybtn").value;
+
+    const emailError = document.getElementById("email-error");
+    const passwordError = document.getElementById("password-error");
+
+    // Clear previous errors
+    emailError.innerText = "";
+    passwordError.innerText = "";
+
+    // Show spinner
+    loadingSpinner.style.display = "flex";
+
+    fetch("/includes/login.inc", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            submit_button_name: btn_name,
+            user_email: emailField,
+            user_psw: passwordField,
+            rememberme: remember
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        const stat = data.stat;
+        const err = data.err;
+        const msg = data.message;
+
+        if (stat === "success") {
+
+            window.location = `/home?msg_report=${msg}&report=suc`;
+
+        } else {
+
+            if (err === "em") {
+
+                emailError.innerText = msg;
+
+            } 
+            else if (err === "psw") {
+
+                passwordError.innerText = msg;
+
+            } 
+            else {
+
+                passwordError.innerText = "Unknown Error, Please try again!";
+            }
+        }
+
+        loadingSpinner.style.display = "none";
+
+    })
+    .catch(error => {
+
+        loadingSpinner.style.display = "none";
+     //   passwordError.innerText = "Network error. Please check your connection.";
+     passwordError.innerText = error;
+
+        console.error(error);
+
+    });
+}
+
+ 
+
+
+});
+   
+    
+</script>
+
+</body>
+</html>

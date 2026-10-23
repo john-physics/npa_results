@@ -43,7 +43,7 @@ require 'menu.php';
 }
 
 
-.container {
+.psw-container {
     max-width: 520px;
     margin: 35px auto;
 }
@@ -351,13 +351,13 @@ require 'menu.php';
     
 <section class="gen_psw">
 
-<div class="container">
+<div class="psw-container">
 
     <div class="header">
         <h2>Staff Password Recovery</h2>
         <p>
             NPA Results Management System<br>
-            ICT Department
+            ICT Department Use Only
         </p>
     </div>
 

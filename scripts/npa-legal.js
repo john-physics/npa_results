@@ -225,7 +225,7 @@
   document.querySelectorAll('.tab').forEach((button) => {
     button.addEventListener('click', () => {
       if (button.dataset.tab === 'home') {
-        window.location.href = '/';
+        window.location.href = '/home';
         return;
       }
       location.hash = button.dataset.tab;

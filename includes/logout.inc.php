@@ -24,7 +24,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
  }
  
   $response = [
-      "stat" => "success",
+      "status" => "success",
       "err" => "No error",
       "message" => "Logout successful !",
       ];
@@ -35,47 +35,9 @@ exit();
   else{
       
       $response = [
-      "stat" => "failed",
+      "status" => "failed",
       "err" => "btn_error",
       "message" => "Staff Not Logged in initially",
-      ];
-echo json_encode($response);
-exit();   
-      
-      
-  }
- }
- 
-  elseif($btn == "admin_logout"){
-     
-  if(isset($_SESSION['admin_id'])){
-      
-  unset($_SESSION['admin_id']);
-  session_destroy();
-  
- if(isset($_COOKIE['admin_cookie'])){
-     
-  $exp = time() - 100;
-  $val = "adm";
-  setcookie('admin_cookie',$val,$exp,'/');   
-     
- }
- 
-  $response = [
-      "stat" => "success",
-      "err" => "No error",
-      "message" => "Logout successful !",
-      ];
-echo json_encode($response);
-exit();   
-     
-  }
-  else{
-      
-      $response = [
-      "stat" => "failed",
-      "err" => "btn_error",
-      "message" => "Admin Not Logged in initially",
       ];
 echo json_encode($response);
 exit();   
@@ -88,7 +50,7 @@ exit();
      
    
    $response = [
-      "stat" => "failed",
+      "status" => "failed",
       "err" => "button_name",
       "message" => "Unknown button name",
       ];
@@ -102,7 +64,7 @@ exit();
 else{
     
   $response = [
-     "stat" => "failed",
+     "status" => "failed",
      "err" => "REQUEST_METHOD",
      "message" => "Unknown Request method",
       ];

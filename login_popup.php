@@ -317,12 +317,12 @@ fetch("/includes/logout.inc", {
 
 .then(data => {
 
-    const status = data.stat;
+    const status = data.status;
     const msg = data.message;
-
+   
     if(status === "success"){
 
-        window.location = `/home?msg_report=${encodeURIComponent(msg)}&report=suc`;
+        window.location = "/";
 
     } else {
 
@@ -337,6 +337,11 @@ fetch("/includes/logout.inc", {
 .catch(error => {
 
     // Catch network errors / JSON errors / thrown errors
+    
+    
+alert("errors:"+error);
+ 
+    
     console.error("Logout Error:", error);
 
     loadingSpinner2.style.display = "none";
@@ -458,11 +463,11 @@ function submit_login_form(e) {
     .then(response => response.json())
     .then(data => {
 
-        const stat = data.stat;
+        const status = data.status;
         const err = data.err;
         const msg = data.message;
 
-        if (stat === "success") {
+        if (status === "success") {
 
             window.location = `/home?msg_report=${msg}&report=suc`;
 
@@ -502,10 +507,6 @@ function submit_login_form(e) {
 
 
 });
-
-
-
-
 
 </script>'; 
 

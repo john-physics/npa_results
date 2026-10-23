@@ -38,10 +38,21 @@
       },
       {
         "id": "corrections",
-        "title": "Result queries and corrections",
+        "title": "Results Query and correction",
         "paragraphs": [
-          "If you think a score, grade or comment is wrong, contact the school office through the Support tab. Please give the student's name, class, term and subject.",
-          "Only the school can change a result. Do not try to change, hide or copy results in any other way."
+          "If you think a score, grade or comment is wrong, contact the school office through the Support tab.",
+          "Only the school can change a result. Do not try to change, hide or copy results in any other way.",
+          
+"1. Submission Deadline: All results queries must be submitted within five working days of result publication.",
+"2. Required Details: Provide the student's full name, admission number, class, term, subject, and a clear description of the issue.",
+"3. Valid Grounds: Queries may concern missing scores, computation errors, incorrect grades, or data-entry mistakes.",
+"4. Verification: All queries will be reviewed against official school records before a decision is made.",
+"5. Approval: No result will be altered without proper verification and approval by authorised school management.",
+"6. Processing Time: Queries will normally be resolved within three to five working days.",
+"7. Confidentiality: All results queries will be handled confidentially.",
+"8. Final Decision: The outcome will be communicated through an approved school communication channel.",
+
+"Note: Submission of a query does not guarantee a change of result."
         ]
       },
       {

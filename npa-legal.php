@@ -343,6 +343,6 @@
     Newphase Academy &copy; <span id="year">2026</span>, All Rights Reserved.
   </footer>
 
-  <script src="/scripts/npa-legal.js?v=3"></script>
+  <script src="/scripts/npa-legal.js?v=5"></script>
 </body>
 </html>

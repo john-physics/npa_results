@@ -1,72 +1,196 @@
 <?php
 
-class Router {
-    private string $baseDir;
+declare(strict_types=1);
 
-    public function __construct(string $directory) {
-        // Correct constructor
-        $this->baseDir = rtrim($directory, "/");
-    }
+final class Router
+{
+    private string $documentRoot;
+    private string $requestPath;
 
-    public function handle_route(string $URL): void {
-    
-        // Extract only the path, ignore query strings
-       $path = $this->normalize_route(parse_url($URL, PHP_URL_PATH));
+    public function __construct(string $documentRoot)
+    {
+        $this->documentRoot = rtrim($documentRoot, '/');
 
+        $requestPath = parse_url(
+            $_SERVER['REQUEST_URI'] ?? '/',
+            PHP_URL_PATH
+        );
 
-        //Home page support
-        if ($path === '/' || $path === '/index.php' || $path === '/index') {
-            $home = $this->baseDir . "/home.php";
-            if (file_exists($home)) {
-            
-                require $home;
-                return;
-            }
+        if (!is_string($requestPath) || $requestPath === '') {
+            $requestPath = '/';
         }
 
-        // Build file path
-        $file = $this->baseDir . $path . ".php";
-     
+        // Decode URL path once.
+        $requestPath = rawurldecode($requestPath);
+
+        // Normalize leading slash.
+        $requestPath = '/' . ltrim($requestPath, '/');
+
+        // Collapse repeated slashes.
+        $requestPath = preg_replace('#/+#', '/', $requestPath);
+
+        $this->requestPath = is_string($requestPath)
+            ? $requestPath
+            : '/';
+    }
+
+    public function handle(): void
+    {
   
-   
-        // directory index support: admin/exams → admin/exams/index.php
-      if (is_dir($this->baseDir . $path)) {
-            $file = $this->baseDir . $path . "/index.php";
+        // BASIC PATH VALIDATION
+        // Reject null bytes.
+        if (str_contains($this->requestPath, "\0")) {
+            $this->forbidden();
         }
 
-        // Load real file if it exists
-        if (file_exists($file)) {
-          
-            require $file;
-            return;
+        // Remove leading slash for route processing.
+        $route = ltrim($this->requestPath, '/');
+
+         /* Reject path traversal.
+         
+         * This also catches encoded traversal because the URL was
+         * decoded above before this check.
+         */
+      
+        if (str_contains($route, '..') || str_contains($route, '\\')){
+         
+            $this->forbidden();
         }
 
-        // 404 error
-       http_response_code(404);
-    // echo "<h3>404 - Page Not Found</h3>";
-     $notfound = $this->baseDir . "/404.shtml";
-        require $notfound;
+       
+    /* ONLY CLEAN ROUTES ARE ALLOWED
+            
+         * Reject any route segment that looks like a filename:
+         *
+         *   /test.php
+         *   /test.sphp
+         *   /test.shell
+         *   /test.exe
+         *   /test.js
+         *   /test.jpg
+         *   /api/user.php
+         *   /api/login.php
+         *   /blog/post.html
+         *
+         * Static files will not reach Router because Apache serves existing files directly.
+         
+         * This is an additional safety layer in case a request somehow reaches Router anyway.
+         */
+
+     if ($route !== '' && preg_match(
+    '/(?:^|\/)[^\/]+\.(?:php[0-9]*|phtml|phar|phps)(?:\/|$)/i', 
+            $route
+        )) {
+    $this->forbidden();
     }
 
-    private function normalize_route(string $path): string {
-        // Clean up paths
-        $path = preg_replace('#^\./#', '', $path);
-        $path = preg_replace('#^\../#', '', $path);
-        $path = preg_replace('#/+#', '/', $path);
+     
+        /* HOME ROUTE
+         * "/" maps to /index.html
+         */
 
+        if ($route === '') {
+            $this->serveHtml('index.html');
+        }
 
-// If no leading slash → treat as relative to current URL
-if (!str_starts_with($path, '/')) {
-    $current = dirname(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-    if ($current === '/') {
-        $path = '/' . $path;
-    } else {
-      $path = rtrim($current, '/') . '/' . $path;
+       /*
+       HTML ROUTE
+        
+         * Example:
+         *
+         *   /about
+         *   /blog/post
+         *   /api/settings
+         *
+         * First check for html file, it exists then serve it
+         
+         *The route will map to :
+         *   /about.html
+         *   /blog/post.html
+         *   /api/settings.html
+         */
+
+        $htmlFile = $this->documentRoot.'/' .$route.'.html';
+
+        if (is_file($htmlFile)) {
+            $this->serveHtml($htmlFile);
+        }
+
+      
+        /* PHP ROUTE
+        If the html file 
+        matching the route does not exist, try its php file
+      
+         *   /about.php
+         *   /blog/post.php
+         *   /api/settings.php
+         *
+         * The PHP file is executed internally and the browser never sees the .php filename.
+         */
+
+       $phpFile = $this->documentRoot.'/'.$route.'.php';
+
+        if (is_file($phpFile)) {
+            require $phpFile;
+            exit;
+        }
+
+        /*
+         * NOTHING MATCHED
+      If there is no matching html or php file for the request, return 404 - not found
+         */
+
+        $this->notFound();
     }
-}
 
-      // Remove trailing slash except root
-        $path = rtrim($path, '/');
-        return $path === '' ? '/' : $path;
+ 
+ 
+    private function serveHtml(string $file): never
+    {
+        $fullPath = str_starts_with($file, $this->documentRoot)
+            ? $file
+            : $this->documentRoot.'/'.ltrim($file, '/');
+
+        if (!is_file($fullPath)) {
+            $this->notFound();
+        }
+
+        header('Content-Type: text/html; charset=UTF-8');
+
+        readfile($fullPath);
+        exit;
+    }
+
+ 
+ 
+    private function forbidden(): never
+    {
+        http_response_code(403);
+
+        $errorPage = $this->documentRoot.'/403.shtml';
+
+        if (is_file($errorPage)) {
+            require $errorPage;
+        } else {
+            echo '403 - Forbidden';
+        }
+
+        exit;
+    }
+
+  
+    private function notFound(): never
+    {
+        http_response_code(404);
+
+        $errorPage = $this->documentRoot.'/404.shtml';
+
+        if (is_file($errorPage)) {
+            require $errorPage;
+        } else {
+            echo '404 - Page Not Found';
+        }
+
+        exit;
     }
 }
