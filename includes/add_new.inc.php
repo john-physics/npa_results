@@ -1223,7 +1223,8 @@ $pin=strtoupper(bin2hex(random_bytes(5))); // 10 chars
       
 //upload student profile 
 if($profile["name"]){
- $targetFolder ="/images/students/";
+ 
+$targetFolder =create_profile_path();
  $filename = upload_image_as_webp($profile, $targetFolder, "profile_", $Id);
 
 if($filename && $filename !== "extension_error"){
@@ -1505,7 +1506,7 @@ if($gender && $gender != $old_gender){
  
 //upload students profile 
 if($profile["name"]){
- $targetFolder ="/images/students/";
+$targetFolder = create_profile_path();
  $filename = upload_image_as_webp($profile, $targetFolder, "profile_", $Id);
 
 if($filename && $filename !== "extension_error"){
@@ -1734,7 +1735,7 @@ if(!$Id){
   
 //upload student profile 
 if($profile["name"]){
- $targetFolder ="/images/students/";
+ $targetFolder = create_profile_path();
  $filename = upload_image_as_webp($profile, $targetFolder, "profile_", $Id);
 
 if($filename && $filename !== "extension_error"){

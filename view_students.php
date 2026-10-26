@@ -445,7 +445,7 @@ $active = ($current_class == $class) ? "active" : "";
 echo '</div>';
 
 
-$students = collect_table_data1($conn,"students","current_class",$current_class,"s","surname ASC");
+$students = collect_table_data2($conn,"students","current_class","status",$current_class,"Active","ss","surname ASC"); //select only Active students in the selected class
 
 
 echo '<div class="class-container">
@@ -497,11 +497,10 @@ echo '<div class="class-container">
  // $lastlogin = timeAgo($student["lastlogin"],'d/m/Y h:i A');
  
   $acct_status = $student["status"];
-  $prf = $student["profile"]??'null.jpg';
-   $prf_link = '/images/students/'.$prf;
-
- if(!file_exists($_SERVER["DOCUMENT_ROOT"].$prf_link)){
- $prf_link = "/images/npa-logo.jpg";
+  $prf_link = $student["profile"] ?? '';
+  
+ if(!is_file($_SERVER["DOCUMENT_ROOT"].'/'.$prf_link)){
+ $prf_link = "images/npa-logo.jpg";
  }
  
 $state = null_check($student["std_state"],'Unknown');

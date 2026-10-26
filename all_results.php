@@ -229,11 +229,11 @@ echo '</div>
   $std_pin = $std_details["std_pin"];
   $profile = null_check($result["std_profile"],$std_details["profile"]);
   
-    $profilePath = $root.'/images/students/'.$profile;
+    $profilePath = $root.'/'.$profile;
  
  if(!is_file($profilePath)){
      
- $profile = "npa-logo.jpg";  
+ $profile = "images/npa-logo.jpg";  
      
  }
  
@@ -241,7 +241,7 @@ echo '</div>
    <tr>
     <td>'.$sn.'</td>
     <td>
-    <img src="images/students/'.$profile.'"
+    <img src="'.$profile.'"
         class="student-photo" loading="lazy">
     </td>
     <td class="student-name">'.$std_name.'</td>

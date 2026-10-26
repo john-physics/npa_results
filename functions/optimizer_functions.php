@@ -458,13 +458,21 @@ function optimizeImage(
 
     unlink($imagePath);
 
+     $docRoot = str_replace('\\', '/', rtrim($_SERVER['DOCUMENT_ROOT'], '/\\'));
+    $normImagePath = str_replace('\\', '/', $imagePath);
+    $normNewPath = str_replace('\\', '/', $newPath);
+
+    $oldRelativePath = ltrim(substr($normImagePath, strlen($docRoot)), '/');
+    $newRelativePath = ltrim(substr($normNewPath, strlen($docRoot)), '/');
+
     $db = updateProfileImageReference(
 
-        basename($imagePath),
+        $oldRelativePath,
 
-        basename($newPath)
+        $newRelativePath
 
     );
+
 
     return [
 

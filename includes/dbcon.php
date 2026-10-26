@@ -4,7 +4,7 @@ $dirname = dirname($_SERVER['DOCUMENT_ROOT']);
 $configfile = $dirname.'/config/npa.config.ini';
 
 if(file_exists($configfile)){
-    
+
  $config = parse_ini_file($configfile,true);
 
 $host = $config["data"]["hostname"];

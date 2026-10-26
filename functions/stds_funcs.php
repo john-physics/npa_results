@@ -327,8 +327,9 @@ function upload_image_as_webp($fileArray, $targetFolder, $prefix, $uniqueId) {
     $rename = $uniqueId . bin2hex(random_bytes(3));
     $finalFilename = $prefix . $rename . '.webp';
     
-    $savePath = $_SERVER["DOCUMENT_ROOT"] . $targetFolder . $finalFilename;
-    
+    $relativePath = $targetFolder .'/'. $finalFilename;
+    $savePath = $_SERVER["DOCUMENT_ROOT"] .'/'. $relativePath;
+  
     // Try GD Conversion
     if (function_exists('imagewebp')) {
         $image = null;
@@ -344,19 +345,37 @@ function upload_image_as_webp($fileArray, $targetFolder, $prefix, $uniqueId) {
 
         if ($image && imagewebp($image, $savePath, 80)) {
             imagedestroy($image);
-            return $finalFilename; // Success!
+            return $relativePath; // Success!
         }
     }
 
     // Fallback: Just move the file if GD fails or isn't needed
     $fallbackName = $prefix . $rename . '.' . $fileExt;
-    $fallbackPath = $_SERVER["DOCUMENT_ROOT"] . $targetFolder . $fallbackName;
+   $fallbackRelativePath = $targetFolder.'/'.$fallbackName;
+    $fallbackPath = $_SERVER["DOCUMENT_ROOT"] . '/'.$fallbackRelativePath;
     
     if (move_uploaded_file($tempDir, $fallbackPath)) {
-        return $fallbackName;
+        return $fallbackRelativePath;
     }
 
     return null; // Failure
+}
+
+function create_profile_path(){
+  
+    $current = get_current_session(); 
+    $session = $current["session"]; 
+    
+    $sesAsFolder = preg_replace('/[^a-zA-Z0-9]/', '', $session);
+    
+    $relativePath = "images/students/" . $sesAsFolder;
+    $fullPath = $_SERVER["DOCUMENT_ROOT"] . "/" . $relativePath;
+    
+    if(!is_dir($fullPath)){
+        mkdir($fullPath, 0755, true);  
+    }
+    
+    return $relativePath;
 }
 
 

@@ -389,13 +389,11 @@ if(!in_array($std_id, $students) && !in_array($staff_cat, $authorized)){
  $std_name = normalize_user_name($std_det["surname"]." ".$std_det["othernames"],"ucwords");
  $profile = null_check($std_det["profile"],'null.jpg');
  $std_pin = $std_det["std_pin"]; 
- $profilePath = $root."/images/students/".$profile;
+ $profilePath = $root."/".$profile;
  $termSession = $term." ".$session;
  
- if(!file_exists($profilePath)){
-     
-   $profile = "npa-logo.jpg"; 
-     
+ if(!is_file($profilePath)){
+   $profile = "images/npa-logo.jpg"; 
  }
  
  
@@ -438,8 +436,8 @@ $sports = $std_results["sports"];
     </div>
 
     <div class="student-profile">
-     <a href="/images/students/'.$profile.'" title="student profile Image">
-      <img src="images/students/'.$profile.'"></a>
+     <a href="'.$profile.'" title="student profile Image">
+      <img src="'.$profile.'"></a>
     </div>
 
   <form action="/includes/upload_results.inc" method="post" id="resultForm" class="resultForm">

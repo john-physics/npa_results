@@ -441,10 +441,10 @@ if($overall_average >= $passmark){
  $passedFailed = "Passed";   
 }
 
-$prfDir = "/images/students/$profile";
-$prfPath = $_SERVER["DOCUMENT_ROOT"]."/images/students/$profile";
+
+$prfPath = $_SERVER["DOCUMENT_ROOT"]."/".$profile;
  if(!is_file($prfPath)){
- $prfDir = "/images/npa-logo.jpg";
+ $profile = "images/npa-logo.jpg";
  }
 
 $redink = redink_for_failure($conn);
@@ -487,7 +487,7 @@ echo '<div class="result-container" id="result-container">
 
         <div class="student-flex">
 
-       <img src="'.$prfDir.'" class="student-photo">
+       <img src="'.$profile.'" class="student-photo">
 
             <div class="student-info">
                 <table>

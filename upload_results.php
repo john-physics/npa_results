@@ -262,12 +262,11 @@ foreach ($classSet as $set){
   $group = $std_cat;  
   $sn++;  
    
- $profilePath = $root.'/images/students/'.$profile;
- 
- 
+ $profilePath = $root.'/'.$profile;
+
  if(!is_file($profilePath)){
      
- $profile = "npa-logo.jpg";  
+ $profile = "images/npa-logo.jpg";  
      
  }
       
@@ -275,7 +274,7 @@ foreach ($classSet as $set){
    <tr>
     <td>'.$sn.'</td>
     <td>
-    <img src="images/students/'.$profile.'"
+    <img src="'.$profile.'"
         class="student-photo" loading="lazy">
     </td>
     <td class="student-name">'.$std_name.'</td>
