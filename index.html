@@ -1596,13 +1596,13 @@ Even red ink can teach you something,
 Even falling can set the stage.  
 
 Exams can test what’s in your head,  
-But they don\'t grade how much you fought.
-And concepts fail sometimes... it\'s human,
+But they don't grade how much you fought.
+And concepts fail sometimes... it's human,
 what matters are the efforts put into thriving to succeed.
 
-So i\'ll cry today, and try tomorrow.
-One bad test won\'t write my story.
-Failure\'s only 𝐀 𝐑𝐎𝐔𝐆𝐇 𝐅𝐈𝐑𝐒𝐓 𝐃𝐑𝐀𝐅𝐓.
+So i'll cry today, and try tomorrow.
+One bad test won't write my story.
+Failure's only 𝐀 𝐑𝐎𝐔𝐆𝐇 𝐅𝐈𝐑𝐒𝐓 𝐃𝐑𝐀𝐅𝐓.
 
 
 ʙʏ: 𝐄𝐓𝐇𝐄𝐋𝐁𝐄𝐑𝐓
@@ -1631,7 +1631,7 @@ Shaping my mind, the brain, the gorge
 I write, not frantic, but precise
 Each word a chess move
 My confidence cold as ice
-The exam rages, and I follow it\'s groove 
+The exam rages, and I follow it's groove 
 
 Confidence, not arrogance, my cloak
 A subtle smile, no need to gloat
@@ -1891,25 +1891,19 @@ function submit_login_form(e) {
     .then(response => response.json())
     .then(data => {
 
-        const stat = data.stat;
-        const err = data.err;
-        const msg = data.message;
+        if (data.status === "success") {
 
-        if (stat === "success") {
-
-            window.location = `/home?msg_report=${msg}&report=suc`;
+            window.location = `/home?msg_report=${data.message}&report=success`;
 
         } else {
 
-            if (err === "em") {
+            if (data.error === "em") {
 
-                emailError.innerText = msg;
+              emailError.innerText = data.message;
 
             } 
-            else if (err === "psw") {
-
-                passwordError.innerText = msg;
-
+            else if (data.error === "psw") {
+                passwordError.innerText = data.message;
             } 
             else {
 
@@ -1923,21 +1917,49 @@ function submit_login_form(e) {
     .catch(error => {
 
         loadingSpinner.style.display = "none";
-     //   passwordError.innerText = "Network error. Please check your connection.";
-     passwordError.innerText = error;
+      passwordError.innerText = "Network error. Please check your connection and try again.";
+   //  passwordError.innerText = error;
 
         console.error(error);
 
     });
 }
 
- 
-
 
 });
    
-    
+ 
 </script>
 
+<script>
+    
+  function checkStaffLogin(){
+     
+    fetch("/includes/login.inc", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            submit_button_name: 'check_staff_login'
+        })
+    })
+    .then(response => response.json())
+    .then(staff => {
+
+       if (staff.status === "logged-in" && staff.login === true) {
+      window.location.href = "/home";
+        } 
+        
+    })
+    .catch(error => {
+    console.log(error);
+    });   
+     
+ }   
+   
+ window.onload = checkStaffLogin();  
+    
+</script>
 </body>
 </html>

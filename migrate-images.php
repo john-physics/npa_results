@@ -4,12 +4,36 @@ set_time_limit(300);
 
 // --- 1. INCLUDE DATABASE CONNECTION ---
 // Assumes dbcon.php initializes $conn as a MySQLi object
- require $_SERVER["DOCUMENT_ROOT"].'/includes/dbcon.php';
+ require $_SERVER["DOCUMENT_ROOT"].'/page_init.php';
 
 
 if (!isset($conn)) {
     die("Error: Database connection (\$conn) is not initialized or is not a valid MySQLi instance.");
 }
+
+
+  $class = "SS 3B";
+  $students = collect_table_data1($conn,'students','current_class',$class,'s');
+$upd =0;$stds=0;
+$resultTable = "results_2026_2027";
+foreach ($students as $std){
+  $stdId = $std["std_id"];
+  $profile = $std["profile"];
+    
+   if($profile && $stdId){
+    $stds++;   
+     if(update_user_data($conn,$resultTable,'std_profile','std_id',$profile,$stdId,'si')){
+      
+  $upd++;    
+     }    
+   }
+ 
+}
+
+
+echo "Number of students: $stds <br>Total Updates: $upd";
+
+/*
 
 // --- 2. DIRECTORY SETUP ---
 $baseDir = __DIR__ . '/images/students/';
@@ -89,4 +113,5 @@ echo "Total Images Processed: $counter\n";
 echo "Successfully Moved & Updated: $successCount\n";
 echo "Errors Encountered: $errorCount\n";
 echo "</pre>";
-?>
+
+*/

@@ -1083,7 +1083,7 @@ function update_stds_class($conn,$students,$class){
     'students',
      $updateData,
      $conditions,
-    'ssi',
+    'ssssi',
     true);
     
    }

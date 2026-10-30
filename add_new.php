@@ -752,7 +752,7 @@ echo '<section id="about" class="section">
   <div class="form-container">
   
   <form action="/includes/add_new.inc" method="post"  enctype="multipart/form-data" class="reg-form" id="reg-form">
-   
+   <input type ="hidden" id="act-ion" value="upload-photo">
   <input type="hidden" name="hidden_id" value="'.$std.'">
   <label for="surname">Student\'s surname</label>
   <input type="text" id="surname" name="surname" placeholder="Enter surname here" value="'.$surname.'" '.$atf1.'>
@@ -856,7 +856,8 @@ elseif(isset($_GET["add_stds_photo"])){
   <div class="form-container">
   
   <form action="/includes/add_new.inc" method="post"  enctype="multipart/form-data" class="reg-form" id="reg-form">
-   
+  
+  <input type ="hidden" id="act-ion" value="upload-photo">
   <label for="class">Select Class</label>
  <select id="std_class" name="std_class" onchange="fetchClassStds()">';
  
@@ -1404,12 +1405,19 @@ imageInput.addEventListener('change', () => {
 const RegForm = document.getElementById("reg-form");
 const spinner = document.getElementById("spinner");
 const prep1 = document.getElementById("prep1");
+const Action = document.getElementById("act-ion").value;
 
 RegForm.addEventListener("submit",(e)=>{
   
   spinner.style.display= "flex";  
    prep1.style.display = "block";
+   let stopTime = 10000;
    
+   if(Action){
+    if(Action === 'upload-photo'){
+     stopTime = 60*5*1000;   
+    }  
+   }
   
     setTimeout(()=>{
       

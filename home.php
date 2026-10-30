@@ -7,7 +7,6 @@ header("Location:/");
 exit();
 }
 
-
  head('NPA Result Port',"$site | Result Portal","Dashboard");
 
 require 'login_popup.php';

@@ -236,6 +236,7 @@ echo '</div>
  $profile = "images/npa-logo.jpg";  
      
  }
+
  
    echo '
    <tr>
