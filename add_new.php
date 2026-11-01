@@ -1405,7 +1405,7 @@ imageInput.addEventListener('change', () => {
 const RegForm = document.getElementById("reg-form");
 const spinner = document.getElementById("spinner");
 const prep1 = document.getElementById("prep1");
-const Action = document.getElementById("act-ion").value;
+const Action = document.getElementById("act-ion");
 
 RegForm.addEventListener("submit",(e)=>{
   
@@ -1414,7 +1414,7 @@ RegForm.addEventListener("submit",(e)=>{
    let stopTime = 10000;
    
    if(Action){
-    if(Action === 'upload-photo'){
+    if(Action.value.trim() === 'upload-photo'){
      stopTime = 60*5*1000;   
     }  
    }
