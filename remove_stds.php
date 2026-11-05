@@ -928,7 +928,7 @@ addStudentsBox.addEventListener("change", () => {
       currentAction = "save_add_students";
 
         document.getElementById("addDescription").innerHTML =
-            `Select the students you want to add from <b>${className}</b>.`;
+            `Select the students you want to add to <b>${className}</b>.`;
 
         loadaddStudents("load_students");
     }
@@ -945,7 +945,7 @@ addSubjectsBox.addEventListener("change", () => {
       currentAction = "save_add_subjects";
 
         document.getElementById("addDescription").innerHTML =
-            `Select the subjects you want to add from <b>${className}</b>.`;
+            `Select the subjects you want to add for <b>${className}</b>.`;
 
         loadaddSubjects("load_subjects");
     }

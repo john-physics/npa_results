@@ -693,9 +693,9 @@ From add class, create another dynamic input that can switch suggested class cat
 
 
     $maxLevels = [
-        "PRE-SCHOOL"  => 3,
-        "PRE-NURSERY" => 3,
-        "NURSERY"     => 3,
+        "PRE-SCHOOL"  => 2,
+        "PRE-NURSERY" => 2,
+        "NURSERY"     => 2,
         "GRADE"       => 5,
         "JSS"         => 3,
         "SS"          => 3

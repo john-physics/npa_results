@@ -336,7 +336,7 @@ function upload_image_as_webp($fileArray, $targetFolder, $prefix, $uniqueId) {
         if ($fileExt == 'jpg' || $fileExt == 'jpeg') $image = imagecreatefromjpeg($tempDir);
         elseif ($fileExt == 'png') {
             $image = imagecreatefrompng($tempDir);
-            imagepalettetotruecolor($image);
+          imagepalettetotruecolor($image);
             imagealphablending($image, true);
             imagesavealpha($image, true);
         } elseif ($fileExt == 'webp') {
